@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply bg-ink-900 text-mist antialiased;
+  }
+  body {
+    @apply overflow-x-hidden font-sans text-[15px] font-[450];
+  }
+  ::selection {
+    @apply bg-azure-deep text-mist;
+  }
+}
+
+@layer components {
+  .eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-mist-dim;
+  }
+  .eyebrow::before {
+    content: '';
+    @apply h-1.5 w-1.5 rounded-full bg-azure;
+  }
+  .panel {
+    @apply border border-white/[0.06] bg-white/[0.03];
+  }
+  .panel-hover {
+    @apply transition-colors duration-300 hover:border-azure/30 hover:bg-white/[0.05];
+  }
+  .card {
+    @apply rounded-lg border border-white/[0.06] bg-white/[0.03];
+  }
+  .btn-primary {
+    @apply inline-block rounded-full bg-azure px-7 py-3.5 text-sm font-semibold text-white transition-all hover:bg-azure-bright hover:shadow-[0_0_32px_-8px_rgba(46,155,255,0.55)];
+  }
+  .btn-secondary {
+    @apply inline-block rounded-full border border-white/10 bg-white/[0.05] px-7 py-3.5 text-sm font-medium text-mist transition-colors hover:bg-white/[0.09];
+  }
+}
+
+/* starfield twinkle */
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.08;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+.star {
+  animation-name: twinkle;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+/* thin scrollbar to match the theme */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0f1a;
+}
+::-webkit-scrollbar-thumb {
+  background: #1a2439;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2c4a80;
+}
