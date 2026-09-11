@@ -229,7 +229,7 @@ function ScreenNotif({ text }) {
   )
 }
 
-const PHONE_BEATS = [5200, 6200, 8200, 9000, 11400, 12200, 13800]
+const PHONE_BEATS = [5200, 6200, 8200, 9000, 11400, 12200, 13400]
 
 function ActPhones() {
   const [beat, setBeat] = useState(0)
@@ -932,16 +932,17 @@ function ActVirus() {
                 initial={{ opacity: 0, scale: 2.1, filter: 'blur(12px)' }}
                 animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
                 exit={{
-                  x: -560,
-                  rotate: -10,
+                  x: -820,
+                  rotate: -18,
                   opacity: 0,
-                  transition: { duration: 0.45, ease: [0.5, 0, 0.75, 0.4] },
+                  filter: 'blur(8px)',
+                  transition: { duration: 0.38, ease: [0.55, 0, 0.8, 0.4] },
                 }}
                 transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
                 className="absolute flex items-center justify-center"
               >
                 <span className="pointer-events-none absolute h-32 w-[380px] rounded-full bg-ink-950/90 blur-2xl" />
-                <h2 className="text-3d relative text-4xl font-bold leading-[1.08] tracking-[-0.03em] sm:text-6xl">
+                <h2 className="text-game font-display relative -skew-x-3 text-4xl font-bold leading-[1.08] sm:text-6xl">
                   XPY SPREADS
                   <br />
                   <span data-text="LIKE A VIRUS." className="glitch text-shimmer inline-block">
@@ -953,19 +954,36 @@ function ActVirus() {
             {slamPhase === 2 && (
               <motion.div
                 key="slam-ripple"
-                initial={{ x: 560, rotate: 8, opacity: 0 }}
+                initial={{ x: 720, rotate: 14, opacity: 0 }}
                 animate={{ x: 0, rotate: 0, opacity: 1 }}
-                transition={{ type: 'spring', stiffness: 250, damping: 19 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 15 }}
                 className="absolute flex items-center justify-center"
               >
                 <span className="pointer-events-none absolute h-32 w-[400px] rounded-full bg-ink-950/90 blur-2xl" />
-                <h2 className="text-3d relative text-3xl font-bold leading-[1.1] tracking-[-0.03em] sm:text-5xl">
+                {/* impact flash + shockwave as it collides */}
+                <motion.span
+                  initial={{ opacity: 0.4 }}
+                  animate={{ opacity: 0 }}
+                  transition={{ delay: 0.1, duration: 0.4 }}
+                  className="pointer-events-none absolute h-36 w-[420px] rounded-full bg-white blur-3xl"
+                />
+                <motion.span
+                  initial={{ opacity: 0.6, scale: 0.4 }}
+                  animate={{ opacity: 0, scale: 1.7 }}
+                  transition={{ delay: 0.12, duration: 0.55, ease: 'easeOut' }}
+                  className="pointer-events-none absolute h-40 w-[440px] rounded-full border-2 border-azure/60 blur-[1px]"
+                />
+                <motion.h2
+                  animate={{ x: [0, -9, 7, -4, 0] }}
+                  transition={{ delay: 0.14, duration: 0.42, ease: 'easeOut' }}
+                  className="text-game font-display relative -skew-x-3 text-3xl font-bold leading-[1.1] sm:text-5xl"
+                >
                   We like to call it
                   <br />
                   <span data-text="THE RIPPLE EFFECT." className="glitch text-shimmer inline-block">
                     THE RIPPLE EFFECT.
                   </span>
-                </h2>
+                </motion.h2>
               </motion.div>
             )}
           </AnimatePresence>
@@ -1492,7 +1510,7 @@ function RefDashboard() {
 
 /* ---------------------------------- page ----------------------------------- */
 
-const ACT_DURATIONS = [3400, 16200, 14600, 10600]
+const ACT_DURATIONS = [3400, 18200, 14600, 10600]
 
 export default function ReferralPage() {
   const [act, setAct] = useState(0)

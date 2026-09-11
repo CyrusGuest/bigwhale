@@ -91,6 +91,21 @@
   }
 }
 
+/* gamified slam title: italic punch, hard outline, stacked depth, arena glow */
+.text-game {
+  font-style: italic;
+  letter-spacing: -0.02em;
+  text-shadow:
+    2px 2px 0 #0a1128,
+    -2px 2px 0 #0a1128,
+    2px -2px 0 #0a1128,
+    -2px -2px 0 #0a1128,
+    0 4px 0 #123063,
+    0 6px 0 #0e2140,
+    0 10px 24px rgba(0, 0, 0, 0.6),
+    0 0 44px rgba(46, 155, 255, 0.4);
+}
+
 /* white text with a slow traveling luster highlight */
 .text-luster {
   background: linear-gradient(100deg, #ffffff 35%, #8fc2ff 50%, #ffffff 65%);
