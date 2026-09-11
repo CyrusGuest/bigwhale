@@ -836,7 +836,60 @@ const WALLETS = [
   { name: 'Coinbase', color: 'text-[#4A80FF]', bar: '#4A80FF', glow: 'rgba(74,128,255,0.30)' },
 ]
 
-// Final frame: floating end card, stays until refresh
+// Act 7: hand-off to the live simulation, then the page glides down
+function ActOutro() {
+  return (
+    <motion.div
+      exit={{ opacity: 0, transition: { duration: 0.4 } }}
+      className="w-full px-4 text-center"
+    >
+      <Float amt={6} dur={5}>
+        <motion.h2
+          initial={{ opacity: 0, y: 30, filter: 'blur(8px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          transition={{ duration: 0.55, ease: EASE }}
+          className="text-3xl font-bold tracking-[-0.02em] sm:text-5xl"
+        >
+          Check out how your position earns
+        </motion.h2>
+      </Float>
+      <Float delay={0.3} amt={5} dur={5.5}>
+        <motion.p
+          initial={{ opacity: 0, y: 22, filter: 'blur(6px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          transition={{ delay: 0.3, duration: 0.5, ease: EASE }}
+          className="text-shimmer mt-3 text-2xl font-semibold sm:text-3xl"
+        >
+          in a real-time simulation
+        </motion.p>
+      </Float>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.75, duration: 0.4 }}
+        className="mt-10 flex justify-center"
+      >
+        <motion.div
+          animate={{ y: [0, 14, 0] }}
+          transition={{ duration: 1.1, repeat: Infinity, ease: 'easeInOut' }}
+          className="flex h-12 w-12 items-center justify-center rounded-full border border-azure/40 bg-azure/10 text-azure shadow-[0_0_30px_-8px_rgba(46,155,255,0.6)]"
+        >
+          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none">
+            <path
+              d="M5 9l7 7 7-7"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </motion.div>
+      </motion.div>
+    </motion.div>
+  )
+}
+
+// Final frame: floating end card, seen when people scroll back up
 function ActEnd() {
   return (
     <div className="w-full px-4 text-center">
@@ -875,8 +928,8 @@ function ActEnd() {
 
 /* ---------------------------------- hero ----------------------------------- */
 
-// title → phone → sleep → reserve → portal → story → end card, then push down
-const ACT_DURATIONS = [3500, 3900, 3800, 4200, 5800, 9600]
+// title → phone → sleep → reserve → portal → story → outro (scrolls down) → end card
+const ACT_DURATIONS = [3500, 3900, 3800, 4200, 5800, 9600, 2700]
 
 export default function Hero() {
   const [notifs, setNotifs] = useState(() => Array.from({ length: 4 }, makeNotif).reverse())
@@ -890,19 +943,19 @@ export default function Hero() {
   }, [])
 
   useEffect(() => {
-    if (act >= 6) return
+    if (act >= 7) return
     const t = setTimeout(() => setAct(act + 1), ACT_DURATIONS[act])
     return () => clearTimeout(t)
   }, [act])
 
-  // when the sequence ends, push the site down to the next section
+  // during the outro, glide the page down to the live simulation
   // (only if the viewer hasn't already scrolled away on their own)
   useEffect(() => {
     if (act !== 6) return
     if (window.scrollY > 120) return
     const t = setTimeout(() => {
       document.getElementById('drip')?.scrollIntoView({ behavior: 'smooth' })
-    }, 1400)
+    }, 2000)
     return () => clearTimeout(t)
   }, [act])
 
@@ -930,7 +983,8 @@ export default function Hero() {
             {act === 3 && <ActReserve key="act-reserve" />}
             {act === 4 && <ActPortal key="act-portal" />}
             {act === 5 && <ActStory key="act-story" />}
-            {act === 6 && (
+            {act === 6 && <ActOutro key="act-outro" />}
+            {act === 7 && (
               <motion.div
                 key="act-end"
                 initial={{ opacity: 0, scale: 0.96 }}
