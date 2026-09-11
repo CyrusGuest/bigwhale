@@ -101,12 +101,12 @@ function ActTitle() {
 
 function MiniPhone({ children, className = '' }) {
   return (
-    <div className={`relative w-[190px] ${className}`}>
-      <div className="rounded-[2.1rem] bg-gradient-to-b from-[#55607a] via-[#2a3147] to-[#171c2e] p-[2.5px] shadow-[0_24px_60px_-16px_rgba(0,0,0,0.8),0_0_50px_-18px_rgba(46,155,255,0.45)]">
-        <div className="rounded-[1.95rem] bg-black p-[6px]">
-          <div className="relative h-[360px] overflow-hidden rounded-[1.6rem] bg-[#0A1128]">
-            <div className="pointer-events-none absolute -top-10 left-1/2 h-40 w-40 -translate-x-1/2 rounded-full bg-azure-deep/50 blur-[50px]" />
-            <div className="absolute left-1/2 top-2 z-20 h-[16px] w-[62px] -translate-x-1/2 rounded-full bg-black" />
+    <div className={`relative w-[224px] ${className}`}>
+      <div className="rounded-[2.4rem] bg-gradient-to-b from-[#55607a] via-[#2a3147] to-[#171c2e] p-[2.5px] shadow-[0_28px_70px_-16px_rgba(0,0,0,0.8),0_0_56px_-18px_rgba(46,155,255,0.45)]">
+        <div className="rounded-[2.25rem] bg-black p-[7px]">
+          <div className="relative h-[424px] overflow-hidden rounded-[1.85rem] bg-[#0A1128]">
+            <div className="pointer-events-none absolute -top-10 left-1/2 h-44 w-44 -translate-x-1/2 rounded-full bg-azure-deep/50 blur-[50px]" />
+            <div className="absolute left-1/2 top-2.5 z-20 h-[17px] w-[70px] -translate-x-1/2 rounded-full bg-black" />
             {children}
           </div>
         </div>
@@ -124,27 +124,38 @@ function TypeText({ text, start, speed = 55 }) {
   return <>{text.slice(0, n)}</>
 }
 
-// big floating +XRP, mobile-game style
+// big floating +XRP: rises off the screen, growing as it fades
 function PopAmt({ amt, big = false }) {
   return (
     <motion.span
-      initial={{ opacity: 0, y: 6, scale: 0.4 }}
-      animate={{ opacity: [0, 1, 1, 0], y: -76, scale: big ? 1.25 : 1 }}
-      transition={{ duration: 1.7, ease: 'easeOut' }}
-      className="pointer-events-none absolute -top-3 left-1/2 z-30 -translate-x-1/2 whitespace-nowrap font-display text-3xl font-bold text-[#30D158] drop-shadow-[0_0_14px_rgba(48,209,88,0.7)]"
+      initial={{ opacity: 0, y: 10, scale: 0.45 }}
+      animate={{
+        opacity: [0, 1, 1, 0.6, 0],
+        y: [10, -30, -80, -130, -175],
+        scale: [0.45, 1, big ? 1.45 : 1.25, big ? 1.8 : 1.5, big ? 2.1 : 1.75],
+      }}
+      transition={{ duration: 2.2, ease: 'easeOut', times: [0, 0.15, 0.45, 0.75, 1] }}
+      className="pointer-events-none absolute -top-3 left-1/2 z-30 -translate-x-1/2 whitespace-nowrap font-display text-3xl font-bold text-[#30D158] drop-shadow-[0_0_16px_rgba(48,209,88,0.7)]"
     >
       +{amt} XRP
     </motion.span>
   )
 }
 
-// in-screen notification banner
+// in-screen notification banner, silky drop like a real lock screen
 function ScreenNotif({ text }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: -34, scale: 0.85 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ type: 'spring', stiffness: 320, damping: 24 }}
+      initial={{ opacity: 0, y: -44, scale: 0.86, filter: 'blur(4px)' }}
+      animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+      transition={{
+        type: 'spring',
+        stiffness: 300,
+        damping: 30,
+        mass: 1,
+        opacity: { duration: 0.4, ease: 'easeOut' },
+        filter: { duration: 0.35, ease: 'easeOut' },
+      }}
       className="absolute inset-x-2 top-6 z-10 flex items-center gap-2 rounded-2xl bg-[#1d1f27]/90 p-2.5 shadow-[0_8px_20px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)] backdrop-blur-xl"
     >
       <span
@@ -192,7 +203,7 @@ function ActPhones() {
         </motion.h2>
       </Float>
 
-      <div className="relative mx-auto mt-6 flex h-[420px] max-w-lg origin-top scale-[0.85] items-center justify-center gap-8 sm:scale-100 sm:gap-14">
+      <div className="relative mx-auto mt-6 flex h-[490px] max-w-xl origin-top scale-[0.7] items-center justify-center gap-8 sm:scale-100 sm:gap-16">
         {/* the invite flying across */}
         {beat >= 1 && beat < 3 && (
           <motion.span
@@ -229,8 +240,8 @@ function ActPhones() {
           transition={{ delay: 0.25, type: 'spring', stiffness: 200, damping: 20 }}
           className="relative"
         >
-          {beat === 4 && <PopAmt amt={1} />}
-          {beat === 6 && <PopAmt amt={2} />}
+          {beat >= 4 && beat < 6 && <PopAmt key="a1" amt={1} />}
+          {beat >= 6 && <PopAmt key="a2" amt={2} />}
           <Float amt={6} dur={4.6}>
             <MiniPhone>
               {beat >= 4 && (
@@ -319,8 +330,8 @@ function ActPhones() {
             transition={{ type: 'spring', stiffness: 190, damping: 17 }}
             className="relative"
           >
-            {beat === 3 && <PopAmt amt={10} big />}
-            {beat === 5 && <PopAmt amt={20} big />}
+            {beat >= 3 && beat < 5 && <PopAmt key="b10" amt={10} big />}
+            {beat >= 5 && <PopAmt key="b20" amt={20} big />}
             <Float amt={6} dur={5.2} delay={0.4}>
               <MiniPhone>
                 {beat >= 3 && (
