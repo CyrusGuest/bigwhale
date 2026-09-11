@@ -21,6 +21,29 @@ function Float({ children, delay = 0, amt = 7, dur = 5, className = '' }) {
   )
 }
 
+// repeating word-wave so still text keeps living
+function WaveWords({ words, big = [], delay = 1.2 }) {
+  return words.map((w, i) => (
+    <motion.span
+      key={i}
+      animate={{
+        scale: [1, big.includes(i) ? 1.3 : 1.14, 1],
+        color: ['#66B8FF', '#FFFFFF', '#66B8FF'],
+      }}
+      transition={{
+        delay: delay + i * 0.13,
+        duration: 0.5,
+        repeat: Infinity,
+        repeatDelay: 1.7,
+        ease: 'easeInOut',
+      }}
+      className="inline-block origin-center"
+    >
+      {w}
+    </motion.span>
+  ))
+}
+
 const BURST = Array.from({ length: 10 }, (_, i) => {
   const a = (i / 10) * Math.PI * 2
   return { x: Math.cos(a) * (110 + (i % 3) * 40), y: Math.sin(a) * (80 + (i % 2) * 30), r: 120 + i * 36 }
@@ -85,12 +108,16 @@ function ActTitle() {
       </Float>
       <Float delay={0.5} amt={5} dur={5.5}>
         <motion.p
-          initial={{ opacity: 0, letterSpacing: '0.1em' }}
-          animate={{ opacity: 1, letterSpacing: '0.3em' }}
-          transition={{ delay: 0.85, duration: 0.7, ease: EASE }}
-          className="mt-8 font-mono text-sm uppercase text-azure-bright"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.85, duration: 0.6, ease: EASE }}
+          className="mt-8 flex flex-wrap justify-center gap-x-2 font-mono text-sm uppercase tracking-[0.22em] text-azure-bright"
         >
-          10% of everything your friends earn
+          <WaveWords
+            words={['10%', 'of', 'everything', 'your', 'friends', 'earn']}
+            big={[0, 5]}
+            delay={1.5}
+          />
         </motion.p>
       </Float>
     </motion.div>
@@ -101,10 +128,10 @@ function ActTitle() {
 
 function MiniPhone({ children, className = '' }) {
   return (
-    <div className={`relative w-[224px] ${className}`}>
-      <div className="rounded-[2.4rem] bg-gradient-to-b from-[#55607a] via-[#2a3147] to-[#171c2e] p-[2.5px] shadow-[0_28px_70px_-16px_rgba(0,0,0,0.8),0_0_56px_-18px_rgba(46,155,255,0.45)]">
-        <div className="rounded-[2.25rem] bg-black p-[7px]">
-          <div className="relative h-[424px] overflow-hidden rounded-[1.85rem] bg-[#0A1128]">
+    <div className={`relative w-[246px] ${className}`}>
+      <div className="rounded-[2.6rem] bg-gradient-to-b from-[#55607a] via-[#2a3147] to-[#171c2e] p-[3px] shadow-[0_30px_76px_-16px_rgba(0,0,0,0.8),0_0_60px_-18px_rgba(46,155,255,0.45)]">
+        <div className="rounded-[2.4rem] bg-black p-[7px]">
+          <div className="relative h-[466px] overflow-hidden rounded-[2rem] bg-[#0A1128]">
             <div className="pointer-events-none absolute -top-10 left-1/2 h-44 w-44 -translate-x-1/2 rounded-full bg-azure-deep/50 blur-[50px]" />
             <div className="absolute left-1/2 top-2.5 z-20 h-[17px] w-[70px] -translate-x-1/2 rounded-full bg-black" />
             {children}
@@ -124,17 +151,19 @@ function TypeText({ text, start, speed = 55 }) {
   return <>{text.slice(0, n)}</>
 }
 
-// big floating +XRP: rises off the screen, growing as it fades
+// big floating +XRP: drifts up and away like an ember on the wind
 function PopAmt({ amt, big = false }) {
   return (
     <motion.span
-      initial={{ opacity: 0, y: 10, scale: 0.45 }}
+      initial={{ opacity: 0, y: 10, x: 0, scale: 0.45, rotate: 0 }}
       animate={{
-        opacity: [0, 1, 1, 0.6, 0],
-        y: [10, -30, -80, -130, -175],
-        scale: [0.45, 1, big ? 1.45 : 1.25, big ? 1.8 : 1.5, big ? 2.1 : 1.75],
+        opacity: [0, 1, 1, 0.75, 0.4, 0],
+        y: [10, -28, -74, -120, -158, -195],
+        x: [0, 8, -10, 14, -4, 18],
+        rotate: [0, 3, -4, 5, -2, 6],
+        scale: [0.45, 1, big ? 1.4 : 1.2, big ? 1.7 : 1.45, big ? 1.95 : 1.65, big ? 2.15 : 1.8],
       }}
-      transition={{ duration: 2.2, ease: 'easeOut', times: [0, 0.15, 0.45, 0.75, 1] }}
+      transition={{ duration: 2.8, ease: 'easeInOut', times: [0, 0.12, 0.32, 0.55, 0.78, 1] }}
       className="pointer-events-none absolute -top-3 left-1/2 z-30 -translate-x-1/2 whitespace-nowrap font-display text-3xl font-bold text-[#30D158] drop-shadow-[0_0_16px_rgba(48,209,88,0.7)]"
     >
       +{amt} XRP
@@ -175,7 +204,7 @@ function ScreenNotif({ text }) {
   )
 }
 
-const PHONE_BEATS = [3300, 3900, 5100, 5500, 7100, 7500, 8500]
+const PHONE_BEATS = [4300, 5100, 6800, 7500, 9600, 10300, 11700]
 
 function ActPhones() {
   const [beat, setBeat] = useState(0)
@@ -199,11 +228,17 @@ function ActPhones() {
           transition={{ duration: 0.5, ease: EASE }}
           className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-5xl"
         >
-          Watch how it <span className="text-shimmer">works.</span>
+          Watch how it{' '}
+          <span className="relative inline-block">
+            <span className="text-shimmer">works.</span>
+            <span aria-hidden className="text-glint absolute inset-0">
+              works.
+            </span>
+          </span>
         </motion.h2>
       </Float>
 
-      <div className="relative mx-auto mt-6 flex h-[490px] max-w-xl origin-top scale-[0.7] items-center justify-center gap-8 sm:scale-100 sm:gap-16">
+      <div className="relative mx-auto mt-6 flex h-[540px] max-w-xl origin-top scale-[0.62] items-center justify-center gap-8 sm:scale-100 sm:gap-16">
         {/* the invite flying across */}
         {beat >= 1 && beat < 3 && (
           <motion.span
@@ -215,7 +250,7 @@ function ActPhones() {
               rotate: [0, 22, 42],
               scale: [0.7, 1, 0.9],
             }}
-            transition={{ duration: 0.85, ease: 'easeIn' }}
+            transition={{ duration: 1.15, ease: 'easeInOut' }}
             className="absolute z-30 rounded-full bg-azure px-3 py-1.5 font-mono text-[10px] font-semibold text-white shadow-[0_0_20px_rgba(46,155,255,0.8)]"
           >
             xpy.io/?ref=7xKX ✉
@@ -228,7 +263,7 @@ function ActPhones() {
             key={`pulse-${beat}`}
             initial={{ opacity: 0, right: '22%', top: '30%' }}
             animate={{ opacity: [0, 1, 1, 0], right: ['22%', '48%', '74%'], top: ['30%', '14%', '30%'] }}
-            transition={{ duration: 0.55, ease: 'easeIn' }}
+            transition={{ duration: 0.85, ease: 'easeInOut' }}
             className="absolute z-30 h-3 w-3 rounded-full bg-[#30D158] shadow-[0_0_16px_4px_rgba(48,209,88,0.8)]"
           />
         )}
@@ -261,7 +296,7 @@ function ActPhones() {
                   Create your referral link
                 </p>
                 <div className="mt-2 rounded-xl bg-white/[0.07] px-2.5 py-2 font-mono text-[9px] text-azure-bright ring-1 ring-white/[0.1]">
-                  <TypeText text="7xKXtg2CW8…gAsU" start={900} />
+                  <TypeText text="7xKXtg2CW8…gAsU" start={1400} speed={75} />
                   <motion.span
                     animate={{ opacity: [1, 0, 1] }}
                     transition={{ duration: 0.9, repeat: Infinity }}
@@ -394,9 +429,13 @@ function ActPhones() {
               initial={{ opacity: 0, scale: 1.6, filter: 'blur(8px)' }}
               animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
               transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-              className="mt-2 font-display text-2xl font-semibold text-white sm:text-3xl"
+              className="mt-2 flex flex-wrap justify-center gap-x-2.5 font-display text-2xl font-semibold text-white sm:text-3xl"
             >
-              They earn. You earn <span className="text-shimmer">10% on top.</span> Automatically.
+              <WaveWords
+                words={['They', 'earn.', 'You', 'earn', '10%', 'on', 'top.', 'Automatically.']}
+                big={[4]}
+                delay={0.8}
+              />
             </motion.p>
           </Float>
         )}
@@ -667,83 +706,62 @@ function StepCards() {
 
 /* ------------------------------ the virus act ------------------------------ */
 
-// contagion network: one holder infects three, three infect nine
-const NET = {
-  c: [180, 150],
-  g1: [
-    [180, 78],
-    [243, 186],
-    [117, 186],
-  ],
-  g2: [
-    [
-      [108, 16],
-      [180, 2],
-      [252, 16],
-    ],
-    [
-      [332, 152],
-      [312, 226],
-      [262, 278],
-    ],
-    [
-      [28, 152],
-      [48, 226],
-      [98, 278],
-    ],
-  ],
-}
-
-function Dot({ x, y, delay, size = 16, core = false }) {
+// blank suited-executive silhouette
+function Person({ size = 34, hot = false }) {
   return (
-    <motion.span
-      initial={{ opacity: 0, scale: 0 }}
-      animate={{ opacity: 1, scale: [0, 1.5, 1] }}
-      transition={{ delay, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-      className="absolute flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full text-white shadow-[0_0_16px_3px_rgba(46,155,255,0.55)]"
-      style={{
-        left: x,
-        top: y,
-        width: size,
-        height: size,
-        background:
-          'radial-gradient(120% 120% at 50% 20%, rgba(46,155,255,0.9) 0%, rgba(16,42,92,1) 75%)',
-      }}
+    <svg
+      viewBox="0 0 40 44"
+      width={size}
+      height={size * 1.1}
+      className={hot ? 'text-azure-bright' : 'text-azure'}
     >
-      {core && <XrpMark className="h-4 w-4" strokeWidth={5} />}
-      <motion.span
-        initial={{ opacity: 0 }}
-        animate={{ opacity: [0.7, 0], scale: [1, 2.4] }}
-        transition={{ delay: delay + 0.1, duration: 0.7, ease: 'easeOut' }}
-        className="pointer-events-none absolute inset-0 rounded-full border border-azure/70"
+      <circle cx="20" cy="10" r="7.5" fill="#0E1630" stroke="currentColor" strokeWidth="2" />
+      <path
+        d="M4 42 C4 28 12 23 20 23 C28 23 36 28 36 42 Z"
+        fill="#0E1630"
+        stroke="currentColor"
+        strokeWidth="2"
       />
-    </motion.span>
+      <path d="M15 23 l5 5 5 -5" fill="none" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M20 28 l2.4 3.2 -2.4 9 -2.4 -9 z" fill="currentColor" opacity="0.85" />
+    </svg>
   )
 }
 
-function Link({ from, to, delay }) {
-  return (
-    <motion.line
-      x1={from[0]}
-      y1={from[1]}
-      x2={to[0]}
-      y2={to[1]}
-      stroke="#2E9BFF"
-      strokeOpacity="0.35"
-      strokeWidth="1.5"
-      initial={{ pathLength: 0 }}
-      animate={{ pathLength: 1 }}
-      transition={{ delay, duration: 0.35, ease: 'easeOut' }}
-    />
-  )
-}
+// 8×4 crowd grid, populated center-out in doubling waves: 1 → 2 → 4 → 8 → 16 → 32
+const CROWD_ORDER = Array.from({ length: 32 }, (_, i) => ({
+  i,
+  d: Math.hypot((i % 8) - 3.5, (Math.floor(i / 8) - 1.5) * 1.9),
+}))
+  .sort((a, b) => a.d - b.d)
+  .map((o) => o.i)
+
+const WAVE_T = [600, 1600, 2300, 2950, 3600, 4200]
+const WAVE_COUNTS = [1, 1, 2, 4, 8, 16]
+
+const CROWD_DELAYS = (() => {
+  const delays = {}
+  let k = 0
+  WAVE_COUNTS.forEach((count, w) => {
+    for (let j = 0; j < count; j++) {
+      delays[CROWD_ORDER[k]] = WAVE_T[w] / 1000 + j * 0.06
+      k++
+    }
+  })
+  return delays
+})()
+
+const HOLDER_COUNTS = [1, 2, 4, 8, 16, 32]
 
 function ActVirus() {
+  const [wave, setWave] = useState(-1)
   const [slam, setSlam] = useState(false)
   useEffect(() => {
-    const t = setTimeout(() => setSlam(true), 2900)
-    return () => clearTimeout(t)
+    const timers = WAVE_T.map((t, i) => setTimeout(() => setWave(i), t))
+    timers.push(setTimeout(() => setSlam(true), 4900))
+    return () => timers.forEach(clearTimeout)
   }, [])
+
   return (
     <motion.div
       exit={{ opacity: 0, y: -46, transition: { duration: 0.35, ease: EASE } }}
@@ -756,51 +774,84 @@ function ActVirus() {
           transition={{ duration: 0.5, ease: EASE }}
           className="text-xl font-medium text-mist sm:text-2xl"
         >
-          Every holder gets <span className="text-shimmer">paid</span> to spread the word.
+          It starts with <span className="text-shimmer">one holder.</span>
         </motion.p>
       </Float>
 
-      {/* the contagion */}
-      <div className="relative mx-auto mt-6 h-[300px] w-[360px]">
-        <svg viewBox="0 0 360 300" className="absolute inset-0 h-full w-full">
-          {NET.g1.map((p, i) => (
-            <Link key={`l1-${i}`} from={NET.c} to={p} delay={1.0 + i * 0.15} />
-          ))}
-          {NET.g2.map((children, pi) =>
-            children.map((p, ci) => (
-              <Link
-                key={`l2-${pi}-${ci}`}
-                from={NET.g1[pi]}
-                to={p}
-                delay={1.8 + pi * 0.18 + ci * 0.08}
-              />
-            )),
-          )}
-        </svg>
-        <Dot x={180} y={150} delay={0.55} size={34} core />
-        {NET.g1.map((p, i) => (
-          <Dot key={`d1-${i}`} x={p[0]} y={p[1]} delay={1.15 + i * 0.15} size={20} />
-        ))}
-        {NET.g2.map((children, pi) =>
-          children.map((p, ci) => (
-            <Dot
-              key={`d2-${pi}-${ci}`}
-              x={p[0]}
-              y={p[1]}
-              delay={2.0 + pi * 0.18 + ci * 0.08}
-              size={14}
-            />
-          )),
-        )}
+      {/* live holder counter */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0 }}
+        animate={wave >= 0 ? { opacity: 1, scale: [0, 1.15, 1] } : {}}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        className="mx-auto mt-4 flex w-fit items-center gap-2 rounded-full bg-white/[0.07] px-4 py-1.5 ring-1 ring-white/[0.12] backdrop-blur"
+      >
+        <span className="text-[13px] text-white/55">Holders</span>
+        <motion.span
+          key={wave}
+          initial={{ scale: 1.5, color: '#30D158' }}
+          animate={{ scale: 1, color: '#FFFFFF' }}
+          transition={{ duration: 0.4 }}
+          className="font-display text-[16px] font-bold tabular-nums"
+        >
+          {HOLDER_COUNTS[Math.max(wave, 0)]}
+        </motion.span>
+      </motion.div>
 
-        {/* the slam, over the grown network */}
+      {/* the crowd multiplying */}
+      <div className="relative mx-auto mt-5 w-fit">
+        {/* the first holder's phone lights up */}
+        <motion.div
+          initial={{ opacity: 0, y: 14, scale: 0.6 }}
+          animate={{ opacity: [0, 1, 1, 0], y: [14, -6, -10, -20], scale: [0.6, 1, 1, 0.9] }}
+          transition={{ delay: 0.95, duration: 1.4, times: [0, 0.2, 0.75, 1] }}
+          className="pointer-events-none absolute -top-9 left-1/2 z-20 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-xl bg-[#1d1f27]/95 px-2.5 py-1.5 shadow-[0_8px_20px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)]"
+        >
+          <span
+            className="flex h-5 w-5 items-center justify-center rounded-[6px] text-white"
+            style={{
+              background:
+                'radial-gradient(130% 105% at 50% 0%, rgba(46,155,255,0.55) 0%, rgba(16,40,88,0.95) 48%, #05080F 100%)',
+            }}
+          >
+            <XrpMark className="h-3 w-3" strokeWidth={5.5} />
+          </span>
+          <span className="text-[10px] font-semibold text-[#30D158]">+XRP every hour</span>
+        </motion.div>
+
+        <div className="grid grid-cols-8 gap-x-2 gap-y-1.5 sm:gap-x-3">
+          {Array.from({ length: 32 }, (_, i) => {
+            const delay = CROWD_DELAYS[i]
+            const isFirst = i === CROWD_ORDER[0]
+            return (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0, y: 14 }}
+                animate={{ opacity: 1, scale: [0, isFirst ? 1.5 : 1.3, 1], y: 0 }}
+                transition={{ delay, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                className="relative"
+              >
+                <Float amt={3} dur={2.6 + (i % 5) * 0.4} delay={delay}>
+                  <Person size={i === CROWD_ORDER[0] ? 40 : 32} hot={isFirst} />
+                </Float>
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: [0, 0.7, 0], scale: [0.6, 1.8, 2.2] }}
+                  transition={{ delay: delay + 0.05, duration: 0.55, ease: 'easeOut' }}
+                  className="pointer-events-none absolute inset-0 rounded-full border border-azure/60"
+                />
+              </motion.div>
+            )
+          })}
+        </div>
+
+        {/* the slam, over the crowd */}
         {slam && (
-          <div className="absolute inset-0 flex items-center justify-center">
+          <div className="absolute inset-0 z-30 flex items-center justify-center">
             <motion.span
               initial={{ opacity: 0, scale: 0.4 }}
-              animate={{ opacity: [0, 0.85, 0.6], scale: [0.4, 1.3, 1.1] }}
+              animate={{ opacity: [0, 0.9, 0.7], scale: [0.4, 1.3, 1.15] }}
               transition={{ duration: 0.7, ease: 'easeOut' }}
-              className="pointer-events-none absolute h-40 w-[340px] rounded-full bg-ink-950/85 blur-2xl"
+              className="pointer-events-none absolute h-32 w-[380px] rounded-full bg-ink-950/90 blur-2xl"
             />
             <motion.h2
               initial={{ opacity: 0, scale: 2.1, filter: 'blur(12px)' }}
@@ -822,11 +873,17 @@ function ActVirus() {
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 4.2, duration: 0.5, ease: EASE }}
+          transition={{ delay: 5.9, duration: 0.5, ease: EASE }}
           className="mx-auto mt-6 max-w-lg text-lg text-mist-dim sm:text-xl"
         >
-          One holder becomes three. Three become nine.{' '}
-          <span className="font-semibold text-white">Everyone earning XRP the whole way.</span>
+          One becomes two. Two become four. Four become a crowd.{' '}
+          <span className="inline-flex flex-wrap justify-center gap-x-1.5 font-semibold">
+            <WaveWords
+              words={['Everyone', 'earning', 'XRP', 'the', 'whole', 'way.']}
+              big={[2]}
+              delay={6.5}
+            />
+          </span>
         </motion.p>
       </Float>
     </motion.div>
@@ -1311,7 +1368,7 @@ function RefDashboard() {
 
 /* ---------------------------------- page ----------------------------------- */
 
-const ACT_DURATIONS = [3000, 10400, 6800, 10600]
+const ACT_DURATIONS = [3400, 13800, 8200, 10600]
 
 export default function ReferralPage() {
   const [act, setAct] = useState(0)
