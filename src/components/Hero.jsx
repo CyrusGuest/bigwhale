@@ -149,62 +149,96 @@ function makeNotif() {
   return { id: n, type: 'app', ...OTHER_NOTIFS[(n / 2 - 1) % OTHER_NOTIFS.length] }
 }
 
-const TAG_WORDS = ['HISTORY', 'XRP 589', 'XPY 589']
+const WALLETS = [
+  { name: 'FOMO', color: 'text-white' },
+  { name: 'Phantom', color: 'text-[#AB9FF2]' },
+  { name: 'Coinbase', color: 'text-[#4A80FF]' },
+]
 
-// commercial tagline scene: lines slide in, then the last word glitch-cuts
+// commercial tagline scene: title card, then wallet availability glitch-cuts
 function TagScene() {
-  const [w, setW] = useState(0)
+  const [phase, setPhase] = useState(0)
+  const [wi, setWi] = useState(0)
   useEffect(() => {
-    const t1 = setTimeout(() => setW(1), 2400)
-    const t2 = setTimeout(() => setW(2), 3900)
+    const t1 = setTimeout(() => setPhase(1), 3000)
+    const t2 = setTimeout(() => setWi(1), 4700)
+    const t3 = setTimeout(() => setWi(2), 6400)
     return () => {
       clearTimeout(t1)
       clearTimeout(t2)
+      clearTimeout(t3)
     }
   }, [])
   return (
     <div className="px-4 text-center">
-      <motion.p
-        initial={{ opacity: 0, y: 18 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.15, duration: 0.5 }}
-        className="font-mono text-xs uppercase tracking-[0.4em] text-azure-bright"
-      >
-        The First
-      </motion.p>
-      <motion.h3
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.35, duration: 0.55 }}
-        className="mt-5 text-3xl font-semibold tracking-[-0.02em] text-mist sm:text-4xl"
-      >
-        Passive-Earning XRP Coin
-      </motion.h3>
-      <motion.p
-        initial={{ opacity: 0, y: 18 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.55, duration: 0.5 }}
-        className="mt-4 text-xl italic text-mist-dim"
-      >
-        in
-      </motion.p>
-      <div className="mt-3 flex h-[96px] items-center justify-center sm:h-[110px]">
-        <AnimatePresence mode="wait">
-          <motion.span
-            key={w}
-            data-text={TAG_WORDS[w]}
-            initial={{ opacity: 0, x: 10, skewX: -8 }}
-            animate={{ opacity: [0, 1, 0.55, 1], x: [-8, 5, -2, 0], skewX: [8, -5, 2, 0] }}
-            exit={{ opacity: 0, transition: { duration: 0.12 } }}
-            transition={{ duration: 0.4, delay: w === 0 ? 0.75 : 0 }}
-            className={`glitch text-5xl font-bold tracking-tight sm:text-7xl ${
-              w === 2 ? 'text-shimmer' : w === 1 ? 'text-azure-bright' : 'text-white'
-            }`}
+      <AnimatePresence mode="wait">
+        {phase === 0 ? (
+          <motion.div key="title" exit={{ opacity: 0, y: -34, transition: { duration: 0.4 } }}>
+            <motion.p
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15, duration: 0.5 }}
+              className="font-mono text-xs uppercase tracking-[0.4em] text-azure-bright"
+            >
+              The First
+            </motion.p>
+            <motion.h3
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.35, duration: 0.55 }}
+              className="mt-5 text-3xl font-semibold tracking-[-0.02em] text-mist sm:text-4xl"
+            >
+              Passive-Earning XRP Coin
+            </motion.h3>
+            <motion.p
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.55, duration: 0.5 }}
+              className="mt-4 text-xl italic text-mist-dim"
+            >
+              in
+            </motion.p>
+            <div className="mt-3 flex h-[96px] items-center justify-center sm:h-[110px]">
+              <motion.span
+                data-text="HISTORY"
+                initial={{ opacity: 0, x: 10, skewX: -8 }}
+                animate={{ opacity: [0, 1, 0.55, 1], x: [-8, 5, -2, 0], skewX: [8, -5, 2, 0] }}
+                transition={{ duration: 0.4, delay: 0.8 }}
+                className="glitch text-5xl font-bold tracking-tight text-white sm:text-7xl"
+              >
+                HISTORY
+              </motion.span>
+            </div>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="wallets"
+            initial={{ opacity: 0, y: 44 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           >
-            {TAG_WORDS[w]}
-          </motion.span>
-        </AnimatePresence>
-      </div>
+            <p className="font-mono text-xs uppercase tracking-[0.4em] text-azure-bright">
+              Available on
+            </p>
+            <div className="mt-4 flex h-[96px] items-center justify-center sm:h-[110px]">
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={wi}
+                  data-text={WALLETS[wi].name}
+                  initial={{ opacity: 0, x: 10, skewX: -8 }}
+                  animate={{ opacity: [0, 1, 0.55, 1], x: [-8, 5, -2, 0], skewX: [8, -5, 2, 0] }}
+                  exit={{ opacity: 0, transition: { duration: 0.12 } }}
+                  transition={{ duration: 0.4 }}
+                  className={`glitch text-5xl font-bold tracking-tight sm:text-7xl ${WALLETS[wi].color}`}
+                >
+                  {WALLETS[wi].name}
+                </motion.span>
+              </AnimatePresence>
+            </div>
+            <p className="mt-2 text-2xl font-medium text-mist-dim">wallet</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
@@ -224,7 +258,7 @@ export default function Hero() {
   useEffect(() => {
     const t = setTimeout(
       () => setScene((s) => (s === 'phone' ? 'tag' : 'phone')),
-      scene === 'phone' ? 10000 : 7200,
+      scene === 'phone' ? 10000 : 8600,
     )
     return () => clearTimeout(t)
   }, [scene])
