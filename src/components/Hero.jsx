@@ -360,8 +360,15 @@ export default function Hero() {
                           >
                             <div className="flex items-center gap-3">
                               {n.type === 'pay' ? (
-                                <span className="flex h-[38px] w-[38px] flex-none items-center justify-center rounded-[9.5px] bg-gradient-to-b from-azure to-[#1668c9] text-white shadow-md shadow-azure/25">
-                                  <XrpMark className="h-[19px] w-[19px]" strokeWidth={4.5} />
+                                <span
+                                  className="relative flex h-[38px] w-[38px] flex-none items-center justify-center overflow-hidden rounded-[9.5px] shadow-md shadow-azure/30 ring-1 ring-white/10"
+                                  style={{
+                                    background:
+                                      'radial-gradient(130% 105% at 50% 0%, rgba(46,155,255,0.55) 0%, rgba(16,40,88,0.95) 48%, #05080F 100%)',
+                                  }}
+                                >
+                                  <span className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/[0.18] to-transparent" />
+                                  <XrpMark className="relative h-[21px] w-[21px] text-white" strokeWidth={5.2} />
                                 </span>
                               ) : (
                                 <span className="h-[38px] w-[38px] flex-none overflow-hidden rounded-[9.5px] shadow-md shadow-black/30">
