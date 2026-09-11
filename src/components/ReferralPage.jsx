@@ -357,6 +357,174 @@ function StepCards() {
   )
 }
 
+/* ------------------------------ the virus act ------------------------------ */
+
+// contagion network: one holder infects three, three infect nine
+const NET = {
+  c: [180, 150],
+  g1: [
+    [180, 78],
+    [243, 186],
+    [117, 186],
+  ],
+  g2: [
+    [
+      [108, 16],
+      [180, 2],
+      [252, 16],
+    ],
+    [
+      [332, 152],
+      [312, 226],
+      [262, 278],
+    ],
+    [
+      [28, 152],
+      [48, 226],
+      [98, 278],
+    ],
+  ],
+}
+
+function Dot({ x, y, delay, size = 16, core = false }) {
+  return (
+    <motion.span
+      initial={{ opacity: 0, scale: 0 }}
+      animate={{ opacity: 1, scale: [0, 1.5, 1] }}
+      transition={{ delay, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+      className="absolute flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full text-white shadow-[0_0_16px_3px_rgba(46,155,255,0.55)]"
+      style={{
+        left: x,
+        top: y,
+        width: size,
+        height: size,
+        background:
+          'radial-gradient(120% 120% at 50% 20%, rgba(46,155,255,0.9) 0%, rgba(16,42,92,1) 75%)',
+      }}
+    >
+      {core && <XrpMark className="h-4 w-4" strokeWidth={5} />}
+      <motion.span
+        initial={{ opacity: 0 }}
+        animate={{ opacity: [0.7, 0], scale: [1, 2.4] }}
+        transition={{ delay: delay + 0.1, duration: 0.7, ease: 'easeOut' }}
+        className="pointer-events-none absolute inset-0 rounded-full border border-azure/70"
+      />
+    </motion.span>
+  )
+}
+
+function Link({ from, to, delay }) {
+  return (
+    <motion.line
+      x1={from[0]}
+      y1={from[1]}
+      x2={to[0]}
+      y2={to[1]}
+      stroke="#2E9BFF"
+      strokeOpacity="0.35"
+      strokeWidth="1.5"
+      initial={{ pathLength: 0 }}
+      animate={{ pathLength: 1 }}
+      transition={{ delay, duration: 0.35, ease: 'easeOut' }}
+    />
+  )
+}
+
+function ActVirus() {
+  const [slam, setSlam] = useState(false)
+  useEffect(() => {
+    const t = setTimeout(() => setSlam(true), 2900)
+    return () => clearTimeout(t)
+  }, [])
+  return (
+    <motion.div
+      exit={{ opacity: 0, y: -46, transition: { duration: 0.35, ease: EASE } }}
+      className="w-full px-4 text-center"
+    >
+      <Float amt={5} dur={5}>
+        <motion.p
+          initial={{ opacity: 0, y: 24, filter: 'blur(6px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          transition={{ duration: 0.5, ease: EASE }}
+          className="text-xl font-medium text-mist sm:text-2xl"
+        >
+          Every holder gets <span className="text-shimmer">paid</span> to spread the word.
+        </motion.p>
+      </Float>
+
+      {/* the contagion */}
+      <div className="relative mx-auto mt-6 h-[300px] w-[360px]">
+        <svg viewBox="0 0 360 300" className="absolute inset-0 h-full w-full">
+          {NET.g1.map((p, i) => (
+            <Link key={`l1-${i}`} from={NET.c} to={p} delay={1.0 + i * 0.15} />
+          ))}
+          {NET.g2.map((children, pi) =>
+            children.map((p, ci) => (
+              <Link
+                key={`l2-${pi}-${ci}`}
+                from={NET.g1[pi]}
+                to={p}
+                delay={1.8 + pi * 0.18 + ci * 0.08}
+              />
+            )),
+          )}
+        </svg>
+        <Dot x={180} y={150} delay={0.55} size={34} core />
+        {NET.g1.map((p, i) => (
+          <Dot key={`d1-${i}`} x={p[0]} y={p[1]} delay={1.15 + i * 0.15} size={20} />
+        ))}
+        {NET.g2.map((children, pi) =>
+          children.map((p, ci) => (
+            <Dot
+              key={`d2-${pi}-${ci}`}
+              x={p[0]}
+              y={p[1]}
+              delay={2.0 + pi * 0.18 + ci * 0.08}
+              size={14}
+            />
+          )),
+        )}
+
+        {/* the slam, over the grown network */}
+        {slam && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <motion.span
+              initial={{ opacity: 0, scale: 0.4 }}
+              animate={{ opacity: [0, 0.85, 0.6], scale: [0.4, 1.3, 1.1] }}
+              transition={{ duration: 0.7, ease: 'easeOut' }}
+              className="pointer-events-none absolute h-40 w-[340px] rounded-full bg-ink-950/85 blur-2xl"
+            />
+            <motion.h2
+              initial={{ opacity: 0, scale: 2.1, filter: 'blur(12px)' }}
+              animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="text-3d relative text-4xl font-bold leading-[1.08] tracking-[-0.03em] sm:text-6xl"
+            >
+              XPY SPREADS
+              <br />
+              <span data-text="LIKE A VIRUS." className="glitch text-shimmer inline-block">
+                LIKE A VIRUS.
+              </span>
+            </motion.h2>
+          </div>
+        )}
+      </div>
+
+      <Float delay={0.6} amt={5} dur={5.4}>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 4.2, duration: 0.5, ease: EASE }}
+          className="mx-auto mt-6 max-w-lg text-lg text-mist-dim sm:text-xl"
+        >
+          One holder becomes three. Three become nine.{' '}
+          <span className="font-semibold text-white">Everyone earning XRP the whole way.</span>
+        </motion.p>
+      </Float>
+    </motion.div>
+  )
+}
+
 /* ------------------------------- the flywheel ------------------------------ */
 
 const WHEEL_NODES = [
@@ -835,13 +1003,13 @@ function RefDashboard() {
 
 /* ---------------------------------- page ----------------------------------- */
 
-const ACT_DURATIONS = [3000, 4600, 10600]
+const ACT_DURATIONS = [3000, 4600, 6800, 10600]
 
 export default function ReferralPage() {
   const [act, setAct] = useState(0)
 
   useEffect(() => {
-    if (act >= 3) return
+    if (act >= 4) return
     const t = setTimeout(() => setAct(act + 1), ACT_DURATIONS[act])
     return () => clearTimeout(t)
   }, [act])
@@ -850,12 +1018,13 @@ export default function ReferralPage() {
     <div className="relative overflow-x-clip pt-16">
       <div className="pointer-events-none absolute -top-48 left-1/2 h-[560px] w-[900px] -translate-x-1/2 rounded-full bg-azure-deep/[0.16] blur-[140px]" />
 
-      {act < 3 ? (
+      {act < 4 ? (
         <div className="relative flex min-h-[calc(100vh-4rem)] items-center justify-center px-6 py-12">
           <AnimatePresence mode="wait">
             {act === 0 && <ActTitle key="ref-title" />}
             {act === 1 && <ActFlow key="ref-flow" />}
-            {act === 2 && <ActFlywheel key="ref-flywheel" />}
+            {act === 2 && <ActVirus key="ref-virus" />}
+            {act === 3 && <ActFlywheel key="ref-flywheel" />}
           </AnimatePresence>
         </div>
       ) : (
