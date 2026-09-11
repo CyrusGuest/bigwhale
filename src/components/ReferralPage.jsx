@@ -969,7 +969,7 @@ function ActVirus() {
                   </span>
                   <br />
                   <span className="relative inline-block">
-                    <span data-text="LIKE A VIRUS." className="glitch text-luster inline-block">
+                    <span data-text="LIKE A VIRUS." className="glitch inline-block text-[#F6FAFF]">
                       LIKE A VIRUS.
                     </span>
                     <span aria-hidden className="text-scan absolute inset-0">
@@ -1014,7 +1014,7 @@ function ActVirus() {
                   </span>
                   <br />
                   <span className="relative inline-block">
-                    <span data-text="THE RIPPLE EFFECT." className="glitch text-luster inline-block">
+                    <span data-text="THE RIPPLE EFFECT." className="glitch inline-block text-[#F6FAFF]">
                       THE RIPPLE EFFECT.
                     </span>
                     <span aria-hidden className="text-scan absolute inset-0">
@@ -1045,6 +1045,115 @@ function ActVirus() {
           </span>
         </motion.p>
       </Float>
+    </motion.div>
+  )
+}
+
+/* ------------------------------- momentum act ------------------------------ */
+
+const MOMENTUM_WORDS = ['More holders.', 'More volume.', 'Bigger payouts.', 'More attention.']
+const MOMENTUM_TIMES = [400, 1900, 3400, 4900, 6500]
+const RISERS = [
+  { x: '8%', size: 22, dur: 9, delay: 0 },
+  { x: '22%', size: 14, dur: 12, delay: 2.5 },
+  { x: '36%', size: 18, dur: 10, delay: 5 },
+  { x: '58%', size: 15, dur: 11, delay: 1.2 },
+  { x: '72%', size: 24, dur: 9.5, delay: 3.8 },
+  { x: '88%', size: 16, dur: 12.5, delay: 6 },
+]
+
+function ActMomentum() {
+  const [step, setStep] = useState(-1) // 0..3 words, 4 finale
+  const [sub, setSub] = useState(false)
+  useEffect(() => {
+    const timers = MOMENTUM_TIMES.map((t, i) => setTimeout(() => setStep(i), t))
+    timers.push(setTimeout(() => setSub(true), 7600))
+    return () => timers.forEach(clearTimeout)
+  }, [])
+
+  return (
+    <motion.div
+      exit={{ opacity: 0, y: -46, transition: { duration: 0.35, ease: EASE } }}
+      className="relative w-full px-4 text-center"
+    >
+      {/* XRP marks rising softly like embers, the whole act long */}
+      {RISERS.map((r, i) => (
+        <motion.span
+          key={i}
+          initial={{ opacity: 0, y: 260 }}
+          animate={{ opacity: [0, 0.35, 0.35, 0], y: -320 }}
+          transition={{
+            duration: r.dur,
+            delay: r.delay,
+            repeat: Infinity,
+            ease: 'linear',
+            times: [0, 0.15, 0.8, 1],
+          }}
+          className="pointer-events-none absolute top-1/2 text-azure"
+          style={{ left: r.x, width: r.size, height: r.size }}
+        >
+          <XrpMark className="h-full w-full" strokeWidth={4} />
+        </motion.span>
+      ))}
+
+      {/* escalating statements, each shoved out by the next */}
+      <div className="relative flex h-[140px] items-center justify-center sm:h-[170px]">
+        <AnimatePresence mode="popLayout">
+          {step >= 0 && step < 4 && (
+            <motion.h2
+              key={step}
+              initial={{ x: 480, opacity: 0, rotate: 5 }}
+              animate={{ x: 0, opacity: 1, rotate: 0 }}
+              exit={{
+                x: -520,
+                opacity: 0,
+                rotate: -6,
+                filter: 'blur(6px)',
+                transition: { duration: 0.35, ease: [0.55, 0, 0.8, 0.4] },
+              }}
+              transition={{ type: 'spring', stiffness: 240, damping: 20 }}
+              className="absolute font-display font-semibold tracking-[-0.03em] text-white"
+              style={{ fontSize: `clamp(2rem, ${7 + step * 0.9}vw, ${3.2 + step * 0.5}rem)` }}
+            >
+              {MOMENTUM_WORDS[step]}
+            </motion.h2>
+          )}
+          {step >= 4 && (
+            <motion.h2
+              key="finale"
+              initial={{ scale: 1.6, opacity: 0, filter: 'blur(10px)' }}
+              animate={{ scale: 1, opacity: 1, filter: 'blur(0px)' }}
+              transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute font-display text-4xl font-semibold tracking-[-0.03em] sm:text-6xl"
+            >
+              <span className="relative inline-block">
+                <span className="text-shimmer">The loop never stops.</span>
+                <span aria-hidden className="text-glint absolute inset-0">
+                  The loop never stops.
+                </span>
+              </span>
+            </motion.h2>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* the ignition line, pure type */}
+      <motion.div
+        initial={{ opacity: 0, y: 26 }}
+        animate={sub ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.6, ease: EASE }}
+      >
+        <p className="mx-auto flex max-w-xl flex-wrap justify-center gap-x-2.5 text-xl font-medium text-mist-dim sm:text-2xl">
+          <WaveWords
+            words={['TikTok.', 'Instagram.', 'X.', 'A', 'launch', 'built', 'to', 'detonate', 'week', 'one.']}
+            big={[0, 1, 2, 7]}
+            delay={0.8}
+          />
+        </p>
+        <p className="mt-4 text-[11px] text-mist-faint">
+          Momentum is the design goal, never a guarantee.
+        </p>
+      </motion.div>
     </motion.div>
   )
 }
@@ -1578,7 +1687,7 @@ function RefDashboard() {
 
 /* ---------------------------------- page ----------------------------------- */
 
-const ACT_DURATIONS = [3400, 18200, 14600, 10600]
+const ACT_DURATIONS = [3400, 18200, 14600, 10400]
 
 export default function ReferralPage() {
   const [act, setAct] = useState(0)
@@ -1599,7 +1708,7 @@ export default function ReferralPage() {
             {act === 0 && <ActTitle key="ref-title" />}
             {act === 1 && <ActPhones key="ref-phones" />}
             {act === 2 && <ActVirus key="ref-virus" />}
-            {act === 3 && <ActFlywheel key="ref-flywheel" />}
+            {act === 3 && <ActMomentum key="ref-momentum" />}
           </AnimatePresence>
         </div>
       ) : (
