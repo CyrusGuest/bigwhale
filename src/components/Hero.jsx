@@ -36,33 +36,96 @@ const XRP_PRICE = 1.34
 
 // non-payout notifications rotate between payouts like a real lock screen
 const OTHER_NOTIFS = [
+  { app: 'Weather', icon: 'weather', body: 'Clear night, 62°. Perfect sleeping weather.' },
   {
-    app: 'Weather',
-    icon: '🌙',
-    bg: 'from-[#4A90D9] to-[#2C5AA0]',
-    body: 'Clear night, 62°. Perfect sleeping weather.',
-  },
-  {
-    app: 'Crypto Prices',
-    icon: '📈',
-    bg: 'from-[#1E9E5A] to-[#0F6B3A]',
+    app: 'Stocks',
+    icon: 'stocks',
     body: 'BTC $118,240 (+2.4%) · SOL $236 (+3.1%) · XRP $1.34 (+5.2%)',
   },
   {
     app: 'X',
-    icon: '𝕏',
-    bg: 'from-[#2a2a2a] to-[#000000]',
+    icon: 'x',
     body: '@xrpwhale: 1 XPY = 1 XRP. i said what i said.',
     hl: '1 XPY = 1 XRP',
   },
   {
-    app: 'Crypto News',
-    icon: '📰',
-    bg: 'from-[#D64545] to-[#8E2626]',
+    app: 'News',
+    icon: 'news',
     body: 'BREAKING: degens can’t stop tweeting “1 XPY = 1 XRP”',
     hl: '“1 XPY = 1 XRP”',
   },
 ]
+
+// hand-drawn app icons in the style of the real apps
+function AppIcon({ kind }) {
+  if (kind === 'weather')
+    return (
+      <svg viewBox="0 0 38 38" className="h-full w-full">
+        <defs>
+          <linearGradient id="wxSky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#4FA9F6" />
+            <stop offset="100%" stopColor="#1863C6" />
+          </linearGradient>
+        </defs>
+        <rect width="38" height="38" fill="url(#wxSky)" />
+        <circle cx="25" cy="13" r="5.5" fill="#FFD335" />
+        <g fill="#FFFFFF">
+          <circle cx="14" cy="23" r="5.5" />
+          <circle cx="21.5" cy="21" r="6.5" />
+          <rect x="8.5" y="22" width="21" height="7.5" rx="3.75" />
+        </g>
+      </svg>
+    )
+  if (kind === 'stocks')
+    return (
+      <svg viewBox="0 0 38 38" className="h-full w-full">
+        <rect width="38" height="38" fill="#1C1C1E" />
+        <polyline
+          points="6,27 13,19 18,23 31,9"
+          fill="none"
+          stroke="#30D158"
+          strokeWidth="2.6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <polyline
+          points="24,9 31,9 31,16"
+          fill="none"
+          stroke="#30D158"
+          strokeWidth="2.6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    )
+  if (kind === 'x')
+    return (
+      <svg viewBox="0 0 38 38" className="h-full w-full">
+        <rect width="38" height="38" fill="#000000" />
+        <path
+          d="M8.5 8.5h6.2l6 7.6 5.8-7.6h5l-8.3 10.2L32 29.5h-6.2l-6.5-8.2-6.3 8.2H8l8.8-10.9L8.5 8.5z"
+          fill="#FFFFFF"
+        />
+      </svg>
+    )
+  if (kind === 'news')
+    return (
+      <svg viewBox="0 0 38 38" className="h-full w-full">
+        <rect width="38" height="38" fill="#F5F5F7" />
+        <defs>
+          <linearGradient id="newsN" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#FF6482" />
+            <stop offset="100%" stopColor="#FF3B30" />
+          </linearGradient>
+        </defs>
+        <path
+          d="M10 29V9h4.6l8.8 13.4V9H28v20h-4.6L14.6 15.6V29H10z"
+          fill="url(#newsN)"
+        />
+      </svg>
+    )
+  return null
+}
 
 let notifCounter = 0
 function makeNotif() {
@@ -296,12 +359,8 @@ export default function Hero() {
                                   <XrpMark className="h-[19px] w-[19px]" strokeWidth={4.5} />
                                 </span>
                               ) : (
-                                <span
-                                  className={`flex h-[38px] w-[38px] flex-none items-center justify-center rounded-[9.5px] bg-gradient-to-b text-[17px] shadow-md shadow-black/30 ${n.bg} ${
-                                    n.app === 'X' ? 'text-[15px] font-bold text-white' : ''
-                                  }`}
-                                >
-                                  {n.icon}
+                                <span className="h-[38px] w-[38px] flex-none overflow-hidden rounded-[9.5px] shadow-md shadow-black/30">
+                                  <AppIcon kind={n.icon} />
                                 </span>
                               )}
                               <div className="min-w-0 flex-1">
