@@ -141,7 +141,8 @@ function BarChart({ points }) {
 }
 
 function Countdown() {
-  const [next, setNext] = useState(2148)
+  // start from a random point in the hour so every visit looks live
+  const [next, setNext] = useState(() => 180 + Math.floor(Math.random() * 3240))
   useEffect(() => {
     const iv = setInterval(() => setNext((s) => (s > 0 ? s - 1 : 3600)), 1000)
     return () => clearInterval(iv)

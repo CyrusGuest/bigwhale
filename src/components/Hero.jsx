@@ -693,6 +693,16 @@ const PORTAL_POPS = [
 ]
 
 function ActPortal() {
+  // countdown starts at a random point so every viewing looks live
+  const [payoutIn, setPayoutIn] = useState(() => 240 + Math.floor(Math.random() * 3120))
+  useEffect(() => {
+    const iv = setInterval(() => setPayoutIn((s) => (s > 0 ? s - 1 : 3600)), 1000)
+    return () => clearInterval(iv)
+  }, [])
+  const payoutLabel = `${String(Math.floor(payoutIn / 60)).padStart(2, '0')}:${String(
+    payoutIn % 60,
+  ).padStart(2, '0')}`
+
   const W = 460
   const H = 170
   const max = PORTAL_PTS[PORTAL_PTS.length - 1]
@@ -756,7 +766,9 @@ function ActPortal() {
               <span className="block font-mono text-[9px] uppercase tracking-[0.18em] text-mist-faint">
                 Next payout
               </span>
-              <span className="mt-1 block font-mono text-lg tabular-nums text-mist">41:32</span>
+              <span className="mt-1 block font-mono text-lg tabular-nums text-mist">
+                {payoutLabel}
+              </span>
             </div>
           </div>
 
