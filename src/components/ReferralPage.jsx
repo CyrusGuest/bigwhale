@@ -97,6 +97,303 @@ function ActTitle() {
   )
 }
 
+/* --------------------------- two-phone walkthrough -------------------------- */
+
+function MiniPhone({ children, className = '' }) {
+  return (
+    <div className={`relative w-[190px] ${className}`}>
+      <div className="rounded-[2.1rem] bg-gradient-to-b from-[#55607a] via-[#2a3147] to-[#171c2e] p-[2.5px] shadow-[0_24px_60px_-16px_rgba(0,0,0,0.8),0_0_50px_-18px_rgba(46,155,255,0.45)]">
+        <div className="rounded-[1.95rem] bg-black p-[6px]">
+          <div className="relative h-[360px] overflow-hidden rounded-[1.6rem] bg-[#0A1128]">
+            <div className="pointer-events-none absolute -top-10 left-1/2 h-40 w-40 -translate-x-1/2 rounded-full bg-azure-deep/50 blur-[50px]" />
+            <div className="absolute left-1/2 top-2 z-20 h-[16px] w-[62px] -translate-x-1/2 rounded-full bg-black" />
+            {children}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function TypeText({ text, start, speed = 55 }) {
+  const [n, setN] = useState(0)
+  useEffect(() => {
+    const timers = text.split('').map((_, i) => setTimeout(() => setN(i + 1), start + i * speed))
+    return () => timers.forEach(clearTimeout)
+  }, [text, start, speed])
+  return <>{text.slice(0, n)}</>
+}
+
+// big floating +XRP, mobile-game style
+function PopAmt({ amt, big = false }) {
+  return (
+    <motion.span
+      initial={{ opacity: 0, y: 6, scale: 0.4 }}
+      animate={{ opacity: [0, 1, 1, 0], y: -76, scale: big ? 1.25 : 1 }}
+      transition={{ duration: 1.7, ease: 'easeOut' }}
+      className="pointer-events-none absolute -top-3 left-1/2 z-30 -translate-x-1/2 whitespace-nowrap font-display text-3xl font-bold text-[#30D158] drop-shadow-[0_0_14px_rgba(48,209,88,0.7)]"
+    >
+      +{amt} XRP
+    </motion.span>
+  )
+}
+
+// in-screen notification banner
+function ScreenNotif({ text }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -34, scale: 0.85 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ type: 'spring', stiffness: 320, damping: 24 }}
+      className="absolute inset-x-2 top-6 z-10 flex items-center gap-2 rounded-2xl bg-[#1d1f27]/90 p-2.5 shadow-[0_8px_20px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)] backdrop-blur-xl"
+    >
+      <span
+        className="flex h-7 w-7 flex-none items-center justify-center rounded-[8px] text-white"
+        style={{
+          background:
+            'radial-gradient(130% 105% at 50% 0%, rgba(46,155,255,0.55) 0%, rgba(16,40,88,0.95) 48%, #05080F 100%)',
+        }}
+      >
+        <XrpMark className="h-3.5 w-3.5" strokeWidth={5} />
+      </span>
+      <div className="min-w-0">
+        <span className="block text-[10px] font-semibold text-white">XPY</span>
+        <span className="block text-[10px] leading-tight text-white/80">{text}</span>
+      </div>
+    </motion.div>
+  )
+}
+
+const PHONE_BEATS = [3300, 3900, 5100, 5500, 7100, 7500, 8500]
+
+function ActPhones() {
+  const [beat, setBeat] = useState(0)
+  useEffect(() => {
+    const timers = PHONE_BEATS.map((t, i) => setTimeout(() => setBeat(i + 1), t))
+    return () => timers.forEach(clearTimeout)
+  }, [])
+
+  const bTotal = beat >= 5 ? 30 : beat >= 3 ? 10 : 0
+  const aTotal = beat >= 6 ? 3 : beat >= 4 ? 1 : 0
+
+  return (
+    <motion.div
+      exit={{ opacity: 0, y: -46, transition: { duration: 0.35, ease: EASE } }}
+      className="w-full px-4 text-center"
+    >
+      <Float amt={5} dur={5}>
+        <motion.h2
+          initial={{ opacity: 0, y: 26, filter: 'blur(8px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          transition={{ duration: 0.5, ease: EASE }}
+          className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-5xl"
+        >
+          Watch how it <span className="text-shimmer">works.</span>
+        </motion.h2>
+      </Float>
+
+      <div className="relative mx-auto mt-6 flex h-[420px] max-w-lg origin-top scale-[0.85] items-center justify-center gap-8 sm:scale-100 sm:gap-14">
+        {/* the invite flying across */}
+        {beat >= 1 && beat < 3 && (
+          <motion.span
+            initial={{ opacity: 0, left: '28%', top: '38%', rotate: 0, scale: 0.7 }}
+            animate={{
+              opacity: [0, 1, 1, 0],
+              left: ['28%', '46%', '66%'],
+              top: ['38%', '18%', '34%'],
+              rotate: [0, 22, 42],
+              scale: [0.7, 1, 0.9],
+            }}
+            transition={{ duration: 0.85, ease: 'easeIn' }}
+            className="absolute z-30 rounded-full bg-azure px-3 py-1.5 font-mono text-[10px] font-semibold text-white shadow-[0_0_20px_rgba(46,155,255,0.8)]"
+          >
+            xpy.io/?ref=7xKX ✉
+          </motion.span>
+        )}
+
+        {/* the 10% match pulse, friend → you */}
+        {(beat === 4 || beat === 6) && (
+          <motion.span
+            key={`pulse-${beat}`}
+            initial={{ opacity: 0, right: '22%', top: '30%' }}
+            animate={{ opacity: [0, 1, 1, 0], right: ['22%', '48%', '74%'], top: ['30%', '14%', '30%'] }}
+            transition={{ duration: 0.55, ease: 'easeIn' }}
+            className="absolute z-30 h-3 w-3 rounded-full bg-[#30D158] shadow-[0_0_16px_4px_rgba(48,209,88,0.8)]"
+          />
+        )}
+
+        {/* Phone A: you, creating the link */}
+        <motion.div
+          initial={{ opacity: 0, x: -260, rotate: -14 }}
+          animate={{ opacity: 1, x: 0, rotate: -5 }}
+          transition={{ delay: 0.25, type: 'spring', stiffness: 200, damping: 20 }}
+          className="relative"
+        >
+          {beat === 4 && <PopAmt amt={1} />}
+          {beat === 6 && <PopAmt amt={2} />}
+          <Float amt={6} dur={4.6}>
+            <MiniPhone>
+              {beat >= 4 && (
+                <ScreenNotif key={`an-${beat >= 6 ? 2 : 1}`} text={`+${beat >= 6 ? 2 : 1} XRP · referral match`} />
+              )}
+              <div className="px-3 pt-8 text-left">
+                <div className="flex items-center gap-1.5">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-md bg-azure/15 text-azure">
+                    <XrpMark className="h-3 w-3" strokeWidth={5.5} />
+                  </span>
+                  <span className="font-display text-[11px] font-bold text-white">XPY</span>
+                  <span className="ml-auto rounded-full bg-white/[0.08] px-2 py-0.5 text-[8px] text-white/60">
+                    Referrals
+                  </span>
+                </div>
+                <p className="mt-4 font-display text-[13px] font-semibold leading-snug text-white">
+                  Create your referral link
+                </p>
+                <div className="mt-2 rounded-xl bg-white/[0.07] px-2.5 py-2 font-mono text-[9px] text-azure-bright ring-1 ring-white/[0.1]">
+                  <TypeText text="7xKXtg2CW8…gAsU" start={900} />
+                  <motion.span
+                    animate={{ opacity: [1, 0, 1] }}
+                    transition={{ duration: 0.9, repeat: Infinity }}
+                    className="text-white/70"
+                  >
+                    |
+                  </motion.span>
+                </div>
+                <motion.div
+                  initial={{ opacity: 0.6 }}
+                  animate={beat >= 1 ? { scale: [1, 0.92, 1], opacity: 1 } : { opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                  className="relative mt-2 rounded-xl bg-azure py-2 text-center text-[11px] font-bold text-white"
+                >
+                  {beat >= 1 ? 'Shared ✓' : 'Generate & Share'}
+                  {beat >= 1 && (
+                    <motion.span
+                      initial={{ opacity: 0.6, scale: 0.4 }}
+                      animate={{ opacity: 0, scale: 2 }}
+                      transition={{ duration: 0.5 }}
+                      className="absolute inset-0 rounded-xl border-2 border-white/70"
+                    />
+                  )}
+                </motion.div>
+
+                <AnimatePresence>
+                  {beat >= 2 && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 16, scale: 0.9 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+                      className="mt-3 rounded-xl bg-white/[0.06] p-2.5 ring-1 ring-white/[0.08]"
+                    >
+                      <span className="block text-[9px] text-white/55">Friends holding</span>
+                      <span className="font-display text-[15px] font-bold text-white">1</span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                <AnimatePresence>
+                  {aTotal > 0 && (
+                    <motion.div
+                      key={aTotal}
+                      initial={{ scale: 1.35 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: 'spring', stiffness: 300, damping: 18 }}
+                      className="mt-2 rounded-xl bg-[#30D158]/12 p-2.5 ring-1 ring-[#30D158]/30"
+                    >
+                      <span className="block text-[9px] text-white/55">Your 10% bonus</span>
+                      <span className="font-display text-[15px] font-bold text-[#30D158]">
+                        +{aTotal} XRP
+                      </span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </MiniPhone>
+          </Float>
+          <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.2em] text-mist-faint">You</p>
+        </motion.div>
+
+        {/* Phone B: your friend */}
+        {beat >= 2 && (
+          <motion.div
+            initial={{ opacity: 0, y: 220, scale: 0.5, rotate: 16 }}
+            animate={{ opacity: 1, y: 0, scale: 1, rotate: 5 }}
+            transition={{ type: 'spring', stiffness: 190, damping: 17 }}
+            className="relative"
+          >
+            {beat === 3 && <PopAmt amt={10} big />}
+            {beat === 5 && <PopAmt amt={20} big />}
+            <Float amt={6} dur={5.2} delay={0.4}>
+              <MiniPhone>
+                {beat >= 3 && (
+                  <ScreenNotif key={`bn-${beat >= 5 ? 2 : 1}`} text={`You just got paid +${beat >= 5 ? 20 : 10} XRP`} />
+                )}
+                <div className="px-3 pt-8 text-left">
+                  <div className="flex items-center gap-1.5">
+                    <span className="flex h-5 w-5 items-center justify-center rounded-md bg-azure/15 text-azure">
+                      <XrpMark className="h-3 w-3" strokeWidth={5.5} />
+                    </span>
+                    <span className="font-display text-[11px] font-bold text-white">XPY</span>
+                  </div>
+                  <motion.p
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.35 }}
+                    className="mt-4 font-display text-[13px] font-semibold leading-snug text-white"
+                  >
+                    You&rsquo;re in 🎉
+                  </motion.p>
+                  <motion.div
+                    initial={{ opacity: 0, y: 14 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.55 }}
+                    className="mt-2 rounded-xl bg-white/[0.06] p-2.5 ring-1 ring-white/[0.08]"
+                  >
+                    <span className="block text-[9px] text-white/55">Now holding</span>
+                    <span className="font-display text-[15px] font-bold text-white">XPY</span>
+                  </motion.div>
+                  <AnimatePresence>
+                    {bTotal > 0 && (
+                      <motion.div
+                        key={bTotal}
+                        initial={{ scale: 1.35 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: 'spring', stiffness: 300, damping: 18 }}
+                        className="mt-2 rounded-xl bg-[#30D158]/12 p-2.5 ring-1 ring-[#30D158]/30"
+                      >
+                        <span className="block text-[9px] text-white/55">XRP earned</span>
+                        <span className="font-display text-[15px] font-bold text-[#30D158]">
+                          +{bTotal} XRP
+                        </span>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </MiniPhone>
+            </Float>
+            <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.2em] text-mist-faint">
+              Your friend
+            </p>
+          </motion.div>
+        )}
+      </div>
+
+      <AnimatePresence>
+        {beat >= 7 && (
+          <Float amt={5} dur={5}>
+            <motion.p
+              initial={{ opacity: 0, scale: 1.6, filter: 'blur(8px)' }}
+              animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+              className="mt-2 font-display text-2xl font-semibold text-white sm:text-3xl"
+            >
+              They earn. You earn <span className="text-shimmer">10% on top.</span> Automatically.
+            </motion.p>
+          </Float>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  )
+}
+
 // friends stream XRP, a cut flows to you, coins pop as they land
 function ActFlow() {
   const [chips, setChips] = useState([])
@@ -1003,7 +1300,7 @@ function RefDashboard() {
 
 /* ---------------------------------- page ----------------------------------- */
 
-const ACT_DURATIONS = [3000, 4600, 6800, 10600]
+const ACT_DURATIONS = [3000, 10400, 6800, 10600]
 
 export default function ReferralPage() {
   const [act, setAct] = useState(0)
@@ -1022,7 +1319,7 @@ export default function ReferralPage() {
         <div className="relative flex min-h-[calc(100vh-4rem)] items-center justify-center px-6 py-12">
           <AnimatePresence mode="wait">
             {act === 0 && <ActTitle key="ref-title" />}
-            {act === 1 && <ActFlow key="ref-flow" />}
+            {act === 1 && <ActPhones key="ref-phones" />}
             {act === 2 && <ActVirus key="ref-virus" />}
             {act === 3 && <ActFlywheel key="ref-flywheel" />}
           </AnimatePresence>
