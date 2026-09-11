@@ -97,8 +97,18 @@ function ActTitle() {
   )
 }
 
-// friends stream XRP, a cut flows to you
+// friends stream XRP, a cut flows to you, coins pop as they land
 function ActFlow() {
+  const [chips, setChips] = useState([])
+  const [total, setTotal] = useState(0)
+  useEffect(() => {
+    const iv = setInterval(() => {
+      const amt = 0.3 + Math.random() * 0.7
+      setChips((c) => [...c.slice(-2), { id: Date.now(), amt }])
+      setTotal((t) => t + amt)
+    }, 1100)
+    return () => clearInterval(iv)
+  }, [])
   return (
     <motion.div
       exit={{ opacity: 0, y: -46, transition: { duration: 0.35, ease: EASE } }}
@@ -155,23 +165,49 @@ function ActFlow() {
             </div>
           ))}
         </div>
-        <motion.span
-          initial={{ opacity: 0, x: 120, scale: 0.5 }}
-          animate={{ opacity: 1, x: 0, scale: 1 }}
-          transition={{ delay: 1.1, type: 'spring', stiffness: 220, damping: 16 }}
-          className="relative flex h-16 w-16 items-center justify-center rounded-full text-white ring-1 ring-azure/50 shadow-[0_0_36px_-6px_rgba(46,155,255,0.7)]"
-          style={{
-            background:
-              'radial-gradient(120% 120% at 50% 0%, rgba(46,155,255,0.65) 0%, rgba(16,42,92,0.95) 60%, #0A1128 100%)',
-          }}
-        >
+        <div className="relative">
+          {/* +XRP coin popups as pulses land */}
+          <AnimatePresence>
+            {chips.map((c) => (
+              <motion.span
+                key={c.id}
+                initial={{ opacity: 0, y: 0, scale: 0.6 }}
+                animate={{ opacity: [0, 1, 1, 0], y: -54, scale: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 1.4, ease: 'easeOut' }}
+                className="pointer-events-none absolute -top-2 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-[#30D158]/15 px-2.5 py-1 font-display text-[12px] font-bold text-[#30D158] ring-1 ring-[#30D158]/30"
+              >
+                +{c.amt.toFixed(2)} XRP
+              </motion.span>
+            ))}
+          </AnimatePresence>
           <motion.span
-            animate={{ opacity: [0.4, 0.9, 0.4] }}
-            transition={{ duration: 2.2, repeat: Infinity }}
-            className="pointer-events-none absolute -inset-1 rounded-full border border-azure/40"
-          />
-          <span className="text-[13px] font-bold">YOU</span>
-        </motion.span>
+            key={chips[chips.length - 1]?.id || 'you'}
+            initial={{ scale: 1.12 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.35, ease: EASE }}
+            className="relative flex h-16 w-16 items-center justify-center rounded-full text-white ring-1 ring-azure/50 shadow-[0_0_36px_-6px_rgba(46,155,255,0.7)]"
+            style={{
+              background:
+                'radial-gradient(120% 120% at 50% 0%, rgba(46,155,255,0.65) 0%, rgba(16,42,92,0.95) 60%, #0A1128 100%)',
+            }}
+          >
+            <motion.span
+              animate={{ opacity: [0.4, 0.9, 0.4] }}
+              transition={{ duration: 2.2, repeat: Infinity }}
+              className="pointer-events-none absolute -inset-1 rounded-full border border-azure/40"
+            />
+            <span className="text-[13px] font-bold">YOU</span>
+          </motion.span>
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.4 }}
+            className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap font-display text-[13px] font-semibold tabular-nums text-[#30D158]"
+          >
+            +{total.toFixed(2)} XRP
+          </motion.span>
+        </div>
       </div>
 
       <Float delay={0.9} amt={5} dur={5}>
@@ -181,8 +217,8 @@ function ActFlow() {
           transition={{ delay: 1.7, duration: 0.5 }}
           className="mx-auto mt-8 max-w-md text-lg text-mist-dim"
         >
-          Their payouts never shrink. Your 10% is paid on top, from the
-          protocol fee.
+          Their payouts never shrink. Your 10% is paid on top, from the 1/5
+          marketing &amp; referral slice of the fee.
         </motion.p>
       </Float>
     </motion.div>
@@ -292,7 +328,7 @@ function StepCards() {
   const steps = [
     { icon: '🔗', title: 'Share your link', body: 'Send it to friends, group chats, your feed. Anyone who buys through it is yours.' },
     { icon: '⏱️', title: 'They hold, they earn', body: 'Your friends get their full hourly XRP payouts. Nothing is taken from them, ever.' },
-    { icon: null, title: 'You earn 10% on top', body: 'Every hour they earn, you earn a 10% match, paid from the protocol fee. For as long as they hold.' },
+    { icon: null, title: 'You earn 10% on top', body: 'Every hour they earn, you earn a 10% match, paid from the 1/5 marketing & referral fee slice. For as long as they hold.' },
   ]
   return (
     <div className="mx-auto mt-14 grid max-w-5xl gap-5 sm:grid-cols-3">
@@ -305,9 +341,11 @@ function StepCards() {
             transition={{ delay: i * 0.12, type: 'spring', stiffness: 200, damping: 21 }}
             className={`${glass} h-full p-6`}
           >
-            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white/[0.08] text-xl ring-1 ring-white/[0.12]">
-              {s.icon || <XrpMark className="h-5 w-5 text-azure" strokeWidth={4.5} />}
-            </span>
+            <Float amt={4} dur={2.6} delay={i * 0.4}>
+              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white/[0.08] text-2xl ring-1 ring-white/[0.12]">
+                {s.icon || <XrpMark className="h-5 w-5 text-azure" strokeWidth={4.5} />}
+              </span>
+            </Float>
             <h4 className="font-display mt-4 text-[17px] font-semibold text-white">
               {i + 1}. {s.title}
             </h4>
@@ -319,12 +357,83 @@ function StepCards() {
   )
 }
 
+// where the 10% comes from: animated fee split bar, mobile-game style
+function FeeSplit() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 60 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ type: 'spring', stiffness: 180, damping: 22 }}
+      className={`${glass} mx-auto mt-14 max-w-3xl p-7 sm:p-9`}
+    >
+      <h3 className="font-display text-[20px] font-semibold text-white">
+        Where the 10% comes from
+      </h3>
+      <p className="mt-1 text-[14px] text-white/55">
+        Every trade pays a 5% fee. It splits two ways, and your bonus lives in
+        the second slice:
+      </p>
+      <div className="mt-6 flex h-16 gap-1 overflow-hidden rounded-2xl ring-1 ring-white/[0.1]">
+        <motion.div
+          initial={{ width: '0%' }}
+          whileInView={{ width: '80%' }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.25, duration: 0.9, ease: EASE }}
+          className="flex items-center justify-center gap-2 overflow-hidden whitespace-nowrap bg-gradient-to-r from-azure-deep/70 to-azure/60 px-3"
+        >
+          <XrpMark className="h-4 w-4 flex-none text-white" strokeWidth={5} />
+          <span className="font-display text-[14px] font-semibold text-white sm:text-[15px]">
+            4/5 · Airdropped to holders as XRP
+          </span>
+        </motion.div>
+        <motion.div
+          initial={{ width: '0%' }}
+          whileInView={{ width: '20%' }}
+          viewport={{ once: true }}
+          transition={{ delay: 1.0, duration: 0.6, ease: EASE }}
+          className="flex items-center justify-center overflow-hidden whitespace-nowrap bg-gradient-to-r from-[#1f8f4e]/70 to-[#30D158]/60 px-2"
+        >
+          <span className="font-display text-[13px] font-semibold text-white">1/5</span>
+        </motion.div>
+      </div>
+      <div className="mt-4 flex justify-end">
+        <motion.div
+          initial={{ opacity: 0, scale: 0 }}
+          whileInView={{ opacity: 1, scale: [0, 1.15, 1] }}
+          viewport={{ once: true }}
+          transition={{ delay: 1.7, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+          className="flex items-center gap-2 rounded-full bg-[#30D158]/12 px-4 py-2 ring-1 ring-[#30D158]/30"
+        >
+          <span className="text-[16px]">🎁</span>
+          <span className="font-display text-[13px] font-semibold text-[#30D158]">
+            Marketing & referrals — your 10% bonus is paid from here
+          </span>
+        </motion.div>
+      </div>
+    </motion.div>
+  )
+}
+
+// squad tiers, mobile-game style
+const TIERS = [
+  { min: 1, name: 'Recruit', emoji: '🥉' },
+  { min: 5, name: 'Squad Leader', emoji: '🥈' },
+  { min: 10, name: 'Whale Wrangler', emoji: '🥇' },
+  { min: 20, name: 'XRP Kingpin', emoji: '👑' },
+]
+
 function RefCalculator() {
   const [friends, setFriends] = useState(5)
   const [avgPos, setAvgPos] = useState(10000)
 
   const friendsDailyXrp = (friends * avgPos * DAILY_RATE) / XRP_PRICE
   const yourDailyXrp = friendsDailyXrp * REF_CUT
+
+  const tierIdx = TIERS.reduce((acc, t, i) => (friends >= t.min ? i : acc), 0)
+  const tier = TIERS[tierIdx]
+  const next = TIERS[tierIdx + 1]
+  const progress = next ? (friends - tier.min) / (next.min - tier.min) : 1
 
   return (
     <motion.div
@@ -334,10 +443,44 @@ function RefCalculator() {
       transition={{ type: 'spring', stiffness: 180, damping: 22 }}
       className={`${glass} mx-auto mt-14 max-w-3xl p-7 sm:p-9`}
     >
-      <h3 className="font-display text-[20px] font-semibold text-white">What your circle is worth</h3>
+      <h3 className="font-display text-[20px] font-semibold text-white">What your squad is worth</h3>
       <p className="mt-1 text-[14px] text-white/55">
         Simulated at $10M avg daily volume, $5M market cap. Arithmetic, not a promise.
       </p>
+
+      {/* squad tier badge + progress to next rank */}
+      <div className="mt-6 flex items-center gap-4 rounded-2xl bg-white/[0.05] p-4 ring-1 ring-white/[0.08]">
+        <Float amt={4} dur={2.4}>
+          <motion.span
+            key={tier.name}
+            initial={{ scale: 0.4, rotate: -20 }}
+            animate={{ scale: [0.4, 1.25, 1], rotate: 0 }}
+            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            className="block text-4xl"
+          >
+            {tier.emoji}
+          </motion.span>
+        </Float>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-baseline justify-between gap-2">
+            <span className="font-display text-[16px] font-semibold text-white">{tier.name}</span>
+            {next ? (
+              <span className="text-[12px] text-white/50">
+                {next.min - friends} more to {next.emoji} {next.name}
+              </span>
+            ) : (
+              <span className="text-[12px] font-semibold text-[#F5C542]">Max rank</span>
+            )}
+          </div>
+          <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-white/[0.08]">
+            <motion.div
+              animate={{ width: `${Math.max(progress * 100, 6)}%` }}
+              transition={{ type: 'spring', stiffness: 160, damping: 22 }}
+              className="h-full rounded-full bg-gradient-to-r from-azure to-azure-bright shadow-[0_0_12px_rgba(46,155,255,0.6)]"
+            />
+          </div>
+        </div>
+      </div>
 
       <div className="mt-7 grid gap-8 sm:grid-cols-2">
         <div>
@@ -464,9 +607,10 @@ function RefDashboard() {
 
       <p className="mt-5 text-xs leading-relaxed text-mist-faint">
         One level only: you earn on people you directly refer, never on chains
-        beneath them. Bonuses are paid from the protocol fee allocation, never
-        deducted from your friends&rsquo; payouts and never from anyone&rsquo;s
-        principal. Figures shown are illustrative and vary with trading volume.
+        beneath them. Bonuses are paid from the 1/5 marketing &amp; referral
+        fee allocation, never deducted from your friends&rsquo; payouts and
+        never from anyone&rsquo;s principal. Figures shown are illustrative
+        and vary with trading volume.
       </p>
     </motion.div>
   )
@@ -538,13 +682,16 @@ export default function ReferralPage() {
               transition={{ delay: 0.35, duration: 0.5, ease: EASE }}
               className="mx-auto mt-5 max-w-xl text-lg text-mist-dim"
             >
-              Every hour your friends get paid, you get a 10% match on top.
-              Paid from the protocol fee. Their payouts never shrink.
+              Every hour your friends get paid, you get a 10% match on top,
+              funded by the 1/5 marketing &amp; referral slice of the fee.
+              Their payouts never shrink. No caps, no expiry: your bonus
+              scales with every friend, for as long as they hold.
             </motion.p>
           </div>
 
           <LinkCard />
           <StepCards />
+          <FeeSplit />
           <RefCalculator />
           <RefDashboard />
         </motion.div>

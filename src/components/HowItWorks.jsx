@@ -12,8 +12,8 @@ const steps = [
     num: 'II',
     title: 'Pool',
     tag: 'fees converted to XRP',
-    body: 'Collected fees are converted to XRP and held in a public rewards pool. Four fifths of each fee is earmarked for holders; one fifth funds protocol liquidity. The pool address is published, and its balance is verifiable by anyone at any time.',
-    spec: '4% to holders · 1% to liquidity · Public pool address',
+    body: 'Collected fees are converted to XRP and held in a public rewards pool. Four fifths of each fee is airdropped to holders as XRP; one fifth funds marketing and the referral program that grows the holder base. The pool address is published, and its balance is verifiable by anyone at any time.',
+    spec: '4/5 airdropped to holders · 1/5 marketing & referrals · Public pool',
   },
   {
     num: 'III',

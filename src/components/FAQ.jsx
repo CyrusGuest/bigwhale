@@ -12,7 +12,7 @@ const faqs = [
   },
   {
     q: 'Where exactly does the XRP come from?',
-    a: 'From the 5% fee charged on each completed trade of the token. Fees are converted to XRP and pooled; four fifths of each fee is sent to holders each hour based on how much they hold, and one fifth funds liquidity. No part of any reward comes from new buyers’ principal, token emissions, or lending out pooled funds, the pool’s inflows and outflows are public XRPL transactions you can audit.',
+    a: 'From the 5% fee charged on each completed trade of the token. Fees are converted to XRP and pooled; four fifths of each fee is airdropped to holders each hour based on how much they hold, and one fifth funds marketing and the referral program. No part of any reward comes from new buyers’ principal, token emissions, or lending out pooled funds, the pool’s inflows and outflows are public XRPL transactions you can audit.',
   },
   {
     q: 'What happens when trading volume falls?',

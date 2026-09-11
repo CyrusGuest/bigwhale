@@ -147,11 +147,11 @@ function FlowDiagram() {
             delay={0.34}
             icon={
               <svg viewBox="0 0 20 20" className="h-5 w-5 fill-current">
-                <path d="M10 1.8s5.5 6 5.5 10a5.5 5.5 0 1 1-11 0c0-4 5.5-10 5.5-10Z" />
+                <path d="M17 3.5v13l-5-2.6H7.5A2.5 2.5 0 0 1 5 11.4v-.06L4.6 15H2.8l.5-4A2.5 2.5 0 0 1 2 8.9c0-1.38 1.12-2.5 2.5-2.5H12l5-2.9Z" />
               </svg>
             }
-            title="Liquidity · 1/5"
-            sub="Deepens the pool for everyone"
+            title="Marketing & referrals · 1/5"
+            sub="Growth budget and referral bonuses"
           />
         </div>
       </div>
