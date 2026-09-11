@@ -461,6 +461,25 @@ function ActPhone({ notifs }) {
         className="relative flex origin-top scale-[0.88] justify-center sm:scale-95"
       >
         <div className="pointer-events-none absolute top-1/2 left-1/2 h-[460px] w-[460px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-azure-deep/[0.28] blur-[100px]" />
+        {/* z z z drifting off the sleeping phone */}
+        {[0, 1, 2].map((i) => (
+          <motion.span
+            key={i}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: [0, 0.9, 0], y: [0, -70 - i * 12], x: [0, 16 + i * 10] }}
+            transition={{
+              delay: 1.6 + i * 0.85,
+              duration: 2.7,
+              repeat: Infinity,
+              repeatDelay: 0.3,
+              ease: 'easeOut',
+            }}
+            className="pointer-events-none absolute right-[18%] top-16 font-bold text-azure-bright"
+            style={{ fontSize: 15 + i * 7 }}
+          >
+            z
+          </motion.span>
+        ))}
         <PhoneMock notifs={notifs} />
       </motion.div>
     </motion.div>
@@ -543,9 +562,27 @@ function ActSleep() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.9, duration: 0.5 }}
-            className="mt-8 font-mono text-sm uppercase tracking-[0.26em] text-azure-bright"
+            className="mt-8 flex flex-wrap justify-center gap-x-2 font-mono text-sm uppercase tracking-[0.26em] text-azure-bright"
           >
-            +97.56 XRP while you dreamt
+            {['+97.56', 'XRP', 'while', 'you', 'dreamt'].map((w, i) => (
+              <motion.span
+                key={i}
+                animate={{
+                  scale: [1, i < 2 ? 1.35 : 1.18, 1],
+                  color: ['#66B8FF', '#FFFFFF', '#66B8FF'],
+                }}
+                transition={{
+                  delay: 2.3 + i * 0.14,
+                  duration: 0.5,
+                  repeat: Infinity,
+                  repeatDelay: 1.5,
+                  ease: 'easeInOut',
+                }}
+                className="inline-block origin-center"
+              >
+                {w}
+              </motion.span>
+            ))}
           </motion.p>
         </Float>
       </div>
@@ -590,14 +627,38 @@ function ActReserve() {
         </motion.p>
       </Float>
       <Float delay={0.3} amt={9} dur={4.8}>
-        <motion.h2
-          initial={{ opacity: 0, scale: 1.3, filter: 'blur(10px)' }}
-          animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-          transition={{ delay: 0.35, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-6 text-6xl font-bold tabular-nums tracking-[-0.03em] text-mist [text-shadow:0_0_60px_rgba(46,155,255,0.45)] sm:text-8xl"
-        >
-          <RollUp target={1000000} prefix="$" dur={1.8} delay={0.5} />
-        </motion.h2>
+        <div className="relative">
+          {/* sonar rings pulsing out from the number */}
+          {[0, 1].map((i) => (
+            <motion.span
+              key={i}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0, 0.35, 0], scale: [0.8, 1.6] }}
+              transition={{
+                delay: 2.6 + i * 1.5,
+                duration: 3,
+                repeat: Infinity,
+                ease: 'easeOut',
+              }}
+              className="pointer-events-none absolute left-1/2 top-1/2 h-36 w-[min(82vw,560px)] -translate-x-1/2 -translate-y-1/2 rounded-full border border-azure/40"
+            />
+          ))}
+          <motion.h2
+            initial={{ opacity: 0, scale: 1.3, filter: 'blur(10px)' }}
+            animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+            transition={{ delay: 0.35, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-6 text-6xl font-bold tabular-nums tracking-[-0.03em] text-mist [text-shadow:0_0_60px_rgba(46,155,255,0.45)] sm:text-8xl"
+          >
+            {/* heartbeat once the roll-up settles */}
+            <motion.span
+              animate={{ scale: [1, 1.035, 1] }}
+              transition={{ delay: 2.5, duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
+              className="inline-block"
+            >
+              <RollUp target={1000000} prefix="$" dur={1.8} delay={0.5} />
+            </motion.span>
+          </motion.h2>
+        </div>
       </Float>
       <Float delay={0.6} amt={6} dur={5.2}>
         <motion.p
@@ -821,7 +882,18 @@ function ActStory() {
               transition={{ delay: 0.85 + i * 0.35, duration: 0.45, ease: EASE }}
               className="text-lg text-mist-dim sm:text-xl"
             >
-              {line}
+              <motion.span
+                animate={{ opacity: [0.55, 1, 0.55] }}
+                transition={{
+                  delay: 2 + i * 1.2,
+                  duration: 2.4,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
+                className="inline-block"
+              >
+                {line}
+              </motion.span>
             </motion.p>
           </Float>
         ))}
@@ -960,8 +1032,13 @@ function ActOutro() {
         <motion.div
           animate={{ y: [0, 14, 0] }}
           transition={{ duration: 1.1, repeat: Infinity, ease: 'easeInOut' }}
-          className="flex h-12 w-12 items-center justify-center rounded-full border border-azure/40 bg-azure/10 text-azure shadow-[0_0_30px_-8px_rgba(46,155,255,0.6)]"
+          className="relative flex h-12 w-12 items-center justify-center rounded-full border border-azure/40 bg-azure/10 text-azure shadow-[0_0_30px_-8px_rgba(46,155,255,0.6)]"
         >
+          <motion.span
+            animate={{ scale: [1, 1.9], opacity: [0.6, 0] }}
+            transition={{ duration: 1.1, repeat: Infinity, ease: 'easeOut' }}
+            className="pointer-events-none absolute inset-0 rounded-full border border-azure/60"
+          />
           <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none">
             <path
               d="M5 9l7 7 7-7"
@@ -1000,13 +1077,15 @@ function ActEnd() {
           transition={{ delay: 0.4, duration: 0.6, ease: EASE }}
           className="mt-9 flex flex-wrap items-center justify-center gap-4"
         >
-          <a
+          <motion.a
             href="#"
+            animate={{ scale: [1, 1.045, 1] }}
+            transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
             className="inline-flex items-center gap-2.5 rounded-full bg-azure px-8 py-4 text-sm font-semibold text-white transition-all hover:bg-azure-bright hover:shadow-[0_0_36px_-8px_rgba(46,155,255,0.6)]"
           >
             <XrpMark className="h-4 w-4" strokeWidth={4} />
             Buy XPY
-          </a>
+          </motion.a>
           <a href="#how" className="btn-secondary">How Virtual Mining Works</a>
         </motion.div>
       </Float>
