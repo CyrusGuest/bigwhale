@@ -1098,6 +1098,82 @@ function ActOutro() {
   )
 }
 
+// Act: earn from referrals — pure type, slotted before the story finale
+function ActRefer() {
+  return (
+    <motion.div exit={actExit} className="w-full px-4 text-center">
+      <Float amt={5} dur={5.5}>
+        <motion.p
+          initial={{ opacity: 0, letterSpacing: '0.1em' }}
+          animate={{ opacity: 1, letterSpacing: '0.32em' }}
+          transition={{ delay: 0.1, duration: 0.7, ease: EASE }}
+          className="font-mono text-xs uppercase text-azure-bright"
+        >
+          Then bring your friends
+        </motion.p>
+      </Float>
+      <Float delay={0.3} amt={7} dur={5}>
+        <motion.h2
+          initial={{ opacity: 0, x: -240 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.25, duration: 0.55, ease: EASE }}
+          className="mt-5 text-4xl font-bold tracking-[-0.03em] sm:text-6xl"
+        >
+          Invite friends.
+        </motion.h2>
+      </Float>
+      <Float delay={0.5} amt={8} dur={4.6}>
+        <motion.h2
+          initial={{ opacity: 0, x: 240 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.45, duration: 0.55, ease: EASE }}
+          className="text-4xl font-bold tracking-[-0.03em] sm:text-6xl"
+        >
+          Earn <span className="text-shimmer">10%</span> of everything they earn.
+        </motion.h2>
+      </Float>
+      <Float delay={0.8} amt={5} dur={5.2}>
+        <motion.p
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.3, duration: 0.5, ease: EASE }}
+          className="mx-auto mt-7 flex max-w-lg flex-wrap justify-center gap-x-2 text-lg font-medium text-mist-dim sm:text-xl"
+        >
+          {['Their', 'payouts', 'never', 'shrink.', 'Your', 'bonus', 'never', 'stops.'].map(
+            (w, i) => (
+              <motion.span
+                key={i}
+                animate={{
+                  scale: [1, i === 3 || i === 7 ? 1.24 : 1.12, 1],
+                  color: ['#A6B0C5', '#FFFFFF', '#A6B0C5'],
+                }}
+                transition={{
+                  delay: 1.9 + i * 0.13,
+                  duration: 0.5,
+                  repeat: Infinity,
+                  repeatDelay: 1.7,
+                  ease: 'easeInOut',
+                }}
+                className="inline-block origin-center"
+              >
+                {w}
+              </motion.span>
+            ),
+          )}
+        </motion.p>
+      </Float>
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2.6, duration: 0.5 }}
+        className="mt-6 font-mono text-[11px] uppercase tracking-[0.2em] text-mist-faint"
+      >
+        Full program in the Referrals tab
+      </motion.p>
+    </motion.div>
+  )
+}
+
 // Final frame: floating end card, seen when people scroll back up
 function ActEnd() {
   return (
@@ -1140,7 +1216,7 @@ function ActEnd() {
 /* ---------------------------------- hero ----------------------------------- */
 
 // title → phone → sleep → reserve → portal → story → outro (scrolls down) → end card
-const ACT_DURATIONS = [2950, 3900, 3800, 4200, 5000, 9600, 3000]
+const ACT_DURATIONS = [2950, 3900, 3800, 4200, 5000, 4800, 9600, 3000]
 
 export default function Hero() {
   const [notifs, setNotifs] = useState(() => Array.from({ length: 4 }, makeNotif).reverse())
@@ -1154,7 +1230,7 @@ export default function Hero() {
   }, [])
 
   useEffect(() => {
-    if (act >= 7) return
+    if (act >= 8) return
     const t = setTimeout(() => setAct(act + 1), ACT_DURATIONS[act])
     return () => clearTimeout(t)
   }, [act])
@@ -1162,7 +1238,7 @@ export default function Hero() {
   // during the outro, glide the page down to the live simulation
   // (only if the viewer hasn't already scrolled away on their own)
   useEffect(() => {
-    if (act !== 6) return
+    if (act !== 7) return
     if (window.scrollY > 120) return
     const t = setTimeout(() => {
       document.getElementById('drip')?.scrollIntoView({ behavior: 'smooth' })
@@ -1193,9 +1269,10 @@ export default function Hero() {
             {act === 2 && <ActSleep key="act-sleep" />}
             {act === 3 && <ActReserve key="act-reserve" />}
             {act === 4 && <ActPortal key="act-portal" />}
-            {act === 5 && <ActStory key="act-story" />}
-            {act === 6 && <ActOutro key="act-outro" />}
-            {act === 7 && (
+            {act === 5 && <ActRefer key="act-refer" />}
+            {act === 6 && <ActStory key="act-story" />}
+            {act === 7 && <ActOutro key="act-outro" />}
+            {act === 8 && (
               <motion.div
                 key="act-end"
                 initial={{ opacity: 0, scale: 0.96 }}
