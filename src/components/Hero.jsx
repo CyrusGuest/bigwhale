@@ -150,19 +150,21 @@ function makeNotif() {
 }
 
 const WALLETS = [
-  { name: 'FOMO', color: 'text-white' },
-  { name: 'Phantom', color: 'text-[#AB9FF2]' },
-  { name: 'Coinbase', color: 'text-[#4A80FF]' },
+  { name: 'FOMO', color: 'text-white', bar: '#E8ECF4', glow: 'rgba(232,236,244,0.22)' },
+  { name: 'Phantom', color: 'text-[#AB9FF2]', bar: '#AB9FF2', glow: 'rgba(171,159,242,0.30)' },
+  { name: 'Coinbase', color: 'text-[#4A80FF]', bar: '#4A80FF', glow: 'rgba(74,128,255,0.30)' },
 ]
+
+const TITLE_WORDS = ['Passive-Earning', 'XRP', 'Coin']
 
 // commercial tagline scene: title card, then wallet availability glitch-cuts
 function TagScene() {
   const [phase, setPhase] = useState(0)
   const [wi, setWi] = useState(0)
   useEffect(() => {
-    const t1 = setTimeout(() => setPhase(1), 3000)
-    const t2 = setTimeout(() => setWi(1), 4700)
-    const t3 = setTimeout(() => setWi(2), 6400)
+    const t1 = setTimeout(() => setPhase(1), 3200)
+    const t2 = setTimeout(() => setWi(1), 5100)
+    const t3 = setTimeout(() => setWi(2), 6800)
     return () => {
       clearTimeout(t1)
       clearTimeout(t2)
@@ -170,40 +172,57 @@ function TagScene() {
     }
   }, [])
   return (
-    <div className="flex w-full flex-col items-center justify-center px-4 text-center">
+    <motion.div
+      animate={{ y: [0, -7, 0] }}
+      transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+      className="flex w-full flex-col items-center justify-center px-4 text-center"
+    >
       {/* title block: stays on screen and glides up when availability appears */}
       <motion.div layout transition={{ layout: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } }}>
         <motion.p
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15, duration: 0.5 }}
-          className="font-mono text-xs uppercase tracking-[0.4em] text-azure-bright"
+          initial={{ opacity: 0, letterSpacing: '0.1em' }}
+          animate={{ opacity: 1, letterSpacing: '0.42em' }}
+          transition={{ delay: 0.15, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          className="font-mono text-xs uppercase text-azure-bright"
         >
           The First
         </motion.p>
-        <motion.h3
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.35, duration: 0.55 }}
-          className="mt-5 text-3xl font-semibold tracking-[-0.02em] text-mist sm:text-4xl"
-        >
-          Passive-Earning XRP Coin
-        </motion.h3>
+        <h3 className="mt-5 text-3xl font-semibold tracking-[-0.02em] text-mist sm:text-4xl">
+          {TITLE_WORDS.map((word, i) => (
+            <motion.span
+              key={word}
+              initial={{ opacity: 0, y: 26, filter: 'blur(8px)' }}
+              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              transition={{ delay: 0.4 + i * 0.14, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              className="inline-block"
+            >
+              {word}
+              {i < TITLE_WORDS.length - 1 ? ' ' : ''}
+            </motion.span>
+          ))}
+        </h3>
         <motion.p
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.55, duration: 0.5 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.85, duration: 0.4 }}
           className="mt-3 text-xl italic text-mist-dim"
         >
           in
         </motion.p>
-        <div className="mt-2 flex h-[84px] items-center justify-center sm:h-[96px]">
+        <div className="relative mt-2 flex h-[84px] items-center justify-center sm:h-[96px]">
+          {/* impact flash as HISTORY lands */}
+          <motion.span
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: [0, 0.55, 0], scale: [0.5, 1.5, 1.9] }}
+            transition={{ delay: 1.05, duration: 0.9, ease: 'easeOut' }}
+            className="pointer-events-none absolute h-24 w-72 rounded-full bg-azure/30 blur-2xl"
+          />
           <motion.span
             data-text="HISTORY"
-            initial={{ opacity: 0, x: 10, skewX: -8 }}
-            animate={{ opacity: [0, 1, 0.55, 1], x: [-8, 5, -2, 0], skewX: [8, -5, 2, 0] }}
-            transition={{ duration: 0.4, delay: 0.8 }}
-            className="glitch text-5xl font-bold tracking-tight text-white sm:text-6xl"
+            initial={{ opacity: 0, scale: 1.45, filter: 'blur(10px)' }}
+            animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+            transition={{ delay: 0.95, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+            className="glitch text-luster text-5xl font-bold tracking-tight sm:text-6xl"
           >
             HISTORY
           </motion.span>
@@ -215,15 +234,32 @@ function TagScene() {
         {phase === 1 && (
           <motion.div
             layout
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 34 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
             className="mt-9"
           >
-            <p className="font-mono text-xs uppercase tracking-[0.4em] text-azure-bright">
+            <motion.p
+              initial={{ opacity: 0, letterSpacing: '0.12em' }}
+              animate={{ opacity: 1, letterSpacing: '0.42em' }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              className="font-mono text-xs uppercase text-azure-bright"
+            >
               Available on
-            </p>
-            <div className="mt-2 flex h-[64px] items-center justify-center sm:h-[76px]">
+            </motion.p>
+            <div className="relative mt-2 flex h-[64px] items-center justify-center sm:h-[76px]">
+              {/* brand-colored glow behind the wallet name */}
+              <AnimatePresence>
+                <motion.span
+                  key={`glow-${wi}`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="pointer-events-none absolute h-16 w-60 rounded-full blur-2xl"
+                  style={{ background: WALLETS[wi].glow }}
+                />
+              </AnimatePresence>
               <AnimatePresence mode="wait">
                 <motion.span
                   key={wi}
@@ -232,17 +268,28 @@ function TagScene() {
                   animate={{ opacity: [0, 1, 0.55, 1], x: [-8, 5, -2, 0], skewX: [8, -5, 2, 0] }}
                   exit={{ opacity: 0, transition: { duration: 0.12 } }}
                   transition={{ duration: 0.4 }}
-                  className={`glitch text-4xl font-bold tracking-tight sm:text-5xl ${WALLETS[wi].color}`}
+                  className={`glitch relative text-4xl font-bold tracking-tight sm:text-5xl ${WALLETS[wi].color}`}
                 >
                   {WALLETS[wi].name}
                 </motion.span>
               </AnimatePresence>
             </div>
-            <p className="mt-1 text-xl font-medium text-mist-dim">wallet</p>
+            {/* underline redraws for each wallet in its brand color */}
+            <div className="mx-auto mt-1.5 h-[2px] w-44 overflow-hidden rounded-full bg-white/[0.06]">
+              <motion.div
+                key={`bar-${wi}`}
+                initial={{ x: '-100%' }}
+                animate={{ x: '0%' }}
+                transition={{ duration: 0.5, ease: 'easeOut' }}
+                className="h-full w-full"
+                style={{ background: WALLETS[wi].bar }}
+              />
+            </div>
+            <p className="mt-2.5 text-xl font-medium text-mist-dim">wallet</p>
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   )
 }
 
@@ -261,7 +308,7 @@ export default function Hero() {
   useEffect(() => {
     const t = setTimeout(
       () => setScene((s) => (s === 'phone' ? 'tag' : 'phone')),
-      scene === 'phone' ? 10000 : 8600,
+      scene === 'phone' ? 10000 : 9200,
     )
     return () => clearTimeout(t)
   }, [scene])

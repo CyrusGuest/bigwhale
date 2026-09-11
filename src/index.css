@@ -58,6 +58,16 @@
   }
 }
 
+/* white text with a slow traveling luster highlight */
+.text-luster {
+  background: linear-gradient(100deg, #ffffff 35%, #8fc2ff 50%, #ffffff 65%);
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 3.2s linear infinite;
+}
+
 /* RGB-split glitch layers, replayed on every mount of a .glitch element */
 .glitch {
   position: relative;
