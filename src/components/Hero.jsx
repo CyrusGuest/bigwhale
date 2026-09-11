@@ -34,10 +34,45 @@ export function XrpMark({ className = '', strokeWidth = 5 }) {
 
 const XRP_PRICE = 1.34
 
+// non-payout notifications rotate between payouts like a real lock screen
+const OTHER_NOTIFS = [
+  {
+    app: 'Weather',
+    icon: '🌙',
+    bg: 'from-[#4A90D9] to-[#2C5AA0]',
+    body: 'Clear night, 62°. Perfect sleeping weather.',
+  },
+  {
+    app: 'Crypto Prices',
+    icon: '📈',
+    bg: 'from-[#1E9E5A] to-[#0F6B3A]',
+    body: 'BTC $118,240 (+2.4%) · SOL $236 (+3.1%) · XRP $1.34 (+5.2%)',
+  },
+  {
+    app: 'X',
+    icon: '𝕏',
+    bg: 'from-[#2a2a2a] to-[#000000]',
+    body: '@xrpwhale: 1 XPY = 1 XRP. i said what i said.',
+    hl: '1 XPY = 1 XRP',
+  },
+  {
+    app: 'Crypto News',
+    icon: '📰',
+    bg: 'from-[#D64545] to-[#8E2626]',
+    body: 'BREAKING: degens can’t stop tweeting “1 XPY = 1 XRP”',
+    hl: '“1 XPY = 1 XRP”',
+  },
+]
+
 let notifCounter = 0
 function makeNotif() {
-  const usd = 40 + Math.random() * 70
-  return { id: ++notifCounter, amt: usd / XRP_PRICE, usd }
+  const n = ++notifCounter
+  // every other notification is a payout; the rest cycle through the pool
+  if (n % 2 === 1) {
+    const usd = 40 + Math.random() * 70
+    return { id: n, type: 'pay', amt: usd / XRP_PRICE, usd }
+  }
+  return { id: n, type: 'app', ...OTHER_NOTIFS[(n / 2 - 1) % OTHER_NOTIFS.length] }
 }
 
 export default function Hero() {
@@ -256,25 +291,49 @@ export default function Hero() {
                             className="rounded-[20px] border border-white/[0.07] bg-[#2a3040]/60 p-3 shadow-lg shadow-black/25 backdrop-blur-2xl"
                           >
                             <div className="flex items-center gap-3">
-                              <span className="flex h-[38px] w-[38px] flex-none items-center justify-center rounded-[9.5px] bg-gradient-to-b from-azure to-[#1668c9] text-white shadow-md shadow-azure/25">
-                                <XrpMark className="h-[19px] w-[19px]" strokeWidth={4.5} />
-                              </span>
+                              {n.type === 'pay' ? (
+                                <span className="flex h-[38px] w-[38px] flex-none items-center justify-center rounded-[9.5px] bg-gradient-to-b from-azure to-[#1668c9] text-white shadow-md shadow-azure/25">
+                                  <XrpMark className="h-[19px] w-[19px]" strokeWidth={4.5} />
+                                </span>
+                              ) : (
+                                <span
+                                  className={`flex h-[38px] w-[38px] flex-none items-center justify-center rounded-[9.5px] bg-gradient-to-b text-[17px] shadow-md shadow-black/30 ${n.bg} ${
+                                    n.app === 'X' ? 'text-[15px] font-bold text-white' : ''
+                                  }`}
+                                >
+                                  {n.icon}
+                                </span>
+                              )}
                               <div className="min-w-0 flex-1">
                                 <div className="flex items-baseline justify-between gap-2">
                                   <span className="text-[13px] font-semibold leading-tight text-white">
-                                    XPY
+                                    {n.type === 'pay' ? 'XPY' : n.app}
                                   </span>
                                   <span className="text-[11px] text-white/40">
                                     {i === 0 ? 'now' : `${i}h ago`}
                                   </span>
                                 </div>
-                                <p className="mt-[1px] text-[12.5px] leading-[1.35] text-white/75">
-                                  You just got paid{' '}
-                                  <span className="font-semibold text-[#8AC5FF]">
-                                    +{n.amt.toFixed(2)} XRP
-                                  </span>{' '}
-                                  <span className="text-white/40">(≈ ${n.usd.toFixed(2)})</span>
-                                </p>
+                                {n.type === 'pay' ? (
+                                  <p className="mt-[1px] text-[12.5px] leading-[1.35] text-white/75">
+                                    You just got paid{' '}
+                                    <span className="font-semibold text-[#8AC5FF]">
+                                      +{n.amt.toFixed(2)} XRP
+                                    </span>{' '}
+                                    <span className="text-white/40">(≈ ${n.usd.toFixed(2)})</span>
+                                  </p>
+                                ) : (
+                                  <p className="mt-[1px] text-[12.5px] leading-[1.35] text-white/75">
+                                    {n.hl ? (
+                                      <>
+                                        {n.body.split(n.hl)[0]}
+                                        <span className="font-semibold text-[#8AC5FF]">{n.hl}</span>
+                                        {n.body.split(n.hl)[1]}
+                                      </>
+                                    ) : (
+                                      n.body
+                                    )}
+                                  </p>
+                                )}
                               </div>
                             </div>
                           </motion.div>
