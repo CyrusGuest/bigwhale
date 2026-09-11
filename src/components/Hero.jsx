@@ -36,7 +36,12 @@ const XRP_PRICE = 1.34
 
 // non-payout notifications rotate between payouts like a real lock screen
 const OTHER_NOTIFS = [
-  { app: 'Weather', icon: 'weather', body: 'Clear night, 62°. Perfect sleeping weather.' },
+  {
+    app: 'X',
+    icon: 'x',
+    body: '@XPYOFFICIAL: We just purchased $1,000,000 worth of XRP for our Reserve to support the XRP ecosystem…',
+    hl: '$1,000,000 worth of XRP',
+  },
   {
     app: 'Stocks',
     icon: 'stocks',
@@ -53,6 +58,12 @@ const OTHER_NOTIFS = [
     icon: 'news',
     body: 'BREAKING: degens can’t stop tweeting “1 XPY = 1 XRP”',
     hl: '“1 XPY = 1 XRP”',
+  },
+  {
+    app: 'X',
+    icon: 'x',
+    body: '@SolWhaleCap: a $1M XRP reserve behind an hourly-payout coin is the most bullish thing in the XRP ecosystem rn',
+    hl: '$1M XRP reserve',
   },
 ]
 
@@ -139,22 +150,14 @@ function makeNotif() {
 }
 
 export default function Hero() {
-  const [notifs, setNotifs] = useState(() => [makeNotif()])
-  const [next, setNext] = useState(2148)
+  const [notifs, setNotifs] = useState(() => Array.from({ length: 4 }, makeNotif).reverse())
 
   useEffect(() => {
     const ping = setInterval(() => {
-      setNotifs((prev) => [makeNotif(), ...prev].slice(0, 4))
+      setNotifs((prev) => [makeNotif(), ...prev].slice(0, 5))
     }, 3200)
-    const clock = setInterval(() => setNext((s) => (s > 0 ? s - 1 : 3600)), 1000)
-    return () => {
-      clearInterval(ping)
-      clearInterval(clock)
-    }
+    return () => clearInterval(ping)
   }, [])
-
-  const mm = String(Math.floor(next / 60)).padStart(2, '0')
-  const ss = String(next % 60).padStart(2, '0')
 
   return (
     <section className="relative overflow-hidden pt-16">
@@ -340,8 +343,10 @@ export default function Hero() {
                       </div>
                     </div>
 
-                    {/* notifications */}
-                    <div className="mt-4 flex min-h-[264px] flex-col gap-2">
+                    {/* notifications: fixed-height stage so the phone never resizes */}
+                    <div className="relative mt-4 h-[280px] overflow-hidden">
+                      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-14 bg-gradient-to-t from-[#070B1A] to-transparent" />
+                      <div className="flex flex-col gap-2">
                       <AnimatePresence initial={false} mode="popLayout">
                         {notifs.map((n, i) => (
                           <motion.div
@@ -398,12 +403,7 @@ export default function Hero() {
                           </motion.div>
                         ))}
                       </AnimatePresence>
-                    </div>
-
-                    {/* next payout pill */}
-                    <div className="mx-auto mt-3 flex w-fit items-center gap-2 rounded-full bg-white/[0.08] px-4 py-1.5 text-[11px] font-medium text-white/70 backdrop-blur">
-                      <span className="h-1.5 w-1.5 animate-pulseSoft rounded-full bg-azure" />
-                      Next payout in <span className="tabular-nums text-azure-bright">{mm}:{ss}</span>
+                      </div>
                     </div>
 
                     {/* flashlight + camera */}
