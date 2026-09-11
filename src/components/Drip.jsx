@@ -121,11 +121,11 @@ export default function Drip() {
                 {secs}s
               </span>
             </div>
-            <div className="mt-2 font-mono text-4xl font-medium tabular-nums tracking-tight text-mist sm:text-6xl">
+            <div className="mt-2 text-4xl font-semibold tabular-nums tracking-tight text-mist sm:text-6xl">
               {accrued.toFixed(4)}
-              <span className="ml-3 text-xl text-azure">XRP</span>
+              <span className="ml-3 text-xl font-medium text-azure">XRP</span>
             </div>
-            <div className="mt-1.5 font-mono text-xl font-medium tabular-nums text-mist sm:text-2xl">
+            <div className="mt-1.5 text-xl font-semibold tabular-nums text-mist sm:text-2xl">
               ≈ ${(accrued * XRP_PRICE).toFixed(2)}
               <span className="ml-2 text-sm font-normal text-mist-dim">USD</span>
             </div>
@@ -136,7 +136,7 @@ export default function Drip() {
               <label className="font-mono text-[11px] uppercase tracking-[0.2em] text-mist-faint">
                 Your position
               </label>
-              <span className="font-mono text-sm tabular-nums text-mist">{fmtUsd(position)}</span>
+              <span className="text-sm font-semibold tabular-nums text-mist">{fmtUsd(position)}</span>
             </div>
             <input
               type="range"
@@ -166,7 +166,7 @@ export default function Drip() {
                 <span className="text-[15px] font-medium text-mist">{label}</span>
                 <span className="flex flex-wrap items-baseline justify-end gap-x-2.5 text-right">
                   <span
-                    className={`font-mono text-base font-semibold tabular-nums sm:text-lg ${
+                    className={`text-base font-semibold tabular-nums sm:text-lg ${
                       hot ? 'text-azure-bright' : 'text-mist'
                     }`}
                   >
@@ -175,8 +175,8 @@ export default function Drip() {
                     })}{' '}
                     XRP
                   </span>
-                  <span className="font-mono text-sm text-mist-faint">·</span>
-                  <span className="font-mono text-base font-semibold tabular-nums text-mist sm:text-lg">
+                  <span className="text-sm text-mist-faint">·</span>
+                  <span className="text-base font-semibold tabular-nums text-mist sm:text-lg">
                     ≈ {fmtUsd(v * XRP_PRICE)}
                   </span>
                 </span>
