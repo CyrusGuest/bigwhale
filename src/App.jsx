@@ -4,6 +4,7 @@ import Navbar from './components/Navbar.jsx'
 import Hero from './components/Hero.jsx'
 import Ticker from './components/Ticker.jsx'
 import Drip from './components/Drip.jsx'
+import RefTeaser from './components/RefTeaser.jsx'
 import Reserve from './components/Reserve.jsx'
 import Future from './components/Future.jsx'
 import Calculator from './components/Calculator.jsx'
@@ -63,6 +64,7 @@ export default function App() {
             <Hero />
             <Ticker />
             <Drip />
+            <RefTeaser />
             <Reserve />
             <Future />
             <Calculator />
