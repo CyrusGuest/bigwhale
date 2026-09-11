@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { XrpMark } from './Hero.jsx'
 
 const XRP_PRICE = 1.34
@@ -23,19 +23,17 @@ const fmtUsd = (n) =>
 export default function Drip() {
   const [t, setT] = useState(600) // ≈ $25,000
   const position = posFromT(t)
+  // the counter accrues on the committed position: dragging the slider only
+  // updates the pace tiles; when the user lets go, the counter resets to the
+  // new position instead of spazzing on every step of the drag
+  const [committedPos, setCommittedPos] = useState(() => posFromT(600))
   const [elapsed, setElapsed] = useState(0)
-  const [drops, setDrops] = useState([])
-  const posRef = useRef(position)
-  posRef.current = position
+  const tRef = useRef(t)
+  tRef.current = t
   const startRef = useRef(null)
 
-  // restart the clock whenever the position changes, so amount always matches rate × time
   useEffect(() => {
     startRef.current = performance.now()
-    setElapsed(0)
-  }, [position])
-
-  useEffect(() => {
     let raf
     const tick = (now) => {
       if (startRef.current !== null) setElapsed((now - startRef.current) / 1000)
@@ -45,21 +43,21 @@ export default function Drip() {
     return () => cancelAnimationFrame(raf)
   }, [])
 
-  const perSec = (position * DAILY_RATE) / 86400 / XRP_PRICE
+  const commitPosition = () => {
+    const next = posFromT(tRef.current)
+    setCommittedPos((prev) => {
+      if (prev !== next) {
+        startRef.current = performance.now()
+        setElapsed(0)
+      }
+      return next
+    })
+  }
+
+  const perSec = (committedPos * DAILY_RATE) / 86400 / XRP_PRICE
   const accrued = perSec * elapsed
   const mins = Math.floor(elapsed / 60)
   const secs = Math.floor(elapsed % 60)
-
-  // floating "+hourly drop" chips
-  useEffect(() => {
-    const iv = setInterval(() => {
-      setDrops((d) => [
-        ...d.slice(-2),
-        { id: Date.now(), amt: (posRef.current * DAILY_RATE) / 24 / XRP_PRICE },
-      ])
-    }, 3400)
-    return () => clearInterval(iv)
-  }, [])
 
   const hourly = (position * DAILY_RATE) / 24 / XRP_PRICE
   const daily = (position * DAILY_RATE) / XRP_PRICE
@@ -124,23 +122,6 @@ export default function Drip() {
             <div className="mt-1.5 font-mono text-base tabular-nums text-mist-faint">
               ≈ ${(accrued * XRP_PRICE).toFixed(2)} USD
             </div>
-            {/* rising hourly-drop chips */}
-            <div className="pointer-events-none absolute -top-2 right-0">
-              <AnimatePresence>
-                {drops.map((d) => (
-                  <motion.span
-                    key={d.id}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: [0, 1, 1, 0], y: -44 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 3 }}
-                    className="absolute right-0 whitespace-nowrap rounded-full border border-azure/30 bg-azure/10 px-3 py-1 font-mono text-[11px] text-azure-bright"
-                  >
-                    +{d.amt.toFixed(4)} XRP / hr
-                  </motion.span>
-                ))}
-              </AnimatePresence>
-            </div>
           </div>
 
           <div className="mt-9">
@@ -157,6 +138,9 @@ export default function Drip() {
               step="1"
               value={t}
               onChange={(e) => setT(Number(e.target.value))}
+              onPointerUp={commitPosition}
+              onKeyUp={commitPosition}
+              onBlur={commitPosition}
               className="w-full accent-[#2E9BFF]"
             />
             <div className="mt-1 flex justify-between font-mono text-[10px] text-mist-faint">
