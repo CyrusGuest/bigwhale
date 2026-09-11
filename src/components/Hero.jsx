@@ -868,7 +868,7 @@ function ActStory() {
   const [wi, setWi] = useState(0)
   useEffect(() => {
     // availability flows straight out of the HISTORY landing, no dead air
-    const t0 = setTimeout(() => setShowWallets(true), 2600)
+    const t0 = setTimeout(() => setShowWallets(true), 2800)
     let iv
     const t1 = setTimeout(() => {
       iv = setInterval(() => {
@@ -879,8 +879,8 @@ function ActStory() {
           }
           return w + 1
         })
-      }, 900)
-    }, 3500)
+      }, 1050)
+    }, 3900)
     return () => {
       clearTimeout(t0)
       clearTimeout(t1)
@@ -1100,6 +1100,11 @@ function ActOutro() {
 
 // Act: earn from referrals — pure type, slotted before the story finale
 function ActRefer() {
+  const [copied, setCopied] = useState(false)
+  useEffect(() => {
+    const t = setTimeout(() => setCopied(true), 2600)
+    return () => clearTimeout(t)
+  }, [])
   return (
     <motion.div exit={actExit} className="w-full px-4 text-center">
       <Float amt={5} dur={5.5}>
@@ -1132,11 +1137,44 @@ function ActRefer() {
           Earn <span className="text-shimmer">10%</span> of everything they earn.
         </motion.h2>
       </Float>
-      <Float delay={0.8} amt={5} dur={5.2}>
+      {/* your referral link getting copied */}
+      <Float delay={0.7} amt={5} dur={5}>
+        <motion.div
+          initial={{ opacity: 0, y: 22, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ delay: 1.2, type: 'spring', stiffness: 220, damping: 20 }}
+          className="mx-auto mt-7 flex w-fit items-center gap-3 rounded-full bg-white/[0.06] py-2 pl-5 pr-2 ring-1 ring-white/[0.12] backdrop-blur"
+        >
+          <span className="font-mono text-[13px] text-azure-bright">xpy.io/?ref=7xKX</span>
+          <span className="relative">
+            <motion.span
+              key={copied ? 'copied' : 'copy'}
+              initial={copied ? { scale: 1.25 } : false}
+              animate={{ scale: 1 }}
+              transition={{ type: 'spring', stiffness: 320, damping: 18 }}
+              className={`block rounded-full px-4 py-1.5 text-[12px] font-semibold ${
+                copied ? 'bg-[#30D158] text-ink-950' : 'bg-white text-ink-950'
+              }`}
+            >
+              {copied ? 'Copied ✓' : 'Copy'}
+            </motion.span>
+            {copied && (
+              <motion.span
+                initial={{ opacity: 0.6, scale: 0.7 }}
+                animate={{ opacity: 0, scale: 1.8 }}
+                transition={{ duration: 0.55, ease: 'easeOut' }}
+                className="pointer-events-none absolute inset-0 rounded-full border-2 border-[#30D158]/70"
+              />
+            )}
+          </span>
+        </motion.div>
+      </Float>
+
+      <Float delay={0.9} amt={5} dur={5.2}>
         <motion.p
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.3, duration: 0.5, ease: EASE }}
+          transition={{ delay: 3.2, duration: 0.5, ease: EASE }}
           className="mx-auto mt-7 flex max-w-lg flex-wrap justify-center gap-x-2 text-lg font-medium text-mist-dim sm:text-xl"
         >
           {['Their', 'payouts', 'never', 'shrink.', 'Your', 'bonus', 'never', 'stops.'].map(
@@ -1148,7 +1186,7 @@ function ActRefer() {
                   color: ['#A6B0C5', '#FFFFFF', '#A6B0C5'],
                 }}
                 transition={{
-                  delay: 1.9 + i * 0.13,
+                  delay: 3.8 + i * 0.13,
                   duration: 0.5,
                   repeat: Infinity,
                   repeatDelay: 1.7,
@@ -1165,7 +1203,7 @@ function ActRefer() {
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2.6, duration: 0.5 }}
+        transition={{ delay: 4.4, duration: 0.5 }}
         className="mt-6 font-mono text-[11px] uppercase tracking-[0.2em] text-mist-faint"
       >
         Full program in the Referrals tab
@@ -1216,7 +1254,7 @@ function ActEnd() {
 /* ---------------------------------- hero ----------------------------------- */
 
 // title → phone → sleep → reserve → portal → story → outro (scrolls down) → end card
-const ACT_DURATIONS = [2950, 3900, 3800, 4200, 5000, 4800, 9600, 3000]
+const ACT_DURATIONS = [2950, 3900, 3800, 4200, 5000, 6400, 11700, 3000]
 
 export default function Hero() {
   const [notifs, setNotifs] = useState(() => Array.from({ length: 4 }, makeNotif).reverse())
