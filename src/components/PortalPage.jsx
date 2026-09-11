@@ -31,8 +31,6 @@ function mulberry32(a) {
   }
 }
 
-const HEXC = '0123456789ABCDEF'
-
 function fetchHolderData(address) {
   const rng = mulberry32(seedFrom(address))
   const balance = Math.round(200_000 + rng() * 19_800_000)
@@ -52,11 +50,7 @@ function fetchHolderData(address) {
   const hourlyBase = days[29].xrp / 24
   const txs = Array.from({ length: 8 }, (_, i) => ({
     id: i,
-    hash: `${Array.from({ length: 4 }, () => HEXC[Math.floor(rng() * 16)]).join('')}…${Array.from(
-      { length: 4 },
-      () => HEXC[Math.floor(rng() * 16)],
-    ).join('')}`,
-    ago: i === 0 ? 'This hour' : `${i}h ago`,
+    ago: i === 0 ? 'Just now' : `${i}h ago`,
     xrp: hourlyBase * (0.7 + rng() * 0.6),
   }))
 
@@ -70,9 +64,9 @@ const num = (n, d = 2) =>
 
 function AreaChart({ points }) {
   const W = 620
-  const H = 210
+  const H = 200
   const L = 10
-  const R = 58
+  const R = 56
   const T = 14
   const B = 22
   const max = Math.max(...points, 1)
@@ -85,57 +79,24 @@ function AreaChart({ points }) {
     <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full">
       <defs>
         <linearGradient id="pArea" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#2E9BFF" stopOpacity="0.30" />
+          <stop offset="0%" stopColor="#2E9BFF" stopOpacity="0.28" />
           <stop offset="100%" stopColor="#2E9BFF" stopOpacity="0" />
         </linearGradient>
       </defs>
-      {[0.25, 0.5, 0.75, 1].map((g) => (
+      {[0.33, 0.66, 1].map((g) => (
         <g key={g}>
           <line x1={L} x2={W - R} y1={y(max * g)} y2={y(max * g)} stroke="#ffffff" strokeOpacity="0.05" />
-          <text x={W - R + 8} y={y(max * g) + 3.5} fill="#606D89" fontSize="10" fontFamily="IBM Plex Mono, monospace">
+          <text x={W - R + 8} y={y(max * g) + 3.5} fill="#606D89" fontSize="10" fontFamily="Inter">
             {num(max * g, max < 100 ? 1 : 0)}
           </text>
         </g>
       ))}
       <path d={area} fill="url(#pArea)" />
-      <path d={line} fill="none" stroke="#2E9BFF" strokeWidth="2.2" />
+      <path d={line} fill="none" stroke="#2E9BFF" strokeWidth="2.5" strokeLinecap="round" />
       <circle cx={x(points.length - 1)} cy={y(points[points.length - 1])} r="4" fill="#2E9BFF" />
       <circle cx={x(points.length - 1)} cy={y(points[points.length - 1])} r="8" fill="#2E9BFF" fillOpacity="0.25">
         <animate attributeName="r" values="6;11;6" dur="2.5s" repeatCount="indefinite" />
       </circle>
-    </svg>
-  )
-}
-
-function BarChart({ points }) {
-  const W = 620
-  const H = 150
-  const P = 8
-  const max = Math.max(...points, 1)
-  const bw = (W - P * 2) / points.length
-  return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full">
-      <defs>
-        <linearGradient id="pBar" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#2E9BFF" stopOpacity="0.9" />
-          <stop offset="100%" stopColor="#2E9BFF" stopOpacity="0.25" />
-        </linearGradient>
-      </defs>
-      {points.map((v, i) => {
-        const h = Math.max((v / max) * (H - P * 2), 2)
-        const last = i === points.length - 1
-        return (
-          <rect
-            key={i}
-            x={P + i * bw + bw * 0.2}
-            y={H - P - h}
-            width={bw * 0.6}
-            height={h}
-            rx="2"
-            fill={last ? '#66B8FF' : 'url(#pBar)'}
-          />
-        )
-      })}
     </svg>
   )
 }
@@ -152,6 +113,9 @@ function Countdown() {
   return <span className="tabular-nums">{mm}:{ss}</span>
 }
 
+const cardShadow =
+  'shadow-[0_14px_34px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.07)]'
+
 function Dashboard({ address, data, sample = false }) {
   const [range, setRange] = useState(30)
   const days = data.days.slice(30 - range)
@@ -164,44 +128,57 @@ function Dashboard({ address, data, sample = false }) {
   const hourly = data.estDailyUsd / 24 / XRP_PRICE
 
   return (
-    <div>
-      {/* identity bar */}
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <span className="flex h-11 w-11 items-center justify-center rounded-full border border-azure/40 bg-ink-900 text-azure">
-            <XrpMark className="h-5 w-5" strokeWidth={4} />
-          </span>
-          <div>
-            <span className="block font-mono text-sm text-mist">
-              {address.slice(0, 6)}…{address.slice(-6)}
-            </span>
-            <span className="block font-mono text-[10px] uppercase tracking-[0.18em] text-mist-faint">
-              Tracking · Read-only · Updates hourly
-            </span>
-          </div>
-        </div>
+    <div className="space-y-5">
+      <div className="flex justify-end">
         <span className="rounded-full border border-brass/40 bg-brass/[0.06] px-3.5 py-1.5 font-mono text-[9px] uppercase tracking-[0.18em] text-brass">
-          {sample ? 'Sample wallet, enter yours above' : 'Illustrative preview, live data connects at launch'}
+          {sample ? 'Sample account, enter your wallet above' : 'Illustrative preview, live data connects at launch'}
         </span>
       </div>
 
-      {/* KPI strip */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      {/* account balance card */}
+      <div
+        className="relative overflow-hidden rounded-3xl p-7 shadow-[0_24px_60px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.12)] sm:p-9"
+        style={{
+          background:
+            'radial-gradient(120% 160% at 10% 0%, rgba(46,155,255,0.35) 0%, rgba(16,42,92,0.9) 42%, #0A1128 100%)',
+        }}
+      >
+        {/* card shine + watermark */}
+        <div className="pointer-events-none absolute -left-24 -top-16 h-[160%] w-40 rotate-12 bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+        <XrpMark
+          className="pointer-events-none absolute -right-10 -top-8 h-44 w-44 text-white opacity-[0.07]"
+          strokeWidth={3}
+        />
+
+        <div className="relative flex items-start justify-between">
+          <span className="text-[13px] font-medium text-white/60">Total balance</span>
+          <span className="flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-[12px] font-semibold text-white backdrop-blur">
+            <XrpMark className="h-3.5 w-3.5" strokeWidth={5} />
+            XPY
+          </span>
+        </div>
+
+        <div className="relative mt-3 text-5xl font-semibold tabular-nums tracking-tight text-white sm:text-6xl">
+          {usd(positionUsd)}
+        </div>
+        <div className="relative mt-2 text-[15px] font-medium tabular-nums text-white/70">
+          {data.balance.toLocaleString('en-US')} XPY · {(data.share * 100).toFixed(4)}% of supply
+        </div>
+
+        <div className="relative mt-7 flex flex-wrap items-center gap-x-5 gap-y-2">
+          <span className="font-mono text-[12px] tracking-wide text-white/50">
+            {address.slice(0, 6)}····{address.slice(-4)}
+          </span>
+          <span className="text-[12px] text-white/40">Read-only · Updates hourly</span>
+        </div>
+      </div>
+
+      {/* stat tiles */}
+      <div className="grid gap-4 sm:grid-cols-3">
         {[
           {
-            label: 'XPY balance',
-            value: data.balance.toLocaleString('en-US'),
-            sub: `${(data.share * 100).toFixed(4)}% of supply`,
-            hot: true,
-          },
-          {
-            label: 'Position value',
-            value: usd(positionUsd),
-            sub: `at $${TOKEN_PRICE.toFixed(3)} / XPY`,
-          },
-          {
             label: 'XRP earned, all time',
-            value: num(data.allTimeXrp, 1),
+            value: `${num(data.allTimeXrp, 1)} XRP`,
             sub: `≈ ${usd(data.allTimeXrp * XRP_PRICE)}`,
           },
           {
@@ -210,48 +187,36 @@ function Dashboard({ address, data, sample = false }) {
             sub: `≈ ${usd(data.totalXrp * XRP_PRICE)}`,
           },
           {
-            label: 'Est. daily pace',
+            label: 'Estimated daily pace',
             value: `${num(data.estDailyUsd / XRP_PRICE, 1)} XRP`,
-            sub: `≈ ${usd(data.estDailyUsd)} / day`,
+            sub: `≈ ${usd(data.estDailyUsd)} per day`,
           },
         ].map((k) => (
-          <div
-            key={k.label}
-            className={`rounded-lg p-5 ${
-              k.hot
-                ? 'border border-azure/35 bg-azure-deep/[0.12]'
-                : 'border border-white/[0.06] bg-white/[0.03]'
-            }`}
-          >
-            <span className="block font-mono text-[9px] uppercase tracking-[0.18em] text-mist-faint">
-              {k.label}
-            </span>
-            <span className="mt-2 block text-xl font-semibold tabular-nums tracking-tight text-mist">
+          <div key={k.label} className={`rounded-2xl bg-[#141828]/90 p-5 backdrop-blur ${cardShadow}`}>
+            <span className="block text-[13px] font-medium text-mist-faint">{k.label}</span>
+            <span className="mt-1.5 block text-2xl font-semibold tabular-nums tracking-tight text-mist">
               {k.value}
             </span>
-            <span className="mt-1 block font-mono text-[11px] text-mist-faint">{k.sub}</span>
+            <span className="mt-0.5 block text-[13px] tabular-nums text-mist-dim">{k.sub}</span>
           </div>
         ))}
       </div>
 
-      {/* main grid */}
-      <div className="mt-5 grid gap-5 lg:grid-cols-3">
-        {/* earnings chart */}
-        <div className="panel rounded-lg p-6 lg:col-span-2">
-          <div className="mb-1 flex items-center justify-between">
+      {/* earnings chart + side column */}
+      <div className="grid gap-5 lg:grid-cols-3">
+        <div className={`rounded-2xl bg-[#141828]/90 p-6 backdrop-blur lg:col-span-2 ${cardShadow}`}>
+          <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-[13px] font-medium text-mist">XRP earned</h3>
-              <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-mist-faint">
-                Cumulative · {range} days
-              </span>
+              <h3 className="text-[15px] font-semibold text-mist">Earnings</h3>
+              <span className="text-[13px] text-mist-faint">Cumulative XRP received</span>
             </div>
-            <div className="flex overflow-hidden rounded-full border border-white/10">
+            <div className="flex overflow-hidden rounded-full bg-white/[0.06] p-0.5">
               {[7, 30].map((r) => (
                 <button
                   key={r}
                   onClick={() => setRange(r)}
-                  className={`px-4 py-1.5 font-mono text-[11px] transition-colors ${
-                    range === r ? 'bg-mist text-ink-950' : 'text-mist-dim hover:text-mist'
+                  className={`rounded-full px-4 py-1.5 text-[12px] font-medium transition-colors ${
+                    range === r ? 'bg-azure text-white' : 'text-mist-dim hover:text-mist'
                   }`}
                 >
                   {r}D
@@ -259,11 +224,11 @@ function Dashboard({ address, data, sample = false }) {
               ))}
             </div>
           </div>
-          <div className="mt-3 flex items-baseline gap-3">
+          <div className="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-1">
             <span className="text-3xl font-semibold tabular-nums tracking-tight text-mist">
               {num(rangeXrp, 1)} XRP
             </span>
-            <span className="font-mono text-sm text-azure-bright">
+            <span className="text-[15px] font-medium tabular-nums text-mist-dim">
               ≈ {usd(rangeXrp * XRP_PRICE)}
             </span>
           </div>
@@ -272,28 +237,30 @@ function Dashboard({ address, data, sample = false }) {
           </div>
         </div>
 
-        {/* side column */}
         <div className="flex flex-col gap-5">
-          <div className="rounded-lg border border-azure/35 bg-azure-deep/[0.12] p-6">
-            <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-azure-bright">
-              Next distribution
-            </span>
-            <div className="mt-2 font-mono text-4xl font-medium text-mist">
+          <div
+            className="relative overflow-hidden rounded-2xl p-6 shadow-[0_14px_34px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.12)]"
+            style={{
+              background:
+                'radial-gradient(130% 140% at 85% 0%, rgba(46,155,255,0.4) 0%, rgba(16,42,92,0.85) 50%, #0C1330 100%)',
+            }}
+          >
+            <span className="text-[13px] font-medium text-white/60">Next payout</span>
+            <div className="mt-2 text-4xl font-semibold text-white">
               <Countdown />
             </div>
-            <div className="mt-2 font-mono text-sm text-azure-bright">
+            <div className="mt-2 text-[14px] font-medium text-azure-bright">
               est. +{num(hourly, 2)} XRP to this wallet
             </div>
-            <p className="mt-3 text-[11px] leading-relaxed text-mist-faint">
-              Paid automatically. Nothing to claim.
+            <p className="mt-3 text-[12px] leading-relaxed text-white/50">
+              Deposited automatically. Nothing to claim.
             </p>
           </div>
 
-          <div className="panel flex-1 rounded-lg p-6">
-            <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-mist-faint">
-              Earning pace at avg volume
-            </span>
-            <div className="mt-4 space-y-3.5">
+          <div className={`flex-1 rounded-2xl bg-[#141828]/90 p-6 backdrop-blur ${cardShadow}`}>
+            <h3 className="text-[15px] font-semibold text-mist">Earning pace</h3>
+            <span className="text-[13px] text-mist-faint">At $10M average daily volume</span>
+            <div className="mt-4 space-y-3">
               {[
                 ['Hourly', hourly, 2],
                 ['Daily', data.estDailyUsd / XRP_PRICE, 1],
@@ -301,14 +268,14 @@ function Dashboard({ address, data, sample = false }) {
               ].map(([label, v, d]) => (
                 <div
                   key={label}
-                  className="flex items-baseline justify-between border-b border-white/[0.05] pb-3 last:border-0 last:pb-0"
+                  className="flex items-center justify-between border-b border-white/[0.05] pb-3 last:border-0 last:pb-0"
                 >
-                  <span className="text-sm text-mist-dim">{label}</span>
+                  <span className="text-[14px] text-mist-dim">{label}</span>
                   <span className="text-right">
-                    <span className="block font-mono text-sm tabular-nums text-mist">
+                    <span className="block text-[15px] font-semibold tabular-nums text-mist">
                       +{num(v, d)} XRP
                     </span>
-                    <span className="block font-mono text-[10px] tabular-nums text-mist-faint">
+                    <span className="block text-[12px] tabular-nums text-mist-faint">
                       ≈ {usd(v * XRP_PRICE)}
                     </span>
                   </span>
@@ -319,55 +286,45 @@ function Dashboard({ address, data, sample = false }) {
         </div>
       </div>
 
-      {/* bottom grid */}
-      <div className="mt-5 grid gap-5 lg:grid-cols-3">
-        <div className="panel rounded-lg p-6">
-          <h3 className="text-[13px] font-medium text-mist">Daily payouts</h3>
-          <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-mist-faint">
-            XRP / day · {range} days
-          </span>
-          <div className="mt-4">
-            <BarChart points={days.map((d) => d.xrp)} />
-          </div>
-          <div className="mt-2 flex justify-between font-mono text-[10px] text-mist-faint">
-            <span>{range}d ago</span>
-            <span>today</span>
-          </div>
+      {/* transactions, bank-statement style */}
+      <div className={`rounded-2xl bg-[#141828]/90 backdrop-blur ${cardShadow}`}>
+        <div className="flex items-center justify-between px-6 pb-2 pt-5">
+          <h3 className="text-[15px] font-semibold text-mist">Recent payouts</h3>
+          <span className="text-[13px] font-medium text-azure">Hourly · Automatic</span>
         </div>
-
-        <div className="panel rounded-lg p-6 lg:col-span-2">
-          <div className="flex items-center justify-between">
-            <h3 className="text-[13px] font-medium text-mist">Distribution ledger</h3>
-            <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-mist-faint">
-              Hourly · Newest first
-            </span>
-          </div>
-          <div className="mt-4 divide-y divide-white/[0.04]">
-            {data.txs.map((t) => (
-              <div
-                key={t.id}
-                className="grid grid-cols-[auto_1fr_auto_auto] items-center gap-3 py-2.5 font-mono text-xs sm:gap-4"
+        <div className="divide-y divide-white/[0.04]">
+          {data.txs.map((t) => (
+            <div
+              key={t.id}
+              className="flex items-center gap-4 px-6 py-3.5 transition-colors hover:bg-white/[0.02]"
+            >
+              <span
+                className="flex h-10 w-10 flex-none items-center justify-center rounded-full text-white"
+                style={{
+                  background:
+                    'radial-gradient(120% 120% at 50% 0%, rgba(46,155,255,0.6) 0%, rgba(16,42,92,0.95) 60%, #0A1128 100%)',
+                }}
               >
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-azure/10 text-azure">
-                  <XrpMark className="h-3 w-3" strokeWidth={5} />
+                <XrpMark className="h-[18px] w-[18px]" strokeWidth={5} />
+              </span>
+              <div className="min-w-0 flex-1">
+                <span className="block text-[14px] font-semibold text-mist">XPY Reward</span>
+                <span className="block text-[12.5px] text-mist-faint">Hourly payout · {t.ago}</span>
+              </div>
+              <div className="text-right">
+                <span className="block text-[15px] font-semibold tabular-nums text-[#34D399]">
+                  +{num(t.xrp, 2)} XRP
                 </span>
-                <span className="truncate text-mist-dim">{t.hash}</span>
-                <span className="whitespace-nowrap text-mist-faint">{t.ago}</span>
-                <span className="text-right">
-                  <span className="block tabular-nums font-medium text-azure">
-                    +{num(t.xrp, 2)} XRP
-                  </span>
-                  <span className="block tabular-nums text-[10px] text-mist-faint">
-                    ≈ {usd(t.xrp * XRP_PRICE, 2)}
-                  </span>
+                <span className="block text-[12px] tabular-nums text-mist-faint">
+                  ≈ {usd(t.xrp * XRP_PRICE, 2)}
                 </span>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </div>
 
-      <p className="mt-5 max-w-3xl text-xs leading-relaxed text-mist-faint">
+      <p className="max-w-3xl text-xs leading-relaxed text-mist-faint">
         Pace figures apply the current formula to this wallet&rsquo;s share at
         $10M average daily volume. They change the moment volume does, and are
         not a promise. Future payouts may be higher, lower, or zero.
@@ -400,7 +357,7 @@ export default function PortalPage() {
       <div className="pointer-events-none absolute -top-48 left-1/2 h-[560px] w-[900px] -translate-x-1/2 rounded-full bg-azure-deep/[0.14] blur-[140px]" />
 
       {/* centered wallet entry */}
-      <div className="relative mx-auto max-w-2xl px-6 pb-14 pt-20 text-center sm:pt-24">
+      <div className="relative mx-auto max-w-2xl px-6 pb-12 pt-16 text-center sm:pt-24">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -411,8 +368,8 @@ export default function PortalPage() {
             Your money, working.
           </h1>
           <p className="mx-auto mt-5 max-w-lg text-lg leading-relaxed text-mist-dim">
-            Enter your Solana wallet and check your XPY position like a
-            portfolio: balance, every payout, and your earning pace. Pin it.
+            Enter your Solana wallet and check your XPY position like a bank
+            account: balance, every payout, and your earning pace. Pin it.
             Check it daily.
           </p>
         </motion.div>
@@ -448,7 +405,7 @@ export default function PortalPage() {
       </div>
 
       {/* dashboard */}
-      <div className="relative mx-auto max-w-7xl px-6 pb-28">
+      <div className="relative mx-auto max-w-6xl px-6 pb-24">
         <AnimatePresence mode="wait">
           <motion.div
             key={address || 'sample'}
