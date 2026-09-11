@@ -233,6 +233,10 @@ const PHONE_BEATS = [5200, 6200, 8200, 9000, 11400, 12200, 13400]
 
 function ActPhones() {
   const [beat, setBeat] = useState(0)
+  // headline dodge is desktop flair only; on mobile it would push off-screen
+  const [dodge] = useState(() =>
+    typeof window !== 'undefined' && window.innerWidth < 640 ? 0 : -140,
+  )
   useEffect(() => {
     const timers = PHONE_BEATS.map((t, i) => setTimeout(() => setBeat(i + 1), t))
     return () => timers.forEach(clearTimeout)
@@ -250,12 +254,12 @@ function ActPhones() {
       <Float amt={5} dur={5}>
         {/* slides left while the featured phone is big, recenters when both phones show */}
         <motion.h2
-          initial={{ opacity: 0, y: 26, x: -110, rotate: -2, filter: 'blur(8px)' }}
+          initial={{ opacity: 0, y: 26, x: dodge, rotate: dodge ? -2 : 0, filter: 'blur(8px)' }}
           animate={{
             opacity: 1,
             y: 0,
-            x: beat >= 2 ? 0 : -140,
-            rotate: beat >= 2 ? 0 : -2,
+            x: beat >= 2 ? 0 : dodge,
+            rotate: beat >= 2 || !dodge ? 0 : -2,
             filter: 'blur(0px)',
           }}
           transition={{
@@ -276,7 +280,7 @@ function ActPhones() {
         </motion.h2>
       </Float>
 
-      <div className="relative mx-auto mt-6 flex h-[580px] max-w-xl origin-top scale-[0.62] items-center justify-center gap-8 sm:scale-100 sm:gap-16">
+      <div className="relative mx-auto -mb-[205px] mt-4 flex h-[580px] max-w-xl origin-top scale-[0.62] items-center justify-center gap-8 sm:mb-0 sm:mt-6 sm:scale-100 sm:gap-16">
         {/* the invite flying across */}
         {beat >= 1 && beat < 3 && (
           <motion.span
@@ -956,7 +960,7 @@ function ActVirus() {
                 className="absolute flex items-center justify-center"
               >
                 <span className="pointer-events-none absolute h-32 w-[380px] rounded-full bg-ink-950/90 blur-2xl" />
-                <h2 className="font-bubble text-retro relative text-3xl leading-[1.14] sm:text-4xl">
+                <h2 className="font-bubble text-retro relative text-3xl leading-[1.14] text-white sm:text-4xl">
                   <span className="relative inline-block">
                     XPY SPREADS
                     <span aria-hidden className="text-scan absolute inset-0">
@@ -965,7 +969,7 @@ function ActVirus() {
                   </span>
                   <br />
                   <span className="relative inline-block">
-                    <span data-text="LIKE A VIRUS." className="glitch text-shimmer inline-block">
+                    <span data-text="LIKE A VIRUS." className="glitch text-luster inline-block">
                       LIKE A VIRUS.
                     </span>
                     <span aria-hidden className="text-scan absolute inset-0">
@@ -1000,7 +1004,7 @@ function ActVirus() {
                 <motion.h2
                   animate={{ x: [0, -9, 7, -4, 0] }}
                   transition={{ delay: 0.14, duration: 0.42, ease: 'easeOut' }}
-                  className="font-bubble text-retro relative text-2xl leading-[1.16] sm:text-3xl"
+                  className="font-bubble text-retro relative text-2xl leading-[1.16] text-white sm:text-3xl"
                 >
                   <span className="relative inline-block">
                     We like to call it
@@ -1010,7 +1014,7 @@ function ActVirus() {
                   </span>
                   <br />
                   <span className="relative inline-block">
-                    <span data-text="THE RIPPLE EFFECT." className="glitch text-shimmer inline-block">
+                    <span data-text="THE RIPPLE EFFECT." className="glitch text-luster inline-block">
                       THE RIPPLE EFFECT.
                     </span>
                     <span aria-hidden className="text-scan absolute inset-0">
