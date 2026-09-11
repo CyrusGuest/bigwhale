@@ -200,10 +200,27 @@ function PhoneMock({ notifs }) {
                         <motion.div
                           key={n.id}
                           layout
-                          initial={{ opacity: 0, y: -28, scale: 0.94 }}
-                          animate={{ opacity: 1 - i * 0.14, y: 0, scale: 1 - i * 0.02 }}
-                          exit={{ opacity: 0, scale: 0.92, transition: { duration: 0.25 } }}
-                          transition={{ type: 'spring', stiffness: 240, damping: 26, mass: 0.9 }}
+                          initial={{ opacity: 0, y: -68, scale: 0.82, filter: 'blur(5px)' }}
+                          animate={{
+                            opacity: 1 - i * 0.14,
+                            y: 0,
+                            scale: 1 - i * 0.02,
+                            filter: 'blur(0px)',
+                          }}
+                          exit={{
+                            opacity: 0,
+                            scale: 0.92,
+                            transition: { duration: 0.28, ease: 'easeIn' },
+                          }}
+                          transition={{
+                            type: 'spring',
+                            stiffness: 320,
+                            damping: 33,
+                            mass: 1,
+                            opacity: { duration: 0.45, ease: 'easeOut' },
+                            filter: { duration: 0.4, ease: 'easeOut' },
+                            layout: { type: 'spring', stiffness: 300, damping: 34 },
+                          }}
                           className="rounded-[24px] bg-[#1d1f27]/80 p-3.5 shadow-[0_10px_26px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.09)] backdrop-blur-2xl"
                         >
                           <div className="flex items-start gap-3">
