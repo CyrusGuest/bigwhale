@@ -91,6 +91,35 @@
   }
 }
 
+/* bubbly retro slam title: Titan One, sticker outline, offset-print depth */
+.font-bubble {
+  font-family: 'Titan One', 'Inter Tight', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+.text-retro {
+  text-shadow:
+    -1.5px -1.5px 0 #0a1128,
+    1.5px -1.5px 0 #0a1128,
+    -1.5px 1.5px 0 #0a1128,
+    3px 3px 0 #0a1128,
+    5px 5px 0 #123063,
+    8px 8px 0 rgba(46, 155, 255, 0.28),
+    0 0 42px rgba(46, 155, 255, 0.4);
+}
+/* CRT scanline texture clipped inside the glyphs */
+.text-scan {
+  color: transparent;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.2) 0 1.5px,
+    transparent 1.5px 5px
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  pointer-events: none;
+}
+
 /* gamified slam title: italic punch, hard outline, stacked depth, arena glow */
 .text-game {
   font-style: italic;
