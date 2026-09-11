@@ -960,21 +960,11 @@ function ActVirus() {
                 className="absolute flex items-center justify-center"
               >
                 <span className="pointer-events-none absolute h-32 w-[380px] rounded-full bg-ink-950/90 blur-2xl" />
-                <h2 className="font-bubble text-retro relative text-3xl leading-[1.14] text-white sm:text-4xl">
-                  <span className="relative inline-block">
-                    XPY SPREADS
-                    <span aria-hidden className="text-scan absolute inset-0">
-                      XPY SPREADS
-                    </span>
-                  </span>
+                <h2 className="text-3d relative text-4xl font-bold leading-[1.1] tracking-[-0.03em] text-white sm:text-5xl">
+                  XPY SPREADS
                   <br />
-                  <span className="relative inline-block">
-                    <span data-text="LIKE A VIRUS." className="glitch inline-block text-[#F6FAFF]">
-                      LIKE A VIRUS.
-                    </span>
-                    <span aria-hidden className="text-scan absolute inset-0">
-                      LIKE A VIRUS.
-                    </span>
+                  <span data-text="LIKE A VIRUS." className="glitch inline-block text-white">
+                    LIKE A VIRUS.
                   </span>
                 </h2>
               </motion.div>
@@ -1004,22 +994,12 @@ function ActVirus() {
                 <motion.h2
                   animate={{ x: [0, -9, 7, -4, 0] }}
                   transition={{ delay: 0.14, duration: 0.42, ease: 'easeOut' }}
-                  className="font-bubble text-retro relative text-2xl leading-[1.16] text-white sm:text-3xl"
+                  className="text-3d relative text-3xl font-bold leading-[1.12] tracking-[-0.03em] text-white sm:text-4xl"
                 >
-                  <span className="relative inline-block">
-                    We like to call it
-                    <span aria-hidden className="text-scan absolute inset-0">
-                      We like to call it
-                    </span>
-                  </span>
+                  We like to call it
                   <br />
-                  <span className="relative inline-block">
-                    <span data-text="THE RIPPLE EFFECT." className="glitch inline-block text-[#F6FAFF]">
-                      THE RIPPLE EFFECT.
-                    </span>
-                    <span aria-hidden className="text-scan absolute inset-0">
-                      THE RIPPLE EFFECT.
-                    </span>
+                  <span data-text="THE RIPPLE EFFECT." className="glitch inline-block text-white">
+                    THE RIPPLE EFFECT.
                   </span>
                 </motion.h2>
               </motion.div>
