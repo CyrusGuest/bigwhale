@@ -125,8 +125,9 @@ export default function Drip() {
               {accrued.toFixed(4)}
               <span className="ml-3 text-xl text-azure">XRP</span>
             </div>
-            <div className="mt-1.5 font-mono text-base tabular-nums text-mist-faint">
-              ≈ ${(accrued * XRP_PRICE).toFixed(2)} USD
+            <div className="mt-1.5 font-mono text-xl font-medium tabular-nums text-mist sm:text-2xl">
+              ≈ ${(accrued * XRP_PRICE).toFixed(2)}
+              <span className="ml-2 text-sm font-normal text-mist-dim">USD</span>
             </div>
           </div>
 
@@ -163,9 +164,9 @@ export default function Drip() {
             ].map(([label, v, hot]) => (
               <div key={label} className="flex items-center justify-between px-5 py-4">
                 <span className="text-[15px] font-medium text-mist">{label}</span>
-                <span className="text-right">
+                <span className="flex flex-wrap items-baseline justify-end gap-x-2.5 text-right">
                   <span
-                    className={`block font-mono text-base font-semibold tabular-nums sm:text-lg ${
+                    className={`font-mono text-base font-semibold tabular-nums sm:text-lg ${
                       hot ? 'text-azure-bright' : 'text-mist'
                     }`}
                   >
@@ -174,7 +175,8 @@ export default function Drip() {
                     })}{' '}
                     XRP
                   </span>
-                  <span className="block font-mono text-xs tabular-nums text-mist-dim">
+                  <span className="font-mono text-sm text-mist-faint">·</span>
+                  <span className="font-mono text-base font-semibold tabular-nums text-mist sm:text-lg">
                     ≈ {fmtUsd(v * XRP_PRICE)}
                   </span>
                 </span>
