@@ -20,14 +20,14 @@ export default function HolderPortal() {
           >
             <p className="eyebrow mb-5">Holder Portal</p>
             <h2 className="font-serif text-4xl font-medium tracking-[-0.01em] sm:text-5xl">
-              Watch your XRP stack up.
+              See your XPY work for you.
             </h2>
             <p className="mt-5 max-w-md leading-relaxed text-mist-dim">
-              Drop in your Solana wallet address and see your XPY position
-              working: holdings, share of supply, every distribution
-              you&rsquo;ve received, and what the algorithm pays your share at
-              average volume. Read-only, the portal never asks you to connect
-              or sign anything.
+              A bank-account-style dashboard for your position: your balance,
+              every payout, and your earning pace, laid out so simply you can
+              check it daily. Easy, transparent navigation built to help you
+              make the best moves. Read-only, the portal never asks you to
+              connect or sign anything.
             </p>
             <a href="#/portal" className="btn-primary mt-9">
               Open the Portal →
