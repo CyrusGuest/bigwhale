@@ -850,13 +850,24 @@ function ActStory() {
   const [showWallets, setShowWallets] = useState(false)
   const [wi, setWi] = useState(0)
   useEffect(() => {
-    const t0 = setTimeout(() => setShowWallets(true), 4200)
-    const t1 = setTimeout(() => setWi(1), 5800)
-    const t2 = setTimeout(() => setWi(2), 7300)
+    // availability flows straight out of the HISTORY landing, no dead air
+    const t0 = setTimeout(() => setShowWallets(true), 2600)
+    let iv
+    const t1 = setTimeout(() => {
+      iv = setInterval(() => {
+        setWi((w) => {
+          if (w >= WALLETS.length - 1) {
+            clearInterval(iv)
+            return w
+          }
+          return w + 1
+        })
+      }, 900)
+    }, 3500)
     return () => {
       clearTimeout(t0)
       clearTimeout(t1)
-      clearTimeout(t2)
+      if (iv) clearInterval(iv)
     }
   }, [])
   return (
@@ -1006,6 +1017,10 @@ const WALLETS = [
   { name: 'FOMO', color: 'text-white', bar: '#E8ECF4', glow: 'rgba(232,236,244,0.22)' },
   { name: 'Phantom', color: 'text-[#AB9FF2]', bar: '#AB9FF2', glow: 'rgba(171,159,242,0.30)' },
   { name: 'Coinbase', color: 'text-[#4A80FF]', bar: '#4A80FF', glow: 'rgba(74,128,255,0.30)' },
+  { name: 'Robinhood', color: 'text-[#00C805]', bar: '#00C805', glow: 'rgba(0,200,5,0.28)' },
+  { name: 'Axiom', color: 'text-[#6C7BFF]', bar: '#6C7BFF', glow: 'rgba(108,123,255,0.30)' },
+  { name: 'Photon', color: 'text-[#C084FC]', bar: '#C084FC', glow: 'rgba(192,132,252,0.30)' },
+  { name: 'Jupiter', color: 'text-[#C7F284]', bar: '#C7F284', glow: 'rgba(199,242,132,0.28)' },
 ]
 
 // Act 7: hand-off to the live simulation, then the page glides down
