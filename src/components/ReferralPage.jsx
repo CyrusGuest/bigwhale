@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+import { motion, AnimatePresence, useInView } from 'framer-motion'
 import { XrpMark } from './Hero.jsx'
 
 const EASE = [0.22, 1, 0.36, 1]
@@ -357,6 +357,234 @@ function StepCards() {
   )
 }
 
+/* ------------------------------- the flywheel ------------------------------ */
+
+const WHEEL_NODES = [
+  { pos: 'top', emoji: '🫂', label: 'More holders' },
+  { pos: 'right', emoji: '📈', label: 'More volume' },
+  { pos: 'bottom', emoji: '💸', label: 'Bigger payouts' },
+  { pos: 'left', emoji: '📣', label: 'More attention' },
+]
+
+const WHEEL_BEATS = [
+  'Every friend you bring becomes a holder.',
+  'Every holder adds volume. Every trade feeds the pool.',
+  'Bigger hourly payouts make XPY impossible to ignore. New holders pour in on their own.',
+  'And the wheel spins faster. A community that funds its own growth, designed to be self-sustaining.',
+]
+
+const NODE_POS = {
+  top: 'left-1/2 top-0 -translate-x-1/2 -translate-y-1/2',
+  right: 'right-0 top-1/2 translate-x-1/3 -translate-y-1/2',
+  bottom: 'left-1/2 bottom-0 -translate-x-1/2 translate-y-1/2',
+  left: 'left-0 top-1/2 -translate-x-1/3 -translate-y-1/2',
+}
+
+function Flywheel() {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-120px' })
+  const [beat, setBeat] = useState(0)
+
+  useEffect(() => {
+    if (!inView) return
+    const times = [500, 2100, 3700, 5300, 7100]
+    const timers = times.map((t, i) => setTimeout(() => setBeat(i + 1), t))
+    return () => timers.forEach(clearTimeout)
+  }, [inView])
+
+  const fast = beat >= 4
+  const orbitDots = fast ? [0, 0.45, 0.9, 1.35, 1.8] : beat >= 2 ? [0, 1.2] : [0]
+  const orbitDur = fast ? '2.2s' : '4.6s'
+
+  return (
+    <div ref={ref} className="mx-auto mt-20 max-w-6xl">
+      <div className="mb-10 text-center">
+        <motion.p
+          initial={{ opacity: 0, scale: 0 }}
+          whileInView={{ opacity: 1, scale: [0, 1.15, 1] }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+          className="eyebrow mb-6"
+        >
+          The Flywheel
+        </motion.p>
+        <Float amt={6} dur={5.5}>
+          <motion.h2
+            initial={{ opacity: 0, x: -220 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.55, ease: EASE }}
+            className="font-display text-4xl font-semibold tracking-[-0.03em] sm:text-6xl"
+          >
+            One wheel.
+          </motion.h2>
+        </Float>
+        <Float delay={0.4} amt={7} dur={5}>
+          <motion.h2
+            initial={{ opacity: 0, x: 220 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ delay: 0.15, duration: 0.55, ease: EASE }}
+            className="font-display text-4xl font-semibold tracking-[-0.03em] sm:text-6xl"
+          >
+            <span className="relative inline-block">
+              <span className="text-shimmer">Everyone earns as it spins.</span>
+              <span aria-hidden className="text-glint absolute inset-0">
+                Everyone earns as it spins.
+              </span>
+            </span>
+          </motion.h2>
+        </Float>
+      </div>
+
+      <div className="grid items-center gap-12 lg:grid-cols-2">
+        {/* the wheel */}
+        <div className="relative mx-auto h-[340px] w-[340px] sm:h-[400px] sm:w-[400px]">
+          {/* rotating dashed ring, speeds up at the finale */}
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: fast ? 7 : 18, repeat: Infinity, ease: 'linear' }}
+            className="absolute inset-6 rounded-full border-2 border-dashed border-azure/30"
+          />
+          <div className="absolute inset-6 rounded-full shadow-[inset_0_0_60px_rgba(46,155,255,0.12)]" />
+
+          {/* orbiting XRP pulses */}
+          <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full">
+            {orbitDots.map((delay, i) => (
+              <circle key={`${fast ? 'f' : 's'}-${i}`} r="5" fill="#2E9BFF">
+                <animateMotion
+                  dur={orbitDur}
+                  begin={`${delay}s`}
+                  repeatCount="indefinite"
+                  path="M200,44 a156,156 0 1,1 -0.1,0 z"
+                />
+              </circle>
+            ))}
+          </svg>
+
+          {/* center medallion */}
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+            <motion.div
+              animate={{ scale: fast ? [1, 1.08, 1] : [1, 1.03, 1] }}
+              transition={{ duration: fast ? 1.2 : 2.4, repeat: Infinity, ease: 'easeInOut' }}
+              className="mx-auto flex h-24 w-24 items-center justify-center rounded-full text-white ring-1 ring-azure/50 shadow-[0_0_50px_-8px_rgba(46,155,255,0.8)]"
+              style={{
+                background:
+                  'radial-gradient(120% 120% at 50% 0%, rgba(46,155,255,0.65) 0%, rgba(16,42,92,0.95) 60%, #0A1128 100%)',
+              }}
+            >
+              <XrpMark className="h-10 w-10" strokeWidth={4.5} />
+            </motion.div>
+            <span className="mt-3 block font-mono text-[10px] uppercase tracking-[0.3em] text-azure-bright">
+              {fast ? 'Accelerating' : 'The Flywheel'}
+            </span>
+          </div>
+
+          {/* nodes pop in with the beats */}
+          {WHEEL_NODES.map((n, i) => (
+            <motion.div
+              key={n.label}
+              initial={{ opacity: 0, scale: 0 }}
+              animate={beat > i ? { opacity: 1, scale: [0, 1.25, 1] } : {}}
+              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+              className={`absolute ${NODE_POS[n.pos]}`}
+            >
+              <Float amt={4} dur={3 + i * 0.4}>
+                <span className="flex items-center gap-2 whitespace-nowrap rounded-full bg-[#141828]/95 px-4 py-2.5 ring-1 ring-white/[0.14] shadow-[0_10px_26px_rgba(0,0,0,0.5)] backdrop-blur">
+                  <span className="text-[17px]">{n.emoji}</span>
+                  <span className="font-display text-[13px] font-semibold text-white">
+                    {n.label}
+                  </span>
+                </span>
+              </Float>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* the story beats */}
+        <div className="space-y-5">
+          {WHEEL_BEATS.map((line, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, x: 60 }}
+              animate={beat > i ? { opacity: 1, x: 0 } : {}}
+              transition={{ type: 'spring', stiffness: 200, damping: 22 }}
+              className="flex items-start gap-4"
+            >
+              <span
+                className={`mt-0.5 flex h-8 w-8 flex-none items-center justify-center rounded-full font-display text-[14px] font-bold ${
+                  i === 3 ? 'bg-azure text-white' : 'bg-white/[0.08] text-azure-bright ring-1 ring-white/[0.12]'
+                }`}
+              >
+                {i + 1}
+              </span>
+              <p
+                className={`text-[17px] leading-relaxed sm:text-[19px] ${
+                  i === 3 ? 'font-display font-semibold text-white' : 'text-white/75'
+                }`}
+              >
+                {line}
+              </p>
+            </motion.div>
+          ))}
+
+          {/* finale: launch blitz */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={beat >= 5 ? { opacity: 1, y: 0 } : {}}
+            transition={{ type: 'spring', stiffness: 180, damping: 20 }}
+            className={`${glass} p-6`}
+          >
+            <p className="font-display text-[17px] font-semibold text-white">
+              Ignition: a launch blitz built to detonate the first weeks.
+            </p>
+            <p className="mt-1.5 text-[14px] leading-relaxed text-white/60">
+              Coordinated campaigns across TikTok, Instagram and X, feeding
+              the wheel from day one, one of the most aggressive marketing
+              engines any coin has launched with.
+            </p>
+            <div className="mt-4 flex flex-wrap gap-2.5">
+              {[
+                { name: 'TikTok', glyph: '♪', cls: 'bg-black text-white ring-white/20' },
+                {
+                  name: 'Instagram',
+                  glyph: '◉',
+                  cls: 'text-white ring-white/20',
+                  style: {
+                    background:
+                      'linear-gradient(45deg, #F58529 0%, #DD2A7B 50%, #8134AF 100%)',
+                  },
+                },
+                { name: 'X', glyph: '𝕏', cls: 'bg-black text-white ring-white/20' },
+              ].map((s, i) => (
+                <motion.span
+                  key={s.name}
+                  initial={{ opacity: 0, scale: 0, rotate: -12 }}
+                  animate={beat >= 5 ? { opacity: 1, scale: [0, 1.2, 1], rotate: 0 } : {}}
+                  transition={{ delay: 0.2 + i * 0.15, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  className={`flex items-center gap-2 rounded-full px-4 py-2 font-display text-[13px] font-semibold ring-1 ${s.cls}`}
+                  style={s.style}
+                >
+                  <span>{s.glyph}</span>
+                  {s.name}
+                </motion.span>
+              ))}
+            </div>
+            <p className="mt-4 font-display text-[15px] font-semibold text-azure-bright">
+              Built to make history for XRP. Show us another coin built like
+              this.
+            </p>
+            <p className="mt-2 text-[11px] text-mist-faint">
+              A flywheel needs volume to spin. Momentum is the design goal,
+              never a guarantee.
+            </p>
+          </motion.div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // where the 10% comes from: animated fee split bar, mobile-game style
 function FeeSplit() {
   return (
@@ -691,6 +919,7 @@ export default function ReferralPage() {
 
           <LinkCard />
           <StepCards />
+          <Flywheel />
           <FeeSplit />
           <RefCalculator />
           <RefDashboard />
