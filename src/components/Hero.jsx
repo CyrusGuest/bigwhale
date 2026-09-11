@@ -331,8 +331,8 @@ function ActTitle() {
       ))}
       <Float delay={0.9} amt={5} dur={5.5}>
         <motion.p
-          initial={{ opacity: 0, letterSpacing: '0.12em' }}
-          animate={{ opacity: 1, letterSpacing: '0.5em' }}
+          initial={{ opacity: 0, letterSpacing: '0.1em' }}
+          animate={{ opacity: 1, letterSpacing: '0.32em' }}
           transition={{ delay: 0.75, duration: 0.7, ease: EASE }}
           className="mt-8 font-mono text-sm uppercase text-azure-bright sm:text-base"
         >
@@ -387,10 +387,103 @@ function ActPhone({ notifs }) {
   )
 }
 
-// Act 3: the condensed making-history explanation
-function ActHistory() {
+// Act 3: earning in your sleep — payout cards fly in from the screen edges
+const SLEEP_DROPS = [
+  { t: '3:47 AM', amt: 32.84 },
+  { t: '4:47 AM', amt: 29.1 },
+  { t: '5:47 AM', amt: 35.62 },
+]
+
+function ActSleep() {
+  return (
+    <motion.div exit={actExit} className="w-full px-4">
+      <div className="mx-auto max-w-2xl text-center">
+        <Float amt={7} dur={5}>
+          <motion.h2
+            initial={{ opacity: 0, x: -260 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.55, ease: EASE }}
+            className="text-5xl font-bold tracking-[-0.03em] sm:text-7xl"
+          >
+            You slept.
+          </motion.h2>
+        </Float>
+        <Float delay={0.4} amt={7} dur={5.4}>
+          <motion.h2
+            initial={{ opacity: 0, x: 260 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.25, duration: 0.55, ease: EASE }}
+            className="text-5xl font-bold tracking-[-0.03em] sm:text-7xl"
+          >
+            You <span className="text-shimmer">earned.</span>
+          </motion.h2>
+        </Float>
+
+        <div className="mt-9 space-y-3">
+          {SLEEP_DROPS.map((d, i) => (
+            <motion.div
+              key={d.t}
+              initial={{ opacity: 0, x: i % 2 ? 360 : -360, rotate: i % 2 ? 5 : -5 }}
+              animate={{ opacity: 1, x: 0, rotate: 0 }}
+              transition={{ delay: 0.95 + i * 0.45, type: 'spring', stiffness: 190, damping: 22 }}
+              className="mx-auto flex w-full max-w-md items-center gap-3 rounded-[20px] border border-white/[0.07] bg-[#2a3040]/60 p-3.5 text-left shadow-lg shadow-black/25 backdrop-blur-2xl"
+            >
+              <span
+                className="relative flex h-[38px] w-[38px] flex-none items-center justify-center overflow-hidden rounded-[9.5px] shadow-md shadow-azure/30 ring-1 ring-white/10"
+                style={{
+                  background:
+                    'radial-gradient(130% 105% at 50% 0%, rgba(46,155,255,0.55) 0%, rgba(16,40,88,0.95) 48%, #05080F 100%)',
+                }}
+              >
+                <span className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/[0.18] to-transparent" />
+                <XrpMark className="relative h-[21px] w-[21px] text-white" strokeWidth={5.2} />
+              </span>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-baseline justify-between gap-2">
+                  <span className="text-[13px] font-semibold text-white">XPY</span>
+                  <span className="text-[11px] text-white/40">{d.t}</span>
+                </div>
+                <p className="mt-[1px] text-[13px] text-white/75">
+                  You just got paid{' '}
+                  <span className="font-semibold text-[#8AC5FF]">+{d.amt.toFixed(2)} XRP</span>
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        <Float delay={1.1} amt={5} dur={5}>
+          <motion.p
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 2.6, duration: 0.5 }}
+            className="mt-8 font-mono text-sm uppercase tracking-[0.26em] text-azure-bright"
+          >
+            +97.56 XRP while you dreamt
+          </motion.p>
+        </Float>
+      </div>
+    </motion.div>
+  )
+}
+
+// Act 4: making history, then availability pops in beneath it
+function ActStory() {
+  const [showWallets, setShowWallets] = useState(false)
+  const [wi, setWi] = useState(0)
+  useEffect(() => {
+    const t0 = setTimeout(() => setShowWallets(true), 4200)
+    const t1 = setTimeout(() => setWi(1), 5800)
+    const t2 = setTimeout(() => setWi(2), 7300)
+    return () => {
+      clearTimeout(t0)
+      clearTimeout(t1)
+      clearTimeout(t2)
+    }
+  }, [])
   return (
     <motion.div exit={actExit} className="w-full px-4 text-center">
+      <motion.div layout transition={{ layout: { duration: 0.55, ease: EASE } }}>
       <Float amt={5} dur={5.5}>
         <motion.p
           initial={{ opacity: 0, letterSpacing: '0.1em' }}
@@ -456,6 +549,66 @@ function ActHistory() {
           </motion.span>
         </Float>
       </div>
+      </motion.div>
+
+      {/* availability pops in beneath; the history text stays and glides up */}
+      <AnimatePresence>
+        {showWallets && (
+          <motion.div
+            layout
+            initial={{ opacity: 0, y: 34 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, ease: EASE }}
+            className="mt-8"
+          >
+            <motion.p
+              initial={{ opacity: 0, letterSpacing: '0.1em' }}
+              animate={{ opacity: 1, letterSpacing: '0.35em' }}
+              transition={{ duration: 0.7, ease: EASE }}
+              className="font-mono text-sm uppercase text-azure-bright"
+            >
+              Available on
+            </motion.p>
+            <div className="relative mt-3 flex h-[72px] items-center justify-center sm:h-[88px]">
+              <AnimatePresence>
+                <motion.span
+                  key={`glow-${wi}`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="pointer-events-none absolute h-16 w-72 rounded-full blur-2xl"
+                  style={{ background: WALLETS[wi].glow }}
+                />
+              </AnimatePresence>
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={wi}
+                  data-text={WALLETS[wi].name}
+                  initial={{ opacity: 0, x: 10, skewX: -8 }}
+                  animate={{ opacity: [0, 1, 0.55, 1], x: [-8, 5, -2, 0], skewX: [8, -5, 2, 0] }}
+                  exit={{ opacity: 0, transition: { duration: 0.12 } }}
+                  transition={{ duration: 0.4, delay: wi === 0 ? 0.4 : 0 }}
+                  className={`glitch relative text-5xl font-bold tracking-tight sm:text-6xl ${WALLETS[wi].color}`}
+                >
+                  {WALLETS[wi].name}
+                </motion.span>
+              </AnimatePresence>
+            </div>
+            <div className="mx-auto mt-2.5 h-[2px] w-48 overflow-hidden rounded-full bg-white/[0.06]">
+              <motion.div
+                key={`bar-${wi}`}
+                initial={{ x: '-100%' }}
+                animate={{ x: '0%' }}
+                transition={{ duration: 0.5, ease: 'easeOut' }}
+                className="h-full w-full"
+                style={{ background: WALLETS[wi].bar }}
+              />
+            </div>
+            <p className="mt-3 text-xl font-medium text-mist-dim">wallet</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   )
 }
@@ -465,68 +618,6 @@ const WALLETS = [
   { name: 'Phantom', color: 'text-[#AB9FF2]', bar: '#AB9FF2', glow: 'rgba(171,159,242,0.30)' },
   { name: 'Coinbase', color: 'text-[#4A80FF]', bar: '#4A80FF', glow: 'rgba(74,128,255,0.30)' },
 ]
-
-// Act 4: availability, in the middle of it all
-function ActWallets() {
-  const [wi, setWi] = useState(0)
-  useEffect(() => {
-    const t1 = setTimeout(() => setWi(1), 1500)
-    const t2 = setTimeout(() => setWi(2), 2900)
-    return () => {
-      clearTimeout(t1)
-      clearTimeout(t2)
-    }
-  }, [])
-  return (
-    <motion.div exit={actExit} className="w-full px-4 text-center">
-      <motion.p
-        initial={{ opacity: 0, letterSpacing: '0.12em' }}
-        animate={{ opacity: 1, letterSpacing: '0.5em' }}
-        transition={{ delay: 0.1, duration: 0.8, ease: EASE }}
-        className="font-mono text-sm uppercase text-azure-bright"
-      >
-        Available on
-      </motion.p>
-      <div className="relative mt-5 flex h-[92px] items-center justify-center sm:h-[110px]">
-        <AnimatePresence>
-          <motion.span
-            key={`glow-${wi}`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
-            className="pointer-events-none absolute h-20 w-80 rounded-full blur-2xl"
-            style={{ background: WALLETS[wi].glow }}
-          />
-        </AnimatePresence>
-        <AnimatePresence mode="wait">
-          <motion.span
-            key={wi}
-            data-text={WALLETS[wi].name}
-            initial={{ opacity: 0, x: 10, skewX: -8 }}
-            animate={{ opacity: [0, 1, 0.55, 1], x: [-8, 5, -2, 0], skewX: [8, -5, 2, 0] }}
-            exit={{ opacity: 0, transition: { duration: 0.12 } }}
-            transition={{ duration: 0.4, delay: wi === 0 ? 0.5 : 0 }}
-            className={`glitch relative text-6xl font-bold tracking-tight sm:text-8xl ${WALLETS[wi].color}`}
-          >
-            {WALLETS[wi].name}
-          </motion.span>
-        </AnimatePresence>
-      </div>
-      <div className="mx-auto mt-3 h-[2px] w-56 overflow-hidden rounded-full bg-white/[0.06]">
-        <motion.div
-          key={`bar-${wi}`}
-          initial={{ x: '-100%' }}
-          animate={{ x: '0%' }}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
-          className="h-full w-full"
-          style={{ background: WALLETS[wi].bar }}
-        />
-      </div>
-      <p className="mt-4 text-2xl font-medium text-mist-dim">wallet</p>
-    </motion.div>
-  )
-}
 
 // Final frame: floating end card, stays until refresh
 function ActEnd() {
@@ -540,7 +631,7 @@ function ActEnd() {
         </h1>
       </Float>
       <Float delay={0.4} amt={5} dur={6}>
-        <p className="mt-6 font-mono text-sm uppercase tracking-[0.4em] text-azure-bright">
+        <p className="mt-6 font-mono text-sm uppercase tracking-[0.28em] text-azure-bright">
           Passively · Hourly · On-chain
         </p>
       </Float>
@@ -567,8 +658,8 @@ function ActEnd() {
 
 /* ---------------------------------- hero ----------------------------------- */
 
-// title → phone → history → wallets → end card, then push down to the site
-const ACT_DURATIONS = [2600, 5200, 4400, 4400]
+// title → phone → sleep → story (history + wallets) → end card, then push down
+const ACT_DURATIONS = [2600, 5200, 5000, 9600]
 
 export default function Hero() {
   const [notifs, setNotifs] = useState(() => Array.from({ length: 4 }, makeNotif).reverse())
@@ -599,7 +690,7 @@ export default function Hero() {
   }, [act])
 
   return (
-    <section className="relative overflow-hidden pt-16">
+    <section className="relative overflow-x-clip pt-16">
       {/* XRP-blue washes */}
       <div className="pointer-events-none absolute -top-56 left-1/3 h-[620px] w-[980px] -translate-x-1/2 rounded-full bg-azure-deep/[0.22] blur-[150px]" />
       <div className="pointer-events-none absolute right-[-180px] top-1/4 h-[420px] w-[420px] rounded-full bg-azure/[0.07] blur-[120px]" />
@@ -618,8 +709,8 @@ export default function Hero() {
           <AnimatePresence mode="wait">
             {act === 0 && <ActTitle key="act-title" />}
             {act === 1 && <ActPhone key="act-phone" notifs={notifs} />}
-            {act === 2 && <ActHistory key="act-history" />}
-            {act === 3 && <ActWallets key="act-wallets" />}
+            {act === 2 && <ActSleep key="act-sleep" />}
+            {act === 3 && <ActStory key="act-story" />}
             {act === 4 && (
               <motion.div
                 key="act-end"
