@@ -185,7 +185,7 @@ function PhoneMock({ notifs }) {
                     </svg>
                     Do Not Disturb
                   </div>
-                  <div className="mt-2 text-[15px] font-medium text-white/70">Tuesday, 5:89 PM</div>
+                  <div className="mt-2 text-[15px] font-medium text-white/70">Tuesday, 5:89 AM</div>
                   <div className="bg-gradient-to-b from-white to-white/70 bg-clip-text text-[68px] font-semibold leading-[1.05] tracking-tight text-transparent">
                     5:89
                   </div>
