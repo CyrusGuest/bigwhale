@@ -129,11 +129,36 @@ function ActTitle() {
 function MiniPhone({ children, className = '' }) {
   return (
     <div className={`relative w-[246px] ${className}`}>
-      <div className="rounded-[2.6rem] bg-gradient-to-b from-[#55607a] via-[#2a3147] to-[#171c2e] p-[3px] shadow-[0_30px_76px_-16px_rgba(0,0,0,0.8),0_0_60px_-18px_rgba(46,155,255,0.45)]">
+      <div className="relative rounded-[2.6rem] bg-gradient-to-b from-[#55607a] via-[#2a3147] to-[#171c2e] p-[3px] shadow-[0_30px_76px_-16px_rgba(0,0,0,0.8),0_0_60px_-18px_rgba(46,155,255,0.45)]">
+        {/* side buttons */}
+        <div className="absolute -left-[2px] top-[86px] h-6 w-[2.5px] rounded-l-full bg-gradient-to-b from-[#5b6680] to-[#2a3147]" />
+        <div className="absolute -left-[2px] top-[118px] h-10 w-[2.5px] rounded-l-full bg-gradient-to-b from-[#5b6680] to-[#2a3147]" />
+        <div className="absolute -left-[2px] top-[162px] h-10 w-[2.5px] rounded-l-full bg-gradient-to-b from-[#5b6680] to-[#2a3147]" />
+        <div className="absolute -right-[2px] top-[128px] h-14 w-[2.5px] rounded-r-full bg-gradient-to-b from-[#5b6680] to-[#2a3147]" />
         <div className="rounded-[2.4rem] bg-black p-[7px]">
           <div className="relative h-[466px] overflow-hidden rounded-[2rem] bg-[#0A1128]">
             <div className="pointer-events-none absolute -top-10 left-1/2 h-44 w-44 -translate-x-1/2 rounded-full bg-azure-deep/50 blur-[50px]" />
-            <div className="absolute left-1/2 top-2.5 z-20 h-[17px] w-[70px] -translate-x-1/2 rounded-full bg-black" />
+            {/* glass glare */}
+            <div className="pointer-events-none absolute -left-16 -top-8 h-[140%] w-24 rotate-12 bg-gradient-to-r from-transparent via-white/[0.05] to-transparent" />
+            {/* status bar */}
+            <div className="absolute right-3.5 top-3 z-20 flex items-center gap-1 text-white/55">
+              <svg viewBox="0 0 18 12" className="h-[7px] w-[11px] fill-current">
+                <rect x="0" y="8" width="3" height="4" rx="0.8" />
+                <rect x="4.5" y="5.5" width="3" height="6.5" rx="0.8" />
+                <rect x="9" y="3" width="3" height="9" rx="0.8" />
+                <rect x="13.5" y="0.5" width="3" height="11.5" rx="0.8" opacity="0.4" />
+              </svg>
+              <svg viewBox="0 0 16 12" className="h-[7px] w-[9px] fill-current">
+                <path d="M8 9.7a1.6 1.6 0 1 1 0 3.2 1.6 1.6 0 0 1 0-3.2ZM8 5.6c1.8 0 3.4.7 4.6 1.9l-1.5 1.5A4.4 4.4 0 0 0 8 7.8c-1.2 0-2.3.5-3.1 1.2L3.4 7.5A6.5 6.5 0 0 1 8 5.6ZM8 1.5c2.9 0 5.5 1.2 7.4 3l-1.5 1.5A8.4 8.4 0 0 0 8 3.6c-2.3 0-4.4.9-5.9 2.4L.6 4.5c1.9-1.8 4.5-3 7.4-3Z" />
+              </svg>
+              <span className="flex h-[8px] w-[15px] items-center rounded-[2px] border border-white/40 px-[1.5px]">
+                <span className="h-[4px] w-[70%] rounded-[1px] bg-white/80" />
+              </span>
+            </div>
+            {/* dynamic island with camera */}
+            <div className="absolute left-1/2 top-2.5 z-20 flex h-[17px] w-[70px] -translate-x-1/2 items-center justify-end rounded-full bg-black pr-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#10151f] ring-1 ring-white/[0.08]" />
+            </div>
             {children}
           </div>
         </div>
@@ -706,24 +731,40 @@ function StepCards() {
 
 /* ------------------------------ the virus act ------------------------------ */
 
-// blank suited-executive silhouette
+// premium suited-executive silhouette: gradient suit, collar, tie, pocket square
 function Person({ size = 34, hot = false }) {
+  const gid = hot ? 'personHot' : 'personStd'
   return (
     <svg
-      viewBox="0 0 40 44"
+      viewBox="0 0 40 46"
       width={size}
-      height={size * 1.1}
+      height={size * 1.15}
       className={hot ? 'text-azure-bright' : 'text-azure'}
     >
-      <circle cx="20" cy="10" r="7.5" fill="#0E1630" stroke="currentColor" strokeWidth="2" />
+      <defs>
+        <linearGradient id={gid} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={hot ? '#2E9BFF' : '#1B3B75'} stopOpacity="0.85" />
+          <stop offset="100%" stopColor="#0A1128" />
+        </linearGradient>
+      </defs>
+      <circle cx="20" cy="10" r="7.6" fill={`url(#${gid})`} stroke="currentColor" strokeWidth="1.8" />
       <path
-        d="M4 42 C4 28 12 23 20 23 C28 23 36 28 36 42 Z"
-        fill="#0E1630"
+        d="M4.5 44 C4.5 30 11 24.5 20 24.5 C29 24.5 35.5 30 35.5 44 Z"
+        fill={`url(#${gid})`}
         stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth="1.8"
+        strokeLinejoin="round"
       />
-      <path d="M15 23 l5 5 5 -5" fill="none" stroke="currentColor" strokeWidth="1.6" />
-      <path d="M20 28 l2.4 3.2 -2.4 9 -2.4 -9 z" fill="currentColor" opacity="0.85" />
+      <path
+        d="M14.5 25.5 L20 31 L25.5 25.5"
+        fill="none"
+        stroke="#E8ECF4"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        opacity="0.85"
+      />
+      <path d="M20 31 l2.2 3 -2.2 8.4 -2.2 -8.4 z" fill="currentColor" />
+      <rect x="27.5" y="33.5" width="4.5" height="2" rx="0.6" fill="currentColor" opacity="0.6" />
     </svg>
   )
 }
@@ -774,7 +815,7 @@ function ActVirus() {
           transition={{ duration: 0.5, ease: EASE }}
           className="text-xl font-medium text-mist sm:text-2xl"
         >
-          It starts with <span className="text-shimmer">one holder.</span>
+          Every movement starts with <span className="text-shimmer">one believer.</span>
         </motion.p>
       </Float>
 
@@ -787,18 +828,28 @@ function ActVirus() {
       >
         <span className="text-[13px] text-white/55">Holders</span>
         <motion.span
-          key={wave}
+          key={slam ? '589' : wave}
           initial={{ scale: 1.5, color: '#30D158' }}
-          animate={{ scale: 1, color: '#FFFFFF' }}
+          animate={{ scale: 1, color: slam ? '#30D158' : '#FFFFFF' }}
           transition={{ duration: 0.4 }}
           className="font-display text-[16px] font-bold tabular-nums"
         >
-          {HOLDER_COUNTS[Math.max(wave, 0)]}
+          {slam ? '589+' : HOLDER_COUNTS[Math.max(wave, 0)]}
         </motion.span>
       </motion.div>
 
       {/* the crowd multiplying */}
       <div className="relative mx-auto mt-5 w-fit">
+        {/* the ripple effect: a shockwave crosses the crowd on every doubling */}
+        {wave >= 1 && (
+          <motion.span
+            key={`ripple-${wave}`}
+            initial={{ opacity: 0.55, scale: 0.15 }}
+            animate={{ opacity: 0, scale: 2.4 }}
+            transition={{ duration: 0.9, ease: 'easeOut' }}
+            className="pointer-events-none absolute left-1/2 top-1/2 z-10 h-44 w-44 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-azure/60 shadow-[0_0_30px_rgba(46,155,255,0.4)]"
+          />
+        )}
         {/* the first holder's phone lights up */}
         <motion.div
           initial={{ opacity: 0, y: 14, scale: 0.6 }}
@@ -831,6 +882,13 @@ function ActVirus() {
                 className="relative"
               >
                 <Float amt={3} dur={2.6 + (i % 5) * 0.4} delay={delay}>
+                  {isFirst && (
+                    <motion.span
+                      animate={{ opacity: [0.5, 0.15, 0.5], scale: [1, 1.35, 1] }}
+                      transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+                      className="pointer-events-none absolute -inset-1.5 rounded-full bg-azure/20 blur-[6px]"
+                    />
+                  )}
                   <Person size={i === CROWD_ORDER[0] ? 40 : 32} hot={isFirst} />
                 </Float>
                 <motion.span
@@ -843,6 +901,16 @@ function ActVirus() {
             )
           })}
         </div>
+
+        {/* lore caption once the doubling is undeniable */}
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={wave >= 3 && !slam ? { opacity: 1, y: 0 } : { opacity: 0 }}
+          transition={{ duration: 0.5 }}
+          className="pointer-events-none absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap font-mono text-[12px] italic tracking-[0.14em] text-azure-bright"
+        >
+          they call it the ripple effect.
+        </motion.p>
 
         {/* the slam, over the crowd */}
         {slam && (
@@ -968,6 +1036,27 @@ function ActFlywheel() {
             transition={{ duration: fast ? 7 : 18, repeat: Infinity, ease: 'linear' }}
             className="absolute inset-6 rounded-full border-2 border-dashed border-azure/30"
           />
+          {/* radar sweep riding the ring */}
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: fast ? 2.4 : 6, repeat: Infinity, ease: 'linear' }}
+            className="absolute inset-6 rounded-full"
+            style={{
+              background:
+                'conic-gradient(from 0deg, transparent 72%, rgba(46,155,255,0.35) 88%, transparent 100%)',
+              filter: 'blur(6px)',
+            }}
+          />
+          {/* pulse flash on every beat */}
+          {beat > 0 && (
+            <motion.span
+              key={`wheelflash-${beat}`}
+              initial={{ opacity: 0.45, scale: 0.6 }}
+              animate={{ opacity: 0, scale: 1.35 }}
+              transition={{ duration: 0.7, ease: 'easeOut' }}
+              className="pointer-events-none absolute inset-4 rounded-full bg-azure/15"
+            />
+          )}
           <div className="absolute inset-6 rounded-full shadow-[inset_0_0_60px_rgba(46,155,255,0.12)]" />
 
           {/* orbiting XRP pulses */}
