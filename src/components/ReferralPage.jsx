@@ -254,7 +254,7 @@ function ActPhones() {
           animate={{
             opacity: 1,
             y: 0,
-            x: beat >= 2 ? 0 : -110,
+            x: beat >= 2 ? 0 : -140,
             rotate: beat >= 2 ? 0 : -2,
             filter: 'blur(0px)',
           }}
@@ -324,6 +324,7 @@ function ActPhones() {
             damping: 21,
             layout: { type: 'spring', stiffness: 140, damping: 22 },
           }}
+          style={{ transformOrigin: 'top center' }}
           className="relative"
         >
           {beat >= 4 && beat < 6 && <PopAmt key="a1" amt={1} />}
