@@ -185,9 +185,9 @@ function PhoneMock({ notifs }) {
                     </svg>
                     Do Not Disturb
                   </div>
-                  <div className="mt-2 text-[15px] font-medium text-white/70">Tuesday, 3:47 AM</div>
+                  <div className="mt-2 text-[15px] font-medium text-white/70">Tuesday, 5:89 PM</div>
                   <div className="bg-gradient-to-b from-white to-white/70 bg-clip-text text-[68px] font-semibold leading-[1.05] tracking-tight text-transparent">
-                    3:47
+                    5:89
                   </div>
                 </div>
 
@@ -284,7 +284,7 @@ function PhoneMock({ notifs }) {
       </motion.div>
 
       <p className="relative mt-6 font-mono text-[10px] uppercase tracking-[0.2em] text-mist-faint">
-        Simulated preview · Payouts land hourly, even at 3 AM
+        Simulated preview · Payouts land hourly, even at 5:89
       </p>
     </div>
   )
@@ -307,38 +307,73 @@ function Float({ children, delay = 0, amt = 8, dur = 5, className = '' }) {
   )
 }
 
-// Act 1: the whole screen is just the core message
+// Act 1: the core message rockets out of the screen at the viewer
 function ActTitle() {
   return (
-    <motion.div exit={actExit} className="w-full px-4 text-center">
-      {['BUY XPY.', 'EARN XRP.'].map((line, i) => (
-        <Float key={line} delay={i * 0.6} amt={7} dur={4.5}>
-          <motion.h1
-            initial={{ opacity: 0, y: 40, filter: 'blur(10px)' }}
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            transition={{ delay: 0.15 + i * 0.25, duration: 0.55, ease: EASE }}
-            className="text-6xl font-bold leading-[1.02] tracking-[-0.03em] sm:text-8xl"
-          >
-            {i === 1 ? (
-              <>
-                EARN <span className="text-shimmer">XRP</span>.
-              </>
-            ) : (
-              line
-            )}
-          </motion.h1>
-        </Float>
-      ))}
-      <Float delay={0.9} amt={5} dur={5.5}>
+    <motion.div
+      exit={actExit}
+      className="relative w-full px-4 text-center"
+      style={{ perspective: 1000 }}
+    >
+      {/* deep glow pulse behind the whole title */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.4 }}
+        animate={{ opacity: [0, 0.9, 0.45], scale: [0.4, 1.25, 1] }}
+        transition={{ delay: 0.35, duration: 1.1, ease: 'easeOut' }}
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[380px] w-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-azure-deep/40 blur-[110px]"
+      />
+
+      <motion.div
+        animate={{ rotateX: [0, 3.5, 0, -2.5, 0], rotateY: [0, -4, 0, 4, 0], y: [0, -8, 0] }}
+        transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
+        style={{ transformStyle: 'preserve-3d' }}
+        className="relative"
+      >
+        {[0, 1].map((i) => (
+          <div key={i} className="relative">
+            {/* shockwave ring on impact */}
+            <motion.span
+              initial={{ opacity: 0, scale: 0.35 }}
+              animate={{ opacity: [0, 0.55, 0], scale: [0.35, 1.35, 1.75] }}
+              transition={{ delay: 0.62 + i * 0.35, duration: 0.65, ease: 'easeOut' }}
+              className="pointer-events-none absolute left-1/2 top-1/2 h-24 w-[min(90vw,460px)] -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-azure/50 blur-[1px]"
+            />
+            <motion.h1
+              initial={{ opacity: 0, scale: 0.1, rotateX: 55, filter: 'blur(14px)' }}
+              animate={{
+                opacity: 1,
+                scale: [0.1, 1.13, 1],
+                rotateX: [55, -6, 0],
+                filter: 'blur(0px)',
+              }}
+              transition={{
+                delay: 0.12 + i * 0.35,
+                duration: 0.62,
+                ease: [0.16, 1, 0.3, 1],
+                times: [0, 0.72, 1],
+              }}
+              className="text-3d text-6xl font-bold leading-[1.04] tracking-[-0.03em] sm:text-8xl lg:text-9xl"
+            >
+              {i === 1 ? (
+                <>
+                  EARN <span className="text-shimmer">XRP</span>.
+                </>
+              ) : (
+                'BUY XPY.'
+              )}
+            </motion.h1>
+          </div>
+        ))}
+
         <motion.p
-          initial={{ opacity: 0, letterSpacing: '0.1em' }}
-          animate={{ opacity: 1, letterSpacing: '0.32em' }}
-          transition={{ delay: 0.75, duration: 0.7, ease: EASE }}
+          initial={{ opacity: 0, letterSpacing: '0.1em', y: 16 }}
+          animate={{ opacity: 1, letterSpacing: '0.32em', y: 0 }}
+          transition={{ delay: 1.0, duration: 0.6, ease: EASE }}
           className="mt-8 font-mono text-sm uppercase text-azure-bright sm:text-base"
         >
           Passively · Hourly
         </motion.p>
-      </Float>
+      </motion.div>
     </motion.div>
   )
 }
@@ -845,7 +880,7 @@ function ActEnd() {
 /* ---------------------------------- hero ----------------------------------- */
 
 // title → phone → sleep → reserve → portal → story → end card, then push down
-const ACT_DURATIONS = [1950, 3900, 3800, 4200, 5800, 9600]
+const ACT_DURATIONS = [2350, 3900, 3800, 4200, 5800, 9600]
 
 export default function Hero() {
   const [notifs, setNotifs] = useState(() => Array.from({ length: 4 }, makeNotif).reverse())

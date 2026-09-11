@@ -58,6 +58,18 @@
   }
 }
 
+/* layered extrusion + glow that makes display text read as solid 3D */
+.text-3d {
+  text-shadow:
+    0 1px 0 #1d3f70,
+    0 2px 0 #193864,
+    0 3px 0 #153058,
+    0 4px 0 #12294c,
+    0 5px 0 #0e2140,
+    0 7px 14px rgba(0, 0, 0, 0.6),
+    0 14px 40px rgba(46, 155, 255, 0.3);
+}
+
 /* white text with a slow traveling luster highlight */
 .text-luster {
   background: linear-gradient(100deg, #ffffff 35%, #8fc2ff 50%, #ffffff 65%);
