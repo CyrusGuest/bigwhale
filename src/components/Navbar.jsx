@@ -7,6 +7,7 @@ const links = [
   { label: 'Roadmap', href: '#future' },
   { label: 'Virtual Mining', href: '#how' },
   { label: 'Holder Portal', href: '#/portal' },
+  { label: 'Referrals', href: '#/referral' },
   { label: 'FAQ', href: '#faq' },
 ]
 
