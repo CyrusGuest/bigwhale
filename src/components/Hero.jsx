@@ -11,18 +11,19 @@ const item = {
   show: { y: 0, opacity: 1, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
 }
 
-// XRP-style mark: a downward and an upward chevron forming an X
-export function XrpMark({ className = '', strokeWidth = 3.5 }) {
+// XRP-style mark: two thick wishbone halves forming the X, arms at ~45°,
+// deep rounded junctions and round caps, nearly touching at the center
+export function XrpMark({ className = '', strokeWidth = 5 }) {
   return (
     <svg viewBox="0 0 32 32" fill="none" className={className}>
       <path
-        d="M4 6 L13 14.5 Q16 17.2 19 14.5 L28 6"
+        d="M4.5 4.5 L12.2 11.8 Q16 15.4 19.8 11.8 L27.5 4.5"
         stroke="currentColor"
         strokeWidth={strokeWidth}
         strokeLinecap="round"
       />
       <path
-        d="M4 26 L13 17.5 Q16 14.8 19 17.5 L28 26"
+        d="M4.5 27.5 L12.2 20.2 Q16 16.6 19.8 20.2 L27.5 27.5"
         stroke="currentColor"
         strokeWidth={strokeWidth}
         strokeLinecap="round"
@@ -31,64 +32,28 @@ export function XrpMark({ className = '', strokeWidth = 3.5 }) {
   )
 }
 
-const B58 = 'rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz'
-const randAddr = () =>
-  'r' + Array.from({ length: 6 }, () => B58[Math.floor(Math.random() * B58.length)]).join('')
+const XRP_PRICE = 1.34
 
-let dropCounter = 0
-function makeDrop() {
-  const share = Math.random() * 1.8 + 0.005
-  const xrp = share * (Math.random() * 40 + 8)
-  return {
-    id: ++dropCounter,
-    addr: `${randAddr()}…${Math.floor(Math.random() * 9000 + 1000)}`,
-    share: `${share.toFixed(3)}%`,
-    xrp: `+${xrp.toFixed(2)} XRP`,
-  }
-}
-
-const XRP_PRICE = 3.02
-
-let coinCounter = 0
-function makeCoin() {
-  return {
-    id: ++coinCounter,
-    x: 6 + Math.random() * 82, // % across the stage
-    amt: 4 + Math.random() * 26,
-    dur: 0.95 + Math.random() * 0.45,
-    rot: -140 + Math.random() * 280,
-  }
+let notifCounter = 0
+function makeNotif() {
+  const usd = 40 + Math.random() * 70
+  return { id: ++notifCounter, amt: usd / XRP_PRICE, usd }
 }
 
 export default function Hero() {
-  const [rows, setRows] = useState(() => Array.from({ length: 3 }, makeDrop))
+  const [notifs, setNotifs] = useState(() => [makeNotif()])
   const [next, setNext] = useState(2148)
-  const [coins, setCoins] = useState([])
-  const [wallet, setWallet] = useState(1834.2)
-  const [lastAmt, setLastAmt] = useState(null)
-  const [bump, setBump] = useState(0)
 
   useEffect(() => {
-    const feed = setInterval(() => {
-      setRows((prev) => [makeDrop(), ...prev].slice(0, 3))
-    }, 2600)
+    const ping = setInterval(() => {
+      setNotifs((prev) => [makeNotif(), ...prev].slice(0, 4))
+    }, 3200)
     const clock = setInterval(() => setNext((s) => (s > 0 ? s - 1 : 3600)), 1000)
-    const rain = setInterval(() => {
-      setCoins((prev) => [...prev.slice(-7), makeCoin()])
-    }, 1500)
     return () => {
-      clearInterval(feed)
+      clearInterval(ping)
       clearInterval(clock)
-      clearInterval(rain)
     }
   }, [])
-
-  const catchCoin = (coin) => {
-    setCoins((prev) => prev.filter((c) => c.id !== coin.id))
-    setWallet((w) => w + coin.amt)
-    setLastAmt(coin.amt)
-    setBump((b) => b + 1)
-  }
 
   const mm = String(Math.floor(next / 60)).padStart(2, '0')
   const ss = String(next % 60).padStart(2, '0')
@@ -200,123 +165,154 @@ export default function Hero() {
           </motion.div>
         </motion.div>
 
-        {/* wallet catching XRP */}
+        {/* phone on the nightstand: paid while you sleep */}
         <motion.div
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
-          className="relative"
+          className="relative flex flex-col items-center"
         >
-          <div className="absolute -inset-px rounded-md bg-gradient-to-b from-azure/25 via-transparent to-transparent" />
-          <div className="relative overflow-hidden rounded-md border border-white/[0.08] bg-ink-900/95 shadow-2xl shadow-black/50">
-            <div className="flex items-center justify-between border-b border-white/[0.07] px-6 py-4">
-              <span className="flex items-center gap-2.5 text-[13px] font-medium text-mist">
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-azure/10 text-azure">
-                  <XrpMark className="h-3.5 w-3.5" strokeWidth={4.5} />
-                </span>
-                Watch a holder get paid
-              </span>
-              <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-azure">
-                <span className="h-1.5 w-1.5 animate-pulseSoft rounded-full bg-azure" />
-                Live sim
-              </span>
-            </div>
+          {/* ambient night glow */}
+          <div className="pointer-events-none absolute top-1/2 left-1/2 h-[480px] w-[480px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-azure-deep/[0.28] blur-[100px]" />
 
-            {/* coin rain stage */}
-            <div className="relative h-44 overflow-hidden">
-              <AnimatePresence>
-                {coins.map((c) => (
+          <motion.div
+            animate={{ y: [0, -9, 0], rotate: [0, 0.6, 0] }}
+            transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
+            className="relative w-[310px]"
+          >
+            {/* titanium frame */}
+            <div className="relative rounded-[3.2rem] bg-gradient-to-b from-[#55607a] via-[#2a3147] to-[#171c2e] p-[3px] shadow-[0_44px_110px_-24px_rgba(0,0,0,0.9),0_0_90px_-28px_rgba(46,155,255,0.45)]">
+              {/* side buttons */}
+              <div className="absolute -left-[2.5px] top-[104px] h-7 w-[3px] rounded-l-full bg-gradient-to-b from-[#5b6680] to-[#2a3147]" />
+              <div className="absolute -left-[2.5px] top-[144px] h-12 w-[3px] rounded-l-full bg-gradient-to-b from-[#5b6680] to-[#2a3147]" />
+              <div className="absolute -left-[2.5px] top-[204px] h-12 w-[3px] rounded-l-full bg-gradient-to-b from-[#5b6680] to-[#2a3147]" />
+              <div className="absolute -right-[2.5px] top-[160px] h-[70px] w-[3px] rounded-r-full bg-gradient-to-b from-[#5b6680] to-[#2a3147]" />
+
+              {/* black bezel */}
+              <div className="rounded-[3.05rem] bg-black p-[9px]">
+                {/* screen */}
+                <div className="relative overflow-hidden rounded-[2.5rem] bg-[#070B1A]">
+                  {/* wallpaper glow */}
+                  <div className="pointer-events-none absolute -top-24 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-azure-deep/40 blur-[70px]" />
+                  <div className="pointer-events-none absolute bottom-0 right-0 h-48 w-48 rounded-full bg-azure/10 blur-[60px]" />
+                  {/* glass glare */}
+                  <div className="pointer-events-none absolute -left-24 -top-10 h-[130%] w-36 rotate-12 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent" />
+                  {/* screen wake flash on new payout */}
                   <motion.div
-                    key={c.id}
-                    initial={{ y: -44, opacity: 0, rotate: 0 }}
-                    animate={{ y: 132, opacity: [0, 1, 1, 0.9], rotate: c.rot }}
-                    exit={{ opacity: 0, scale: 0.4 }}
-                    transition={{ duration: c.dur, ease: [0.45, 0.05, 0.85, 0.6] }}
-                    onAnimationComplete={() => catchCoin(c)}
-                    className="absolute top-0"
-                    style={{ left: `${c.x}%` }}
-                  >
-                    <span className="flex h-9 w-9 items-center justify-center rounded-full border border-azure/60 bg-gradient-to-b from-ink-700 to-ink-900 text-azure shadow-[0_0_18px_-2px_rgba(46,155,255,0.55)]">
-                      <XrpMark className="h-4 w-4" strokeWidth={4.5} />
+                    key={`flash-${notifs[0]?.id}`}
+                    initial={{ opacity: 0.1 }}
+                    animate={{ opacity: 0 }}
+                    transition={{ duration: 1.1, ease: 'easeOut' }}
+                    className="pointer-events-none absolute inset-0 z-10 bg-white"
+                  />
+
+                  {/* status bar */}
+                  <div className="relative flex items-center justify-end gap-1.5 px-6 pt-4 text-white/60">
+                    <svg viewBox="0 0 18 12" className="h-[10px] w-[15px] fill-current">
+                      <rect x="0" y="8" width="3" height="4" rx="0.8" />
+                      <rect x="4.5" y="5.5" width="3" height="6.5" rx="0.8" />
+                      <rect x="9" y="3" width="3" height="9" rx="0.8" />
+                      <rect x="13.5" y="0.5" width="3" height="11.5" rx="0.8" opacity="0.4" />
+                    </svg>
+                    <svg viewBox="0 0 16 12" className="h-[10px] w-[13px] fill-current">
+                      <path d="M8 9.7a1.6 1.6 0 1 1 0 3.2 1.6 1.6 0 0 1 0-3.2ZM8 5.6c1.8 0 3.4.7 4.6 1.9l-1.5 1.5A4.4 4.4 0 0 0 8 7.8c-1.2 0-2.3.5-3.1 1.2L3.4 7.5A6.5 6.5 0 0 1 8 5.6ZM8 1.5c2.9 0 5.5 1.2 7.4 3l-1.5 1.5A8.4 8.4 0 0 0 8 3.6c-2.3 0-4.4.9-5.9 2.4L.6 4.5c1.9-1.8 4.5-3 7.4-3Z" />
+                    </svg>
+                    <span className="ml-0.5 flex h-[11px] w-[22px] items-center rounded-[3px] border border-white/40 px-[2px]">
+                      <span className="h-[6px] w-[70%] rounded-[1px] bg-white/80" />
                     </span>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-azure/[0.10] to-transparent" />
-            </div>
+                  </div>
 
-            {/* wallet balance, pulses on every catch */}
-            <div className="relative px-6 pb-5">
-              <motion.div
-                key={bump}
-                initial={{ scale: 1.02 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                className="relative rounded-md border border-azure/30 bg-ink-800/80 px-6 py-5"
-              >
-                <motion.span
-                  key={`ring-${bump}`}
-                  initial={{ opacity: 0.5, scale: 0.97 }}
-                  animate={{ opacity: 0, scale: 1.12 }}
-                  transition={{ duration: 0.8 }}
-                  className="pointer-events-none absolute inset-0 rounded-md border-2 border-azure/50"
-                />
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-mist-faint">
-                    Holder wallet · rXPY…HODL
-                  </span>
-                  {lastAmt !== null && (
-                    <motion.span
-                      key={`amt-${bump}`}
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: [0, 1, 1, 0], y: -14 }}
-                      transition={{ duration: 1.6 }}
-                      className="font-mono text-sm font-medium text-azure-bright"
-                    >
-                      +{lastAmt.toFixed(2)} XRP
-                    </motion.span>
-                  )}
-                </div>
-                <div className="mt-2 font-mono text-4xl font-medium tabular-nums tracking-tight text-mist sm:text-5xl">
-                  {wallet.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                  <span className="ml-2.5 text-lg text-azure">XRP</span>
-                </div>
-                <div className="mt-1 font-mono text-sm tabular-nums text-mist-faint">
-                  ≈ ${(wallet * XRP_PRICE).toLocaleString('en-US', { maximumFractionDigits: 0 })} USD
-                </div>
-              </motion.div>
-            </div>
+                  {/* dynamic island */}
+                  <div className="absolute left-1/2 top-3.5 z-20 flex h-[27px] w-[102px] -translate-x-1/2 items-center justify-end rounded-full bg-black pr-2.5">
+                    <span className="h-2.5 w-2.5 rounded-full bg-[#10151f] ring-1 ring-white/[0.06]" />
+                  </div>
 
-            {/* other holders */}
-            <div className="border-t border-white/[0.05] px-6 py-3">
-              <p className="mb-2 font-mono text-[9px] uppercase tracking-[0.2em] text-mist-faint">
-                Other holders getting paid right now
-              </p>
-              <AnimatePresence initial={false} mode="popLayout">
-                {rows.map((d) => (
-                  <motion.div
-                    key={d.id}
-                    layout
-                    initial={{ opacity: 0, y: -8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.4 }}
-                    className="flex items-center justify-between py-1.5 font-mono text-xs"
-                  >
-                    <span className="text-mist-dim">{d.addr}</span>
-                    <span className="tabular-nums font-medium text-azure">{d.xrp}</span>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </div>
+                  <div className="relative px-3.5 pb-5 pt-7">
+                    {/* lock screen clock */}
+                    <div className="text-center">
+                      <div className="mx-auto flex w-fit items-center gap-1.5 rounded-full bg-white/[0.08] px-3 py-1 text-[10px] font-medium text-white/60 backdrop-blur">
+                        <svg viewBox="0 0 16 16" className="h-2.5 w-2.5 fill-current">
+                          <path d="M13.5 9.8A6 6 0 0 1 6.2 2.5a6 6 0 1 0 7.3 7.3Z" />
+                        </svg>
+                        Do Not Disturb
+                      </div>
+                      <div className="mt-2 text-[15px] font-medium text-white/70">Tuesday, 3:47 AM</div>
+                      <div className="bg-gradient-to-b from-white to-white/70 bg-clip-text text-[68px] font-semibold leading-[1.05] tracking-tight text-transparent">
+                        3:47
+                      </div>
+                    </div>
 
-            <div className="flex items-center justify-between border-t border-white/[0.07] bg-gradient-to-r from-azure-deep/[0.18] to-transparent px-6 py-3.5 font-mono text-[10px] uppercase tracking-[0.15em]">
-              <span className="text-mist-dim">
-                Next distribution <span className="tabular-nums text-azure-bright">{mm}:{ss}</span>
-              </span>
-              <span className="text-mist-faint">Simulated preview</span>
+                    {/* notifications */}
+                    <div className="mt-4 flex min-h-[264px] flex-col gap-2">
+                      <AnimatePresence initial={false} mode="popLayout">
+                        {notifs.map((n, i) => (
+                          <motion.div
+                            key={n.id}
+                            layout
+                            initial={{ opacity: 0, y: -28, scale: 0.94 }}
+                            animate={{ opacity: 1 - i * 0.14, y: 0, scale: 1 - i * 0.02 }}
+                            exit={{ opacity: 0, scale: 0.92, transition: { duration: 0.25 } }}
+                            transition={{ type: 'spring', stiffness: 240, damping: 26, mass: 0.9 }}
+                            className="rounded-[20px] border border-white/[0.07] bg-[#2a3040]/60 p-3 shadow-lg shadow-black/25 backdrop-blur-2xl"
+                          >
+                            <div className="flex items-center gap-3">
+                              <span className="flex h-[38px] w-[38px] flex-none items-center justify-center rounded-[9.5px] bg-gradient-to-b from-azure to-[#1668c9] text-white shadow-md shadow-azure/25">
+                                <XrpMark className="h-[19px] w-[19px]" strokeWidth={4.5} />
+                              </span>
+                              <div className="min-w-0 flex-1">
+                                <div className="flex items-baseline justify-between gap-2">
+                                  <span className="text-[13px] font-semibold leading-tight text-white">
+                                    XPY
+                                  </span>
+                                  <span className="text-[11px] text-white/40">
+                                    {i === 0 ? 'now' : `${i}h ago`}
+                                  </span>
+                                </div>
+                                <p className="mt-[1px] text-[12.5px] leading-[1.35] text-white/75">
+                                  You just got paid{' '}
+                                  <span className="font-semibold text-[#8AC5FF]">
+                                    +{n.amt.toFixed(2)} XRP
+                                  </span>{' '}
+                                  <span className="text-white/40">(≈ ${n.usd.toFixed(2)})</span>
+                                </p>
+                              </div>
+                            </div>
+                          </motion.div>
+                        ))}
+                      </AnimatePresence>
+                    </div>
+
+                    {/* next payout pill */}
+                    <div className="mx-auto mt-3 flex w-fit items-center gap-2 rounded-full bg-white/[0.08] px-4 py-1.5 text-[11px] font-medium text-white/70 backdrop-blur">
+                      <span className="h-1.5 w-1.5 animate-pulseSoft rounded-full bg-azure" />
+                      Next payout in <span className="tabular-nums text-azure-bright">{mm}:{ss}</span>
+                    </div>
+
+                    {/* flashlight + camera */}
+                    <div className="mt-4 flex items-center justify-between px-3">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/[0.1] text-white/80 backdrop-blur">
+                        <svg viewBox="0 0 16 16" className="h-4 w-4 fill-current">
+                          <path d="M5 1h6v2.5L9.5 6v7.5a1.5 1.5 0 0 1-3 0V6L5 3.5V1Zm3 7a.8.8 0 0 1 .8.8v3.4a.8.8 0 0 1-1.6 0V8.8A.8.8 0 0 1 8 8Z" />
+                        </svg>
+                      </span>
+                      <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/[0.1] text-white/80 backdrop-blur">
+                        <svg viewBox="0 0 16 16" className="h-4 w-4 fill-current">
+                          <path d="M5.5 2.5 6.6 1h2.8l1.1 1.5H13A1.5 1.5 0 0 1 14.5 4v8A1.5 1.5 0 0 1 13 13.5H3A1.5 1.5 0 0 1 1.5 12V4A1.5 1.5 0 0 1 3 2.5h2.5ZM8 5a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm0 1.5A1.5 1.5 0 1 1 8 9.5 1.5 1.5 0 0 1 8 6.5Z" />
+                        </svg>
+                      </span>
+                    </div>
+
+                    {/* home indicator */}
+                    <div className="mx-auto mt-3 h-[4px] w-28 rounded-full bg-white/30" />
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
+          </motion.div>
+
+          <p className="relative mt-6 font-mono text-[10px] uppercase tracking-[0.2em] text-mist-faint">
+            Simulated preview · Payouts land hourly, even at 3 AM
+          </p>
         </motion.div>
       </div>
     </section>

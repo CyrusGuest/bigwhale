@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { XrpMark } from './Hero.jsx'
 
-const XRP_PRICE = 3.02
+const XRP_PRICE = 1.34
 const RESERVE_USD = 1000000
 const RESERVE_XRP = Math.round(RESERVE_USD / XRP_PRICE)
 
@@ -192,7 +192,7 @@ export default function Reserve() {
             transition={{ duration: 0.7 }}
           >
             <p className="eyebrow mb-6">First Mover</p>
-            <h2 className="text-5xl font-semibold leading-[1.05] tracking-[-0.03em] sm:text-6xl">
+            <h2 className="text-4xl font-semibold leading-[1.08] tracking-[-0.03em] sm:text-6xl sm:leading-[1.05]">
               The future coin of the
               <br />
               <span className="bg-gradient-to-r from-azure to-azure-bright bg-clip-text text-transparent">
@@ -222,7 +222,7 @@ export default function Reserve() {
                 <span className="block font-mono text-[10px] uppercase tracking-[0.2em] text-azure-bright">
                   Starting reserve
                 </span>
-                <span className="mt-1 block text-6xl font-semibold tabular-nums tracking-tight text-mist [text-shadow:0_0_40px_rgba(46,155,255,0.35)] sm:text-7xl">
+                <span className="mt-1 block text-4xl font-semibold tabular-nums tracking-tight text-mist [text-shadow:0_0_40px_rgba(46,155,255,0.35)] sm:text-7xl">
                   <CountUp target={RESERVE_USD} prefix="$" />
                 </span>
               </div>

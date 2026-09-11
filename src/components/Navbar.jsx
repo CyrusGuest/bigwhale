@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { XrpMark } from './Hero.jsx'
 
 const links = [
   { label: 'Reserve', href: '#reserve' },
@@ -21,10 +22,10 @@ export default function Navbar() {
     >
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         <a href="#" className="flex items-center gap-3">
-          <span className="flex h-8 w-8 items-center justify-center border border-brass/60 font-serif text-sm font-medium text-mist">
-            X
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-azure/10 text-azure">
+            <XrpMark className="h-4 w-4" strokeWidth={5} />
           </span>
-          <span className="text-base font-medium tracking-[0.08em]">XPY</span>
+          <span className="text-base font-semibold tracking-[0.08em]">XPY</span>
         </a>
 
         <div className="hidden items-center gap-9 md:flex">

@@ -6,6 +6,10 @@
   html {
     @apply bg-ink-900 text-mist antialiased;
   }
+  /* anchor jumps land below the fixed navbar */
+  [id] {
+    scroll-margin-top: 5rem;
+  }
   body {
     @apply overflow-x-hidden font-sans text-[15px] font-[450];
   }

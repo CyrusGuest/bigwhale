@@ -1,3 +1,5 @@
+import { XrpMark } from './Hero.jsx'
+
 const columns = [
   {
     title: 'Token',
@@ -19,10 +21,10 @@ export default function Footer() {
       <div className="mx-auto grid max-w-7xl gap-12 px-6 py-16 sm:grid-cols-2 lg:grid-cols-5">
         <div className="lg:col-span-2">
           <div className="flex items-center gap-3">
-            <span className="flex h-8 w-8 items-center justify-center border border-brass/60 font-serif text-sm font-medium text-mist">
-              X
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-azure/10 text-azure">
+              <XrpMark className="h-4 w-4" strokeWidth={5} />
             </span>
-            <span className="text-base font-medium tracking-[0.08em]">XPY</span>
+            <span className="text-base font-semibold tracking-[0.08em]">XPY</span>
           </div>
           <p className="mt-5 max-w-xs text-sm leading-relaxed text-mist-dim">
             Virtual mining on the XRP Ledger: trading fees redistributed to

@@ -5,7 +5,7 @@ import { XrpMark } from './Hero.jsx'
 const TOTAL_SUPPLY = 1_000_000_000
 const HOLDER_SHARE = 0.04
 const AVG_DAILY_VOLUME = 10_000_000
-const XRP_PRICE = 3.02
+const XRP_PRICE = 1.34
 const TOKEN_PRICE = 0.005 // $5M mcap / 1B supply
 
 const SOL_ADDRESS = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/
@@ -345,13 +345,13 @@ function Dashboard({ address, data, sample = false }) {
             {data.txs.map((t) => (
               <div
                 key={t.id}
-                className="grid grid-cols-[auto_1fr_auto_auto] items-center gap-4 py-2.5 font-mono text-xs"
+                className="grid grid-cols-[auto_1fr_auto_auto] items-center gap-3 py-2.5 font-mono text-xs sm:gap-4"
               >
                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-azure/10 text-azure">
                   <XrpMark className="h-3 w-3" strokeWidth={5} />
                 </span>
-                <span className="text-mist-dim">{t.hash}</span>
-                <span className="text-mist-faint">{t.ago}</span>
+                <span className="truncate text-mist-dim">{t.hash}</span>
+                <span className="whitespace-nowrap text-mist-faint">{t.ago}</span>
                 <span className="text-right">
                   <span className="block tabular-nums font-medium text-azure">
                     +{num(t.xrp, 2)} XRP

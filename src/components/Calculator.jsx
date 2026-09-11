@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 
 const HOLDER_SHARE = 0.04 // 4% of trade volume flows to holders
-const TRADE_FEE = 0.05 // fee paid when swapping rewards back into the token
 const HORIZONS = [30, 90, 180, 365]
 
 const fmt = (n) =>
@@ -14,53 +13,31 @@ const fmtShort = (n) =>
       ? `$${(n / 1e3).toFixed(1)}k`
       : fmt(n)
 
-function GrowthChart({ position, dailyRate, compHourly, days, simpleTotal, compTotal, diff }) {
+function GrowthChart({ position, dailyRate, days, total }) {
   const W = 600
-  const H = 220
+  const H = 200
   const L = 12
   const R = 86
   const T = 18
   const B = 26
-  const N = 72
-  const pts = Array.from({ length: N + 1 }, (_, i) => {
-    const d = (days / N) * i
-    return {
-      simple: position * dailyRate * d,
-      comp: position * (Math.pow(compHourly, 24 * d) - 1),
-    }
-  })
-  const max = Math.max(compTotal, simpleTotal, 1)
+  const N = 60
+  const pts = Array.from({ length: N + 1 }, (_, i) => position * dailyRate * ((days / N) * i))
+  const max = Math.max(total, 1)
   const x = (i) => L + ((W - L - R) / N) * i
   const y = (v) => H - B - (v / max) * (H - T - B)
-
-  const line = (key) => pts.map((p, i) => `${i ? 'L' : 'M'}${x(i)},${y(p[key])}`).join(' ')
-  const band =
-    line('comp') +
-    pts
-      .slice()
-      .reverse()
-      .map((p, i) => `L${x(N - i)},${y(p.simple)}`)
-      .join('') +
-    ' Z'
-  const area = `${line('comp')} L${x(N)},${H - B} L${x(0)},${H - B} Z`
-
-  const showDiff = diff > position * 0.002
+  const line = pts.map((v, i) => `${i ? 'L' : 'M'}${x(i)},${y(v)}`).join(' ')
+  const area = `${line} L${x(N)},${H - B} L${x(0)},${H - B} Z`
 
   return (
     <div>
       <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full">
         <defs>
           <linearGradient id="calcArea" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#2E9BFF" stopOpacity="0.16" />
+            <stop offset="0%" stopColor="#2E9BFF" stopOpacity="0.22" />
             <stop offset="100%" stopColor="#2E9BFF" stopOpacity="0" />
-          </linearGradient>
-          <linearGradient id="calcBand" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#2E9BFF" stopOpacity="0.05" />
-            <stop offset="100%" stopColor="#2E9BFF" stopOpacity="0.34" />
           </linearGradient>
         </defs>
 
-        {/* gridlines */}
         {[0.25, 0.5, 0.75, 1].map((g) => (
           <line
             key={g}
@@ -73,54 +50,23 @@ function GrowthChart({ position, dailyRate, compHourly, days, simpleTotal, compT
           />
         ))}
 
-        {/* fills */}
         <path d={area} fill="url(#calcArea)" />
-        <path d={band} fill="url(#calcBand)" />
+        <path d={line} fill="none" stroke="#2E9BFF" strokeWidth="2.5" />
 
-        {/* curves */}
-        <path
-          d={line('simple')}
-          fill="none"
-          stroke="#606D89"
-          strokeWidth="1.5"
-          strokeDasharray="5 4"
-        />
-        <path d={line('comp')} fill="none" stroke="#2E9BFF" strokeWidth="2.5" />
-
-        {/* endpoints + labels */}
-        <circle cx={x(N)} cy={y(compTotal)} r="3.5" fill="#2E9BFF" />
-        <circle cx={x(N)} cy={y(simpleTotal)} r="3" fill="#606D89" />
+        <circle cx={x(N)} cy={y(total)} r="4" fill="#2E9BFF" />
+        <circle cx={x(N)} cy={y(total)} r="8" fill="#2E9BFF" fillOpacity="0.25">
+          <animate attributeName="r" values="6;11;6" dur="2.5s" repeatCount="indefinite" />
+        </circle>
         <text
           x={x(N) + 10}
-          y={y(compTotal) + 4}
+          y={y(total) + 4}
           fill="#66B8FF"
           fontSize="12"
           fontFamily="IBM Plex Mono, monospace"
         >
-          {fmtShort(compTotal)}
+          {fmtShort(total)}
         </text>
-        <text
-          x={x(N) + 10}
-          y={Math.max(y(simpleTotal) + 4, y(compTotal) + 20)}
-          fill="#606D89"
-          fontSize="11"
-          fontFamily="IBM Plex Mono, monospace"
-        >
-          {fmtShort(simpleTotal)}
-        </text>
-        {showDiff && (
-          <text
-            x={x(Math.floor(N * 0.66))}
-            y={y((compTotal + simpleTotal * 2) / 3) - 10}
-            fill="#2E9BFF"
-            fontSize="11"
-            fontFamily="IBM Plex Mono, monospace"
-          >
-            +{fmtShort(diff)} from compounding
-          </text>
-        )}
 
-        {/* axis labels */}
         <text x={L} y={H - 6} fill="#606D89" fontSize="10" fontFamily="IBM Plex Mono, monospace">
           day 0
         </text>
@@ -135,14 +81,8 @@ function GrowthChart({ position, dailyRate, compHourly, days, simpleTotal, compT
           day {days}
         </text>
       </svg>
-      <div className="mt-1 flex items-center gap-5 font-mono text-[10px] text-mist-faint">
-        <span className="flex items-center gap-1.5">
-          <span className="inline-block h-[2px] w-4 rounded bg-azure" /> compounded
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="inline-block h-px w-4 border-t border-dashed border-mist-faint" /> not
-          compounded
-        </span>
+      <div className="mt-1 font-mono text-[10px] text-mist-faint">
+        Total XRP earned over time, in dollars, at your inputs
       </div>
     </div>
   )
@@ -152,24 +92,14 @@ export default function Calculator() {
   const [position, setPosition] = useState(1000)
   const [mcap, setMcap] = useState(5000000)
   const [volume, setVolume] = useState(10000000)
-  const [compound, setCompound] = useState(false)
   const [days, setDays] = useState(30)
 
-  const hourlyRate = mcap > 0 ? (volume * HOLDER_SHARE) / 24 / mcap : 0
-  const dailyRate = hourlyRate * 24
+  const dailyRate = mcap > 0 ? (volume * HOLDER_SHARE) / mcap : 0
   const sharePct = mcap > 0 ? (position / mcap) * 100 : 0
 
-  const simpleDaily = position * dailyRate
-  const simpleTotal = simpleDaily * days
-  const compHourly = 1 + hourlyRate * (1 - TRADE_FEE)
-  const compTotal = position * (Math.pow(compHourly, 24 * days) - 1)
-  const compFirstDay = position * (Math.pow(compHourly, 24) - 1)
-  const compLastDay =
-    position * Math.pow(compHourly, 24 * (days - 1)) * (Math.pow(compHourly, 24) - 1)
-
-  const total = compound ? compTotal : simpleTotal
+  const daily = position * dailyRate
+  const total = daily * days
   const pctTotal = position > 0 ? (total / position) * 100 : 0
-  const diff = compTotal - simpleTotal
 
   const sliders = [
     {
@@ -219,8 +149,8 @@ export default function Calculator() {
         </h2>
         <p className="mt-5 leading-relaxed text-mist-dim">
           One formula, nothing hidden: daily volume × 4% × your share of
-          market cap. Set your assumptions, pick a horizon, flip on
-          compounding, and see the pace for yourself.
+          market cap. Set your assumptions, pick a horizon, and see the pace
+          for yourself.
         </p>
       </motion.div>
 
@@ -273,89 +203,55 @@ export default function Calculator() {
               ))}
             </div>
           </div>
-
-          <label className="flex cursor-pointer items-center gap-4 border-t border-white/[0.08] pt-6">
-            <input
-              type="checkbox"
-              checked={compound}
-              onChange={(e) => setCompound(e.target.checked)}
-              className="h-4 w-4 accent-[#C3A878]"
-            />
-            <span>
-              <span className="block text-sm font-medium text-mist">Compound hourly</span>
-              <span className="mt-0.5 block text-[11px] text-mist-faint">
-                Swap each XRP payout back into XPY · includes the 5% re-buy fee
-              </span>
-            </span>
-          </label>
         </div>
 
         {/* results */}
         <div className="flex flex-col border-t border-white/[0.07] bg-ink-800/50 p-8 sm:p-10 lg:border-l lg:border-t-0">
-          <div className="flex items-baseline justify-between">
-            <div className="flex items-baseline gap-3">
-              <span className="font-serif text-5xl font-medium tabular-nums text-mist">
-                {fmt(total)}
-              </span>
-              <span className="text-sm text-mist-faint">
-                / {days} days · {pctTotal.toFixed(1)}%
-              </span>
-            </div>
-            {compound && (
-              <span className="border border-brass/40 bg-brass/[0.06] px-2 py-1 font-mono text-[9px] uppercase tracking-[0.18em] text-brass">
-                Compounding
-              </span>
-            )}
+          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-mist-faint">
+            Estimated at these inputs
+          </span>
+          <div className="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <span className="font-serif text-4xl font-medium tabular-nums text-mist sm:text-5xl">
+              {fmt(total)}
+            </span>
+            <span className="text-sm text-mist-faint">
+              / {days} days · {pctTotal.toFixed(1)}%
+            </span>
           </div>
 
           <div className="mt-6 grid grid-cols-3 gap-px overflow-hidden rounded-sm border border-white/[0.08] bg-white/[0.08] font-mono text-xs">
             <div className="bg-ink-850 px-4 py-3">
               <span className="block text-[9px] uppercase tracking-[0.18em] text-mist-faint">
-                {compound ? 'Day 1' : 'Per day'}
+                Per day
               </span>
-              <span className="mt-1 block tabular-nums text-mist">
-                {fmt(compound ? compFirstDay : simpleDaily)}
-              </span>
+              <span className="mt-1 block tabular-nums text-mist">{fmt(daily)}</span>
             </div>
             <div className="bg-ink-850 px-4 py-3">
               <span className="block text-[9px] uppercase tracking-[0.18em] text-mist-faint">
-                {compound ? `Day ${days}` : 'Supply share'}
+                Per month
               </span>
-              <span className="mt-1 block tabular-nums text-mist">
-                {compound ? fmt(compLastDay) : `${sharePct.toFixed(4)}%`}
-              </span>
+              <span className="mt-1 block tabular-nums text-mist">{fmt(daily * 30)}</span>
             </div>
             <div className="bg-ink-850 px-4 py-3">
               <span className="block text-[9px] uppercase tracking-[0.18em] text-mist-faint">
-                Compounding {compound ? 'adds' : 'would add'}
+                Supply share
               </span>
-              <span className={`mt-1 block tabular-nums ${diff > 0 ? 'text-azure' : 'text-mist'}`}>
-                +{fmt(diff)}
-              </span>
+              <span className="mt-1 block tabular-nums text-mist">{sharePct.toFixed(4)}%</span>
             </div>
           </div>
 
           <div className="mt-7 flex-1">
-            <GrowthChart
-              position={position}
-              dailyRate={dailyRate}
-              compHourly={compHourly}
-              days={days}
-              simpleTotal={simpleTotal}
-              compTotal={compTotal}
-              diff={diff}
-            />
+            <GrowthChart position={position} dailyRate={dailyRate} days={days} total={total} />
           </div>
 
           <div className="mt-6 flex flex-col gap-1.5 border-t border-white/[0.08] pt-4 font-mono text-[11px] leading-relaxed text-mist-faint">
             <span>
               {fmtShort(volume)} × 4% ÷ {fmtShort(mcap)} ={' '}
               <span className="text-mist-dim">{(dailyRate * 100).toFixed(3)}%/day</span>
-              {compound && ` · hourly ×(1 + ${(hourlyRate * 100).toFixed(4)}% × 95%)`}
             </span>
             <span>
-              Arithmetic at your inputs, not a projection, volume is
-              unknowable, and at zero volume distributions are zero.
+              Arithmetic at your inputs, not a projection. Volume is
+              unknowable, and at zero volume payouts are zero.
             </span>
           </div>
         </div>

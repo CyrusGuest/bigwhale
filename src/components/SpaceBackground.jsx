@@ -14,11 +14,11 @@ function mulberry32(a) {
 
 // floating XRP marks at different "depths": bigger + more blurred = closer/further
 const MARKS = [
-  { size: 240, top: '6%', left: '74%', o: 0.05, blur: 'blur-[2px]', dur: 19, dy: -34, rot: 9 },
+  { size: 240, top: '6%', left: '74%', o: 0.05, blur: 'blur-[2px]', dur: 19, dy: -34, rot: 9, desktopOnly: true },
   { size: 90, top: '26%', left: '5%', o: 0.07, blur: '', dur: 14, dy: -22, rot: -12 },
-  { size: 150, top: '52%', left: '86%', o: 0.05, blur: 'blur-[3px]', dur: 23, dy: -28, rot: 7 },
+  { size: 150, top: '52%', left: '86%', o: 0.05, blur: 'blur-[3px]', dur: 23, dy: -28, rot: 7, desktopOnly: true },
   { size: 60, top: '68%', left: '10%', o: 0.09, blur: '', dur: 12, dy: -16, rot: 14 },
-  { size: 320, top: '80%', left: '58%', o: 0.035, blur: 'blur-[5px]', dur: 27, dy: -38, rot: -6 },
+  { size: 320, top: '80%', left: '58%', o: 0.035, blur: 'blur-[5px]', dur: 27, dy: -38, rot: -6, desktopOnly: true },
   { size: 44, top: '14%', left: '32%', o: 0.06, blur: 'blur-[1px]', dur: 16, dy: -14, rot: -16 },
 ]
 
@@ -29,7 +29,7 @@ function ParallaxMark({ m, i }) {
   const y = useTransform(scrollY, (v) => -v * speed)
   return (
     <motion.div
-      className={`absolute ${m.blur}`}
+      className={`absolute ${m.blur} ${m.desktopOnly ? 'hidden md:block' : ''}`}
       style={{ top: m.top, left: m.left, opacity: m.o, width: m.size, height: m.size, y }}
     >
       <motion.div
