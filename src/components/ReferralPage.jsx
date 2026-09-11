@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { XrpMark } from './Hero.jsx'
 
@@ -1691,6 +1691,7 @@ const ACT_DURATIONS = [3400, 18200, 14600, 10400]
 
 export default function ReferralPage() {
   const [act, setAct] = useState(0)
+  const lastSkipRef = useRef(0)
 
   useEffect(() => {
     if (act >= 4) return
@@ -1698,18 +1699,37 @@ export default function ReferralPage() {
     return () => clearTimeout(t)
   }, [act])
 
+  // tap anywhere to skip ahead, with a 0.4s breather between skips
+  const skip = () => {
+    const now = performance.now()
+    if (now - lastSkipRef.current < 400) return
+    lastSkipRef.current = now
+    setAct((a) => Math.min(a + 1, 4))
+  }
+
   return (
     <div className="relative overflow-x-clip pt-16">
       <div className="pointer-events-none absolute -top-48 left-1/2 h-[560px] w-[900px] -translate-x-1/2 rounded-full bg-azure-deep/[0.16] blur-[140px]" />
 
       {act < 4 ? (
-        <div className="relative flex min-h-[calc(100vh-4rem)] items-center justify-center px-6 py-12">
+        <div
+          onClick={skip}
+          className="relative flex min-h-[calc(100vh-4rem)] cursor-pointer select-none items-center justify-center px-6 py-12"
+        >
           <AnimatePresence mode="wait">
             {act === 0 && <ActTitle key="ref-title" />}
             {act === 1 && <ActPhones key="ref-phones" />}
             {act === 2 && <ActVirus key="ref-virus" />}
             {act === 3 && <ActMomentum key="ref-momentum" />}
           </AnimatePresence>
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: [0, 0.5, 0.25, 0.5] }}
+            transition={{ delay: 2, duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+            className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 font-mono text-[10px] uppercase tracking-[0.25em] text-mist-faint"
+          >
+            tap to skip ›
+          </motion.span>
         </div>
       ) : (
         <motion.div
