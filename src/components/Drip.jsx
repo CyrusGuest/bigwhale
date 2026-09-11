@@ -63,7 +63,7 @@ export default function Drip() {
   const daily = (position * DAILY_RATE) / XRP_PRICE
 
   return (
-    <section id="drip" className="relative mx-auto max-w-7xl px-6 py-24">
+    <section id="drip" className="relative mx-auto max-w-7xl px-6 py-16 sm:py-24">
       <div className="grid items-center gap-14 lg:grid-cols-2">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

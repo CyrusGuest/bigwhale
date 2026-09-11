@@ -30,7 +30,7 @@ const items = [
 export default function Security() {
   return (
     <section id="security" className="border-t border-white/[0.07] bg-ink-850/40">
-      <div className="mx-auto max-w-7xl px-6 py-28">
+      <div className="mx-auto max-w-7xl px-6 py-20 sm:py-28">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

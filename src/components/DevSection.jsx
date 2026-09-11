@@ -43,7 +43,7 @@ const perks = [
 export default function DevSection() {
   return (
     <section id="developers" className="border-y border-white/[0.07] bg-ink-850/40">
-      <div className="mx-auto max-w-7xl px-6 py-28">
+      <div className="mx-auto max-w-7xl px-6 py-20 sm:py-28">
         <div className="grid gap-14 lg:grid-cols-2 lg:items-start">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

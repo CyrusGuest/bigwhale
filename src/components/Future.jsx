@@ -53,7 +53,7 @@ const pairs = [
 
 export default function Future() {
   return (
-    <section id="future" className="relative mx-auto max-w-7xl overflow-x-clip px-6 py-28">
+    <section id="future" className="relative mx-auto max-w-7xl overflow-x-clip px-6 py-20 sm:py-28">
       {/* header: lines slam in from opposite sides */}
       <div className="mb-14 text-center lg:text-left">
         <motion.p

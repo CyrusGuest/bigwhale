@@ -81,7 +81,7 @@ export default function Stats() {
   return (
     <section id="stats" className="relative overflow-hidden border-y border-white/[0.06] bg-ink-850/50">
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-[300px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-azure-deep/[0.14] blur-[120px]" />
-      <div className="relative mx-auto max-w-7xl px-6 py-24">
+      <div className="relative mx-auto max-w-7xl px-6 py-16 sm:py-24">
         <div className="mb-12 text-center">
           <span className="inline-block rounded-full border border-brass/30 bg-brass/[0.05] px-4 py-1.5 font-mono text-[9px] uppercase tracking-[0.2em] text-brass">
             Illustrative, live metrics connect at launch

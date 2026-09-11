@@ -10,7 +10,7 @@ const previewStats = [
 export default function HolderPortal() {
   return (
     <section id="portal" className="border-y border-white/[0.07] bg-ink-850/40">
-      <div className="mx-auto max-w-7xl px-6 py-28">
+      <div className="mx-auto max-w-7xl px-6 py-20 sm:py-28">
         <div className="grid items-center gap-14 lg:grid-cols-2">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
