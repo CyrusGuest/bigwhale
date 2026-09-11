@@ -112,9 +112,15 @@ export default function Drip() {
           </div>
 
           <div className="relative mt-7">
-            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-mist-faint">
-              XRP earned since you opened this page · {mins > 0 ? `${mins}m ` : ''}{secs}s
-            </span>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+              <span className="text-sm font-medium text-mist sm:text-[15px]">
+                XRP earned since you opened this page
+              </span>
+              <span className="rounded-full border border-azure/30 bg-azure/[0.08] px-2.5 py-0.5 font-mono text-[11px] tabular-nums text-azure-bright">
+                {mins > 0 ? `${mins}m ` : ''}
+                {secs}s
+              </span>
+            </div>
             <div className="mt-2 font-mono text-4xl font-medium tabular-nums tracking-tight text-mist sm:text-6xl">
               {accrued.toFixed(4)}
               <span className="ml-3 text-xl text-azure">XRP</span>
@@ -155,11 +161,11 @@ export default function Drip() {
               ['Every day', daily, false],
               ['Every month', daily * 30, false],
             ].map(([label, v, hot]) => (
-              <div key={label} className="flex items-baseline justify-between px-5 py-3.5">
-                <span className="text-sm text-mist-dim">{label}</span>
-                <span className="flex items-baseline gap-2.5">
+              <div key={label} className="flex items-center justify-between px-5 py-4">
+                <span className="text-[15px] font-medium text-mist">{label}</span>
+                <span className="text-right">
                   <span
-                    className={`font-mono text-sm font-medium tabular-nums sm:text-base ${
+                    className={`block font-mono text-base font-semibold tabular-nums sm:text-lg ${
                       hot ? 'text-azure-bright' : 'text-mist'
                     }`}
                   >
@@ -168,7 +174,7 @@ export default function Drip() {
                     })}{' '}
                     XRP
                   </span>
-                  <span className="font-mono text-xs tabular-nums text-mist-faint">
+                  <span className="block font-mono text-xs tabular-nums text-mist-dim">
                     ≈ {fmtUsd(v * XRP_PRICE)}
                   </span>
                 </span>
