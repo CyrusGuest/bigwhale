@@ -307,101 +307,104 @@ function Float({ children, delay = 0, amt = 8, dur = 5, className = '' }) {
   )
 }
 
-// Act 1: movie cold-open — letterbox, per-letter reveal, light sweep, slow dolly
-const TITLE_TOKENS = [
-  { line: 0, tokens: ['B', 'U', 'Y', ' ', 'X', 'P', 'Y', '.'] },
-  { line: 1, tokens: ['E', 'A', 'R', 'N', ' ', { t: 'XRP', shimmer: true }, '.'] },
-]
+// Act 1: kinetic slam — words collide from opposite edges with XRP-mark bursts
+const BURST = Array.from({ length: 10 }, (_, i) => {
+  const a = (i / 10) * Math.PI * 2
+  return {
+    x: Math.cos(a) * (110 + (i % 3) * 40),
+    y: Math.sin(a) * (80 + (i % 2) * 30),
+    r: 120 + i * 36,
+    s: 0.7 + (i % 3) * 0.3,
+  }
+})
+
+function Burst({ delay }) {
+  return (
+    <span className="pointer-events-none absolute left-1/2 top-1/2">
+      {BURST.map((b, i) => (
+        <motion.span
+          key={i}
+          initial={{ opacity: 0, x: 0, y: 0, scale: 0.3, rotate: 0 }}
+          animate={{ opacity: [0, 1, 0], x: b.x, y: b.y, scale: b.s, rotate: b.r }}
+          transition={{ delay, duration: 0.75, ease: 'easeOut' }}
+          className="absolute text-azure"
+        >
+          <XrpMark className="h-5 w-5" strokeWidth={4} />
+        </motion.span>
+      ))}
+    </span>
+  )
+}
+
+function ImpactPulse({ delay }) {
+  return (
+    <motion.span
+      initial={{ opacity: 0, scale: 0.3 }}
+      animate={{ opacity: [0, 0.7, 0], scale: [0.3, 1.4, 1.8] }}
+      transition={{ delay, duration: 0.6, ease: 'easeOut' }}
+      className="pointer-events-none absolute left-1/2 top-1/2 h-32 w-[min(88vw,460px)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-azure/25 blur-3xl"
+    />
+  )
+}
 
 function ActTitle() {
   return (
     <motion.div exit={actExit} className="relative w-full px-4 text-center">
-      {/* letterbox bars */}
-      <motion.div
-        initial={{ y: '-100%' }}
-        animate={{ y: 0 }}
-        exit={{ y: '-100%', transition: { duration: 0.5, ease: EASE } }}
-        transition={{ duration: 0.8, ease: EASE }}
-        className="pointer-events-none fixed inset-x-0 top-0 z-30 h-[9vh] bg-black"
-      />
-      <motion.div
-        initial={{ y: '100%' }}
-        animate={{ y: 0 }}
-        exit={{ y: '100%', transition: { duration: 0.5, ease: EASE } }}
-        transition={{ duration: 0.8, ease: EASE }}
-        className="pointer-events-none fixed inset-x-0 bottom-0 z-30 h-[9vh] bg-black"
-      />
-      {/* vignette */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0, transition: { duration: 0.4 } }}
-        transition={{ duration: 1.2 }}
-        className="pointer-events-none fixed inset-0 z-20"
-        style={{
-          background:
-            'radial-gradient(ellipse at center, transparent 52%, rgba(3,6,15,0.85) 100%)',
-        }}
-      />
-
-      {/* slow dolly push-in for the whole act */}
-      <motion.div
-        initial={{ scale: 0.93 }}
-        animate={{ scale: 1.07 }}
-        transition={{ duration: 4.4, ease: 'easeInOut' }}
-        className="relative"
-      >
-        {/* light beam sweeping across the title */}
-        <motion.div
-          initial={{ x: '-160%', opacity: 0 }}
-          animate={{ x: '160%', opacity: [0, 0.9, 0] }}
-          transition={{ delay: 1.5, duration: 1.1, ease: 'easeInOut' }}
-          className="pointer-events-none absolute inset-y-[-40px] left-0 z-10 w-40 rotate-[16deg] bg-gradient-to-r from-transparent via-white/[0.14] to-transparent blur-[6px]"
-        />
-        {/* ambient glow rising behind */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.6 }}
-          transition={{ delay: 1.8, duration: 1.4 }}
-          className="pointer-events-none absolute left-1/2 top-1/2 h-[360px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-azure-deep/40 blur-[110px]"
-        />
-
-        {TITLE_TOKENS.map(({ line, tokens }) => (
-          <h1
-            key={line}
-            className="text-3d text-6xl font-bold leading-[1.06] tracking-[-0.03em] sm:text-8xl lg:text-9xl"
+      <Float amt={8} dur={5} delay={1.8}>
+        {/* line 1: BUY + XPY. slam in from opposite sides and collide */}
+        <div className="relative flex flex-wrap items-center justify-center gap-x-5">
+          <ImpactPulse delay={0.55} />
+          <Burst delay={0.55} />
+          <motion.span
+            initial={{ x: '-70vw', rotate: -14, opacity: 0 }}
+            animate={{ x: 0, rotate: 0, opacity: 1 }}
+            transition={{ delay: 0.12, type: 'spring', stiffness: 230, damping: 16 }}
+            className="text-3d inline-block text-6xl font-bold tracking-[-0.03em] sm:text-8xl lg:text-9xl"
           >
-            {tokens.map((tok, i) => {
-              const isObj = typeof tok === 'object'
-              const delay = 0.55 + line * 0.85 + i * 0.07
-              return (
-                <motion.span
-                  key={i}
-                  initial={{ opacity: 0, y: 26, rotateX: 50, filter: 'blur(7px)' }}
-                  animate={{ opacity: 1, y: 0, rotateX: 0, filter: 'blur(0px)' }}
-                  transition={{ delay, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className={`inline-block ${isObj && tok.shimmer ? 'text-shimmer' : ''}`}
-                >
-                  {isObj ? tok.t : tok}
-                </motion.span>
-              )
-            })}
-          </h1>
-        ))}
+            BUY
+          </motion.span>
+          <motion.span
+            initial={{ x: '70vw', rotate: 14, opacity: 0 }}
+            animate={{ x: 0, rotate: 0, opacity: 1 }}
+            transition={{ delay: 0.26, type: 'spring', stiffness: 230, damping: 16 }}
+            className="text-3d inline-block text-6xl font-bold tracking-[-0.03em] sm:text-8xl lg:text-9xl"
+          >
+            XPY.
+          </motion.span>
+        </div>
 
-        <motion.p
-          initial={{ opacity: 0, letterSpacing: '0.1em', y: 14 }}
-          animate={{ opacity: 1, letterSpacing: '0.32em', y: 0 }}
-          transition={{ delay: 2.6, duration: 0.6, ease: EASE }}
-          className="mt-8 font-mono text-sm uppercase text-azure-bright sm:text-base"
-        >
-          Passively · Hourly
-        </motion.p>
-      </motion.div>
+        {/* line 2: drops from above and bounces on landing */}
+        <div className="relative">
+          <ImpactPulse delay={1.25} />
+          <Burst delay={1.25} />
+          <motion.h1
+            initial={{ y: '-58vh', opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.8, type: 'spring', stiffness: 210, damping: 13 }}
+            className="text-3d origin-bottom text-6xl font-bold leading-[1.1] tracking-[-0.03em] sm:text-8xl lg:text-9xl"
+          >
+            EARN <span className="text-shimmer">XRP</span>.
+          </motion.h1>
+        </div>
+
+        {/* tagline words pop like impacts */}
+        <div className="mt-7 flex items-center justify-center gap-3 font-mono text-sm uppercase tracking-[0.3em] text-azure-bright sm:text-base">
+          {['Passively', '·', 'Hourly'].map((w, i) => (
+            <motion.span
+              key={w + i}
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: [0, 1.25, 1] }}
+              transition={{ delay: 1.75 + i * 0.14, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="inline-block"
+            >
+              {w}
+            </motion.span>
+          ))}
+        </div>
+      </Float>
     </motion.div>
   )
 }
-
 // Act 2: the phone, early, with floating copy beside it
 function ActPhone({ notifs }) {
   return (
@@ -492,7 +495,13 @@ function ActSleep() {
             transition={{ delay: 0.25, duration: 0.55, ease: EASE }}
             className="text-5xl font-bold tracking-[-0.03em] sm:text-7xl"
           >
-            You <span className="text-shimmer">earned.</span>
+            You{' '}
+            <span className="relative inline-block">
+              <span className="text-shimmer">earned.</span>
+              <span aria-hidden className="text-glint absolute inset-0">
+                earned.
+              </span>
+            </span>
           </motion.h2>
         </Float>
 
@@ -614,16 +623,24 @@ function ActReserve() {
   )
 }
 
-// Act 5: the Holder Portal, assembling itself
+// Act 5: your earnings curve draws itself live, payouts popping along the way
 const PORTAL_PTS = [0, 5, 8, 14, 17, 24, 28, 35, 39, 47, 54, 62]
+const PORTAL_POPS = [
+  { i: 4, label: '+8,412 XRP' },
+  { i: 8, label: '+12,930 XRP' },
+  { i: 11, label: '+38,346 XRP' },
+]
 
 function ActPortal() {
-  const W = 420
-  const H = 110
+  const W = 460
+  const H = 170
   const max = PORTAL_PTS[PORTAL_PTS.length - 1]
-  const px = (i) => 8 + ((W - 16) / (PORTAL_PTS.length - 1)) * i
-  const py = (v) => H - 10 - (v / max) * (H - 22)
+  const px = (i) => 14 + ((W - 28) / (PORTAL_PTS.length - 1)) * i
+  const py = (v) => H - 14 - (v / max) * (H - 40)
   const line = PORTAL_PTS.map((v, i) => `${i ? 'L' : 'M'}${px(i)},${py(v)}`).join(' ')
+  const drawStart = 1.1
+  const drawDur = 1.7
+  const popDelay = (i) => drawStart + (i / (PORTAL_PTS.length - 1)) * drawDur
 
   return (
     <motion.div exit={actExit} className="w-full px-4 text-center">
@@ -634,7 +651,13 @@ function ActPortal() {
           transition={{ duration: 0.55, ease: EASE }}
           className="text-4xl font-bold tracking-[-0.03em] sm:text-6xl"
         >
-          Watch it <span className="text-shimmer">stack up.</span>
+          Watch it{' '}
+          <span className="relative inline-block">
+            <span className="text-shimmer">stack up.</span>
+            <span aria-hidden className="text-glint absolute inset-0">
+              stack up.
+            </span>
+          </span>
         </motion.h2>
       </Float>
       <Float delay={0.3} amt={5} dur={5.6}>
@@ -644,83 +667,102 @@ function ActPortal() {
           transition={{ delay: 0.2, duration: 0.55, ease: EASE }}
           className="mt-4 text-lg text-mist-dim sm:text-xl"
         >
-          Your balance, every payout, your daily pace. Tracked in your Holder Portal.
+          Every payout tracked, daily, in your Holder Portal.
         </motion.p>
       </Float>
 
       <Float delay={0.6} amt={6} dur={5.2}>
         <motion.div
-          initial={{ opacity: 0, y: 70, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ delay: 0.55, type: 'spring', stiffness: 180, damping: 22 }}
-          className="mx-auto mt-8 w-full max-w-xl rounded-lg border border-white/[0.08] bg-ink-900/80 p-5 text-left shadow-2xl shadow-black/50 backdrop-blur"
+          initial={{ opacity: 0, y: 90, scale: 0.93, rotate: -1.5 }}
+          animate={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
+          transition={{ delay: 0.5, type: 'spring', stiffness: 170, damping: 20 }}
+          className="mx-auto mt-8 w-full max-w-xl rounded-lg border border-white/[0.08] bg-ink-900/85 p-6 text-left shadow-2xl shadow-black/50 backdrop-blur"
         >
-          <div className="grid grid-cols-3 gap-2.5">
-            {[
-              ['XRP earned', <RollUp key="a" target={38346} dur={1.4} delay={1.1} />, 'all time'],
-              ['≈ USD', <RollUp key="b" target={51384} prefix="$" dur={1.4} delay={1.3} />, 'last 30 days'],
-              ['Next payout', '41:32', 'automatic'],
-            ].map(([label, value, sub], i) => (
-              <motion.div
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <span className="block font-mono text-[9px] uppercase tracking-[0.18em] text-mist-faint">
+                XRP earned, all time
+              </span>
+              <span className="mt-1 block font-mono text-3xl font-semibold tabular-nums text-mist sm:text-4xl">
+                <RollUp target={38346} dur={1.9} delay={1.1} />
+                <span className="ml-2 text-lg text-azure">XRP</span>
+              </span>
+              <span className="mt-0.5 block font-mono text-sm tabular-nums text-azure-bright">
+                ≈ <RollUp target={51384} prefix="$" dur={1.9} delay={1.2} />
+              </span>
+            </div>
+            <div className="pb-1 text-right">
+              <span className="block font-mono text-[9px] uppercase tracking-[0.18em] text-mist-faint">
+                Next payout
+              </span>
+              <span className="mt-1 block font-mono text-lg tabular-nums text-mist">41:32</span>
+            </div>
+          </div>
+
+          <div className="relative mt-4">
+            <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full">
+              <defs>
+                <linearGradient id="actPortalArea" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#2E9BFF" stopOpacity="0.32" />
+                  <stop offset="100%" stopColor="#2E9BFF" stopOpacity="0" />
+                </linearGradient>
+              </defs>
+              <motion.path
+                d={`${line} L${px(PORTAL_PTS.length - 1)},${H - 14} L14,${H - 14} Z`}
+                fill="url(#actPortalArea)"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: drawStart + drawDur - 0.3, duration: 0.6 }}
+              />
+              <motion.path
+                d={line}
+                fill="none"
+                stroke="#2E9BFF"
+                strokeWidth="3"
+                strokeLinecap="round"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ delay: drawStart, duration: drawDur, ease: 'linear' }}
+              />
+              {PORTAL_POPS.map(({ i }) => (
+                <motion.circle
+                  key={i}
+                  cx={px(i)}
+                  cy={py(PORTAL_PTS[i])}
+                  r="5"
+                  fill="#66B8FF"
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: [0, 1.6, 1] }}
+                  transition={{ delay: popDelay(i), duration: 0.4 }}
+                />
+              ))}
+            </svg>
+            {/* payout chips popping along the curve as the line passes */}
+            {PORTAL_POPS.map(({ i, label }) => (
+              <motion.span
                 key={label}
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.9 + i * 0.15, duration: 0.45, ease: EASE }}
-                className="rounded-md border border-white/[0.06] bg-white/[0.03] px-3 py-2.5"
+                initial={{ opacity: 0, y: 12, scale: 0.6 }}
+                animate={{ opacity: 1, y: 0, scale: [0.6, 1.15, 1] }}
+                transition={{ delay: popDelay(i) + 0.08, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                className="absolute -translate-x-1/2 -translate-y-full whitespace-nowrap rounded-full border border-azure/40 bg-ink-900/95 px-3 py-1 font-mono text-[11px] font-medium text-azure-bright shadow-lg shadow-azure/20"
+                style={{
+                  left: `${(px(i) / W) * 100}%`,
+                  top: `${(py(PORTAL_PTS[i]) / H) * 100 - 6}%`,
+                }}
               >
-                <span className="block font-mono text-[8px] uppercase tracking-[0.16em] text-mist-faint">
-                  {label}
-                </span>
-                <span className="mt-0.5 block font-mono text-sm font-medium tabular-nums text-azure-bright sm:text-base">
-                  {value}
-                </span>
-                <span className="block font-mono text-[9px] text-mist-faint">{sub}</span>
-              </motion.div>
+                {label}
+              </motion.span>
             ))}
           </div>
-          <svg viewBox={`0 0 ${W} ${H}`} className="mt-4 h-auto w-full">
-            <defs>
-              <linearGradient id="actPortalArea" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#2E9BFF" stopOpacity="0.3" />
-                <stop offset="100%" stopColor="#2E9BFF" stopOpacity="0" />
-              </linearGradient>
-            </defs>
-            <motion.path
-              d={`${line} L${px(PORTAL_PTS.length - 1)},${H - 10} L8,${H - 10} Z`}
-              fill="url(#actPortalArea)"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 2.3, duration: 0.6 }}
-            />
-            <motion.path
-              d={line}
-              fill="none"
-              stroke="#2E9BFF"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              initial={{ pathLength: 0 }}
-              animate={{ pathLength: 1 }}
-              transition={{ delay: 1.4, duration: 1.2, ease: 'easeInOut' }}
-            />
-            <motion.circle
-              cx={px(PORTAL_PTS.length - 1)}
-              cy={py(max)}
-              r="4.5"
-              fill="#2E9BFF"
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 2.5, duration: 0.3 }}
-            />
-          </svg>
         </motion.div>
       </Float>
 
       <Float delay={1} amt={5} dur={5.4}>
         <motion.a
           href="#/portal"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2.8, duration: 0.5, ease: EASE }}
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: [0, 1.15, 1] }}
+          transition={{ delay: 3.1, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
           className="mt-7 inline-flex items-center gap-2 rounded-full border border-azure/30 bg-azure/[0.08] px-6 py-3 font-mono text-xs uppercase tracking-[0.18em] text-azure-bright transition-colors hover:bg-azure/[0.15]"
         >
           Open your Holder Portal →
@@ -975,7 +1017,7 @@ function ActEnd() {
 /* ---------------------------------- hero ----------------------------------- */
 
 // title → phone → sleep → reserve → portal → story → outro (scrolls down) → end card
-const ACT_DURATIONS = [4400, 3900, 3800, 4200, 5800, 9600, 3700]
+const ACT_DURATIONS = [3600, 3900, 3800, 4200, 5800, 9600, 3000]
 
 export default function Hero() {
   const [notifs, setNotifs] = useState(() => Array.from({ length: 4 }, makeNotif).reverse())
@@ -1001,7 +1043,7 @@ export default function Hero() {
     if (window.scrollY > 120) return
     const t = setTimeout(() => {
       document.getElementById('drip')?.scrollIntoView({ behavior: 'smooth' })
-    }, 3000)
+    }, 2300)
     return () => clearTimeout(t)
   }, [act])
 
