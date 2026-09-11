@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
-import { motion, AnimatePresence, useInView } from 'framer-motion'
+import { useEffect, useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { XrpMark } from './Hero.jsx'
 
 const EASE = [0.22, 1, 0.36, 1]
@@ -380,41 +380,31 @@ const NODE_POS = {
   left: 'left-0 top-1/2 -translate-x-1/3 -translate-y-1/2',
 }
 
-function Flywheel() {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-120px' })
+function ActFlywheel() {
   const [beat, setBeat] = useState(0)
 
   useEffect(() => {
-    if (!inView) return
-    const times = [500, 2100, 3700, 5300, 7100]
+    const times = [400, 1900, 3400, 4900, 6500]
     const timers = times.map((t, i) => setTimeout(() => setBeat(i + 1), t))
     return () => timers.forEach(clearTimeout)
-  }, [inView])
+  }, [])
 
   const fast = beat >= 4
   const orbitDots = fast ? [0, 0.45, 0.9, 1.35, 1.8] : beat >= 2 ? [0, 1.2] : [0]
   const orbitDur = fast ? '2.2s' : '4.6s'
 
   return (
-    <div ref={ref} className="mx-auto mt-20 max-w-6xl">
-      <div className="mb-10 text-center">
-        <motion.p
-          initial={{ opacity: 0, scale: 0 }}
-          whileInView={{ opacity: 1, scale: [0, 1.15, 1] }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-          className="eyebrow mb-6"
-        >
-          The Flywheel
-        </motion.p>
+    <motion.div
+      exit={{ opacity: 0, y: -46, transition: { duration: 0.35, ease: EASE } }}
+      className="mx-auto w-full max-w-6xl px-2"
+    >
+      <div className="mb-8 text-center">
         <Float amt={6} dur={5.5}>
           <motion.h2
             initial={{ opacity: 0, x: -220 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.55, ease: EASE }}
-            className="font-display text-4xl font-semibold tracking-[-0.03em] sm:text-6xl"
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, ease: EASE }}
+            className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-5xl"
           >
             One wheel.
           </motion.h2>
@@ -422,10 +412,9 @@ function Flywheel() {
         <Float delay={0.4} amt={7} dur={5}>
           <motion.h2
             initial={{ opacity: 0, x: 220 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ delay: 0.15, duration: 0.55, ease: EASE }}
-            className="font-display text-4xl font-semibold tracking-[-0.03em] sm:text-6xl"
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.15, duration: 0.5, ease: EASE }}
+            className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-5xl"
           >
             <span className="relative inline-block">
               <span className="text-shimmer">Everyone earns as it spins.</span>
@@ -437,9 +426,9 @@ function Flywheel() {
         </Float>
       </div>
 
-      <div className="grid items-center gap-12 lg:grid-cols-2">
+      <div className="grid items-center gap-10 lg:grid-cols-2">
         {/* the wheel */}
-        <div className="relative mx-auto h-[340px] w-[340px] sm:h-[400px] sm:w-[400px]">
+        <div className="relative mx-auto h-[300px] w-[300px] sm:h-[380px] sm:w-[380px]">
           {/* rotating dashed ring, speeds up at the finale */}
           <motion.div
             animate={{ rotate: 360 }}
@@ -519,7 +508,7 @@ function Flywheel() {
                 {i + 1}
               </span>
               <p
-                className={`text-[17px] leading-relaxed sm:text-[19px] ${
+                className={`text-[15px] leading-relaxed sm:text-[17px] ${
                   i === 3 ? 'font-display font-semibold text-white' : 'text-white/75'
                 }`}
               >
@@ -581,7 +570,7 @@ function Flywheel() {
           </motion.div>
         </div>
       </div>
-    </div>
+    </motion.div>
   )
 }
 
@@ -846,13 +835,13 @@ function RefDashboard() {
 
 /* ---------------------------------- page ----------------------------------- */
 
-const ACT_DURATIONS = [3000, 4600]
+const ACT_DURATIONS = [3000, 4600, 10600]
 
 export default function ReferralPage() {
   const [act, setAct] = useState(0)
 
   useEffect(() => {
-    if (act >= 2) return
+    if (act >= 3) return
     const t = setTimeout(() => setAct(act + 1), ACT_DURATIONS[act])
     return () => clearTimeout(t)
   }, [act])
@@ -861,11 +850,12 @@ export default function ReferralPage() {
     <div className="relative overflow-x-clip pt-16">
       <div className="pointer-events-none absolute -top-48 left-1/2 h-[560px] w-[900px] -translate-x-1/2 rounded-full bg-azure-deep/[0.16] blur-[140px]" />
 
-      {act < 2 ? (
+      {act < 3 ? (
         <div className="relative flex min-h-[calc(100vh-4rem)] items-center justify-center px-6 py-12">
           <AnimatePresence mode="wait">
             {act === 0 && <ActTitle key="ref-title" />}
             {act === 1 && <ActFlow key="ref-flow" />}
+            {act === 2 && <ActFlywheel key="ref-flywheel" />}
           </AnimatePresence>
         </div>
       ) : (
@@ -919,7 +909,6 @@ export default function ReferralPage() {
 
           <LinkCard />
           <StepCards />
-          <Flywheel />
           <FeeSplit />
           <RefCalculator />
           <RefDashboard />
