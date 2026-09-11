@@ -467,7 +467,193 @@ function ActSleep() {
   )
 }
 
-// Act 4: making history, then availability pops in beneath it
+// simple mount-triggered count-up for act numbers
+function RollUp({ target, prefix = '', dur = 1.6, delay = 0 }) {
+  const [v, setV] = useState(0)
+  useEffect(() => {
+    let raf
+    const start = performance.now() + delay * 1000
+    const tick = (now) => {
+      const t = Math.min(Math.max((now - start) / (dur * 1000), 0), 1)
+      setV(target * (1 - Math.pow(1 - t, 4)))
+      if (t < 1) raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [target, dur, delay])
+  return (
+    <>
+      {prefix}
+      {Math.round(v).toLocaleString('en-US')}
+    </>
+  )
+}
+
+// Act 4: the million-dollar reserve, rolling up
+function ActReserve() {
+  return (
+    <motion.div exit={actExit} className="w-full px-4 text-center">
+      <Float amt={5} dur={5.5}>
+        <motion.p
+          initial={{ opacity: 0, letterSpacing: '0.1em' }}
+          animate={{ opacity: 1, letterSpacing: '0.34em' }}
+          transition={{ delay: 0.1, duration: 0.7, ease: EASE }}
+          className="font-mono text-sm uppercase text-azure-bright"
+        >
+          Standing behind XPY
+        </motion.p>
+      </Float>
+      <Float delay={0.3} amt={9} dur={4.8}>
+        <motion.h2
+          initial={{ opacity: 0, scale: 1.3, filter: 'blur(10px)' }}
+          animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+          transition={{ delay: 0.35, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+          className="mt-6 text-6xl font-bold tabular-nums tracking-[-0.03em] text-mist [text-shadow:0_0_60px_rgba(46,155,255,0.45)] sm:text-8xl"
+        >
+          <RollUp target={1000000} prefix="$" dur={1.8} delay={0.5} />
+        </motion.h2>
+      </Float>
+      <Float delay={0.6} amt={6} dur={5.2}>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.3, duration: 0.5, ease: EASE }}
+          className="mt-5 text-2xl font-medium text-mist sm:text-3xl"
+        >
+          of <span className="text-shimmer">XRP</span> in our starting reserve
+        </motion.p>
+      </Float>
+      <Float delay={0.9} amt={4} dur={6}>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2, duration: 0.5 }}
+          className="mt-6 font-mono text-[11px] uppercase tracking-[0.2em] text-mist-faint"
+        >
+          Held on the public ledger · Verify any time · Attestation publishes at launch
+        </motion.p>
+      </Float>
+    </motion.div>
+  )
+}
+
+// Act 5: the Holder Portal, assembling itself
+const PORTAL_PTS = [0, 5, 8, 14, 17, 24, 28, 35, 39, 47, 54, 62]
+
+function ActPortal() {
+  const W = 420
+  const H = 110
+  const max = PORTAL_PTS[PORTAL_PTS.length - 1]
+  const px = (i) => 8 + ((W - 16) / (PORTAL_PTS.length - 1)) * i
+  const py = (v) => H - 10 - (v / max) * (H - 22)
+  const line = PORTAL_PTS.map((v, i) => `${i ? 'L' : 'M'}${px(i)},${py(v)}`).join(' ')
+
+  return (
+    <motion.div exit={actExit} className="w-full px-4 text-center">
+      <Float amt={7} dur={5}>
+        <motion.h2
+          initial={{ opacity: 0, x: -240 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.55, ease: EASE }}
+          className="text-4xl font-bold tracking-[-0.03em] sm:text-6xl"
+        >
+          Watch it <span className="text-shimmer">stack up.</span>
+        </motion.h2>
+      </Float>
+      <Float delay={0.3} amt={5} dur={5.6}>
+        <motion.p
+          initial={{ opacity: 0, x: 240 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.2, duration: 0.55, ease: EASE }}
+          className="mt-4 text-lg text-mist-dim sm:text-xl"
+        >
+          Your balance, every payout, your daily pace. Tracked in your Holder Portal.
+        </motion.p>
+      </Float>
+
+      <Float delay={0.6} amt={6} dur={5.2}>
+        <motion.div
+          initial={{ opacity: 0, y: 70, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ delay: 0.55, type: 'spring', stiffness: 180, damping: 22 }}
+          className="mx-auto mt-8 w-full max-w-xl rounded-lg border border-white/[0.08] bg-ink-900/80 p-5 text-left shadow-2xl shadow-black/50 backdrop-blur"
+        >
+          <div className="grid grid-cols-3 gap-2.5">
+            {[
+              ['XRP earned', <RollUp key="a" target={38346} dur={1.4} delay={1.1} />, 'all time'],
+              ['≈ USD', <RollUp key="b" target={51384} prefix="$" dur={1.4} delay={1.3} />, 'last 30 days'],
+              ['Next payout', '41:32', 'automatic'],
+            ].map(([label, value, sub], i) => (
+              <motion.div
+                key={label}
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.9 + i * 0.15, duration: 0.45, ease: EASE }}
+                className="rounded-md border border-white/[0.06] bg-white/[0.03] px-3 py-2.5"
+              >
+                <span className="block font-mono text-[8px] uppercase tracking-[0.16em] text-mist-faint">
+                  {label}
+                </span>
+                <span className="mt-0.5 block font-mono text-sm font-medium tabular-nums text-azure-bright sm:text-base">
+                  {value}
+                </span>
+                <span className="block font-mono text-[9px] text-mist-faint">{sub}</span>
+              </motion.div>
+            ))}
+          </div>
+          <svg viewBox={`0 0 ${W} ${H}`} className="mt-4 h-auto w-full">
+            <defs>
+              <linearGradient id="actPortalArea" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#2E9BFF" stopOpacity="0.3" />
+                <stop offset="100%" stopColor="#2E9BFF" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+            <motion.path
+              d={`${line} L${px(PORTAL_PTS.length - 1)},${H - 10} L8,${H - 10} Z`}
+              fill="url(#actPortalArea)"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 2.3, duration: 0.6 }}
+            />
+            <motion.path
+              d={line}
+              fill="none"
+              stroke="#2E9BFF"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ delay: 1.4, duration: 1.2, ease: 'easeInOut' }}
+            />
+            <motion.circle
+              cx={px(PORTAL_PTS.length - 1)}
+              cy={py(max)}
+              r="4.5"
+              fill="#2E9BFF"
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 2.5, duration: 0.3 }}
+            />
+          </svg>
+        </motion.div>
+      </Float>
+
+      <Float delay={1} amt={5} dur={5.4}>
+        <motion.a
+          href="#/portal"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 2.8, duration: 0.5, ease: EASE }}
+          className="mt-7 inline-flex items-center gap-2 rounded-full border border-azure/30 bg-azure/[0.08] px-6 py-3 font-mono text-xs uppercase tracking-[0.18em] text-azure-bright transition-colors hover:bg-azure/[0.15]"
+        >
+          Open your Holder Portal →
+        </motion.a>
+      </Float>
+    </motion.div>
+  )
+}
+
+// Act 6: making history, then availability pops in beneath it
 function ActStory() {
   const [showWallets, setShowWallets] = useState(false)
   const [wi, setWi] = useState(0)
@@ -658,8 +844,8 @@ function ActEnd() {
 
 /* ---------------------------------- hero ----------------------------------- */
 
-// title → phone → sleep → story (history + wallets) → end card, then push down
-const ACT_DURATIONS = [2600, 5200, 5000, 9600]
+// title → phone → sleep → reserve → portal → story → end card, then push down
+const ACT_DURATIONS = [2600, 5200, 5000, 4200, 5800, 9600]
 
 export default function Hero() {
   const [notifs, setNotifs] = useState(() => Array.from({ length: 4 }, makeNotif).reverse())
@@ -673,7 +859,7 @@ export default function Hero() {
   }, [])
 
   useEffect(() => {
-    if (act >= 4) return
+    if (act >= 6) return
     const t = setTimeout(() => setAct(act + 1), ACT_DURATIONS[act])
     return () => clearTimeout(t)
   }, [act])
@@ -681,7 +867,7 @@ export default function Hero() {
   // when the sequence ends, push the site down to the next section
   // (only if the viewer hasn't already scrolled away on their own)
   useEffect(() => {
-    if (act !== 4) return
+    if (act !== 6) return
     if (window.scrollY > 120) return
     const t = setTimeout(() => {
       document.getElementById('drip')?.scrollIntoView({ behavior: 'smooth' })
@@ -710,8 +896,10 @@ export default function Hero() {
             {act === 0 && <ActTitle key="act-title" />}
             {act === 1 && <ActPhone key="act-phone" notifs={notifs} />}
             {act === 2 && <ActSleep key="act-sleep" />}
-            {act === 3 && <ActStory key="act-story" />}
-            {act === 4 && (
+            {act === 3 && <ActReserve key="act-reserve" />}
+            {act === 4 && <ActPortal key="act-portal" />}
+            {act === 5 && <ActStory key="act-story" />}
+            {act === 6 && (
               <motion.div
                 key="act-end"
                 initial={{ opacity: 0, scale: 0.96 }}
