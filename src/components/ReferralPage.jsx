@@ -1671,20 +1671,27 @@ const ACT_DURATIONS = [3400, 18200, 14600, 10400]
 
 export default function ReferralPage() {
   const [act, setAct] = useState(0)
-  const lastSkipRef = useRef(0)
+  const skipTimerRef = useRef(null)
 
   useEffect(() => {
+    // an act change cancels any pending skip so taps never double-advance
+    if (skipTimerRef.current) {
+      clearTimeout(skipTimerRef.current)
+      skipTimerRef.current = null
+    }
     if (act >= 4) return
     const t = setTimeout(() => setAct(act + 1), ACT_DURATIONS[act])
     return () => clearTimeout(t)
   }, [act])
 
-  // tap anywhere to skip ahead, with a 0.4s breather between skips
+  // tap anywhere to skip: the cut lands 0.4s later, so the current
+  // animation always gets one last beat before the transition
   const skip = () => {
-    const now = performance.now()
-    if (now - lastSkipRef.current < 400) return
-    lastSkipRef.current = now
-    setAct((a) => Math.min(a + 1, 4))
+    if (skipTimerRef.current) return
+    skipTimerRef.current = setTimeout(() => {
+      skipTimerRef.current = null
+      setAct((a) => Math.min(a + 1, 4))
+    }, 400)
   }
 
   return (
