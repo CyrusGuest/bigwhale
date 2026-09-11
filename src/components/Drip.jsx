@@ -105,7 +105,7 @@ export default function Drip() {
               <span className="flex h-6 w-6 items-center justify-center rounded-full bg-azure/10 text-azure">
                 <XrpMark className="h-3.5 w-3.5" strokeWidth={4.5} />
               </span>
-              Amount of XRP passively earned in {mins > 0 ? `${mins}m ` : ''}{secs}s
+              Passive earnings
             </span>
             <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-azure">
               <span className="h-1.5 w-1.5 animate-pulseSoft rounded-full bg-azure" />
@@ -113,15 +113,16 @@ export default function Drip() {
             </span>
           </div>
 
-          <div className="relative mt-8">
-            <div className="font-mono text-4xl font-medium tabular-nums tracking-tight text-mist sm:text-6xl">
-              {accrued.toFixed(7)}
+          <div className="relative mt-7">
+            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-mist-faint">
+              XRP earned since you opened this page · {mins > 0 ? `${mins}m ` : ''}{secs}s
+            </span>
+            <div className="mt-2 font-mono text-4xl font-medium tabular-nums tracking-tight text-mist sm:text-6xl">
+              {accrued.toFixed(4)}
               <span className="ml-3 text-xl text-azure">XRP</span>
             </div>
-            <div className="mt-2 font-mono text-lg tabular-nums text-mist-faint">
-              ≈ $
-              {(accrued * XRP_PRICE).toFixed(accrued * XRP_PRICE < 10 ? 4 : 2)}
-              <span className="ml-2 text-xs uppercase tracking-[0.15em]">USD</span>
+            <div className="mt-1.5 font-mono text-base tabular-nums text-mist-faint">
+              ≈ ${(accrued * XRP_PRICE).toFixed(2)} USD
             </div>
             {/* rising hourly-drop chips */}
             <div className="pointer-events-none absolute -top-2 right-0">
@@ -164,40 +165,31 @@ export default function Drip() {
             </div>
           </div>
 
-          <div className="mt-7 grid grid-cols-3 gap-2 sm:gap-3">
-            <div className="rounded-md border border-white/[0.06] bg-white/[0.03] px-2.5 py-3.5 sm:px-4 sm:py-4">
-              <span className="block font-mono text-[9px] uppercase tracking-[0.14em] text-mist-faint sm:tracking-[0.18em]">
-                Every hour
-              </span>
-              <span className="mt-1 block font-mono text-[13px] tabular-nums text-azure-bright sm:text-lg">
-                +{hourly.toFixed(hourly >= 10 ? 2 : 4)} XRP
-              </span>
-              <span className="mt-0.5 block font-mono text-[10px] text-mist-faint sm:text-[11px]">
-                ≈ {fmtUsd(hourly * XRP_PRICE)}
-              </span>
-            </div>
-            <div className="rounded-md border border-white/[0.06] bg-white/[0.03] px-2.5 py-3.5 sm:px-4 sm:py-4">
-              <span className="block font-mono text-[9px] uppercase tracking-[0.14em] text-mist-faint sm:tracking-[0.18em]">
-                Every day
-              </span>
-              <span className="mt-1 block font-mono text-[13px] tabular-nums text-mist sm:text-lg">
-                +{daily.toFixed(daily >= 10 ? 2 : 3)} XRP
-              </span>
-              <span className="mt-0.5 block font-mono text-[10px] text-mist-faint sm:text-[11px]">
-                ≈ {fmtUsd(daily * XRP_PRICE)}
-              </span>
-            </div>
-            <div className="rounded-md border border-white/[0.06] bg-white/[0.03] px-2.5 py-3.5 sm:px-4 sm:py-4">
-              <span className="block font-mono text-[9px] uppercase tracking-[0.14em] text-mist-faint sm:tracking-[0.18em]">
-                Every month
-              </span>
-              <span className="mt-1 block font-mono text-[13px] tabular-nums text-mist sm:text-lg">
-                +{(daily * 30).toFixed(daily * 30 >= 10 ? 1 : 3)} XRP
-              </span>
-              <span className="mt-0.5 block font-mono text-[10px] text-mist-faint sm:text-[11px]">
-                ≈ {fmtUsd(daily * 30 * XRP_PRICE)}
-              </span>
-            </div>
+          <div className="mt-7 divide-y divide-white/[0.05] rounded-lg border border-white/[0.06] bg-white/[0.03]">
+            {[
+              ['Every hour', hourly, true],
+              ['Every day', daily, false],
+              ['Every month', daily * 30, false],
+            ].map(([label, v, hot]) => (
+              <div key={label} className="flex items-baseline justify-between px-5 py-3.5">
+                <span className="text-sm text-mist-dim">{label}</span>
+                <span className="flex items-baseline gap-2.5">
+                  <span
+                    className={`font-mono text-sm font-medium tabular-nums sm:text-base ${
+                      hot ? 'text-azure-bright' : 'text-mist'
+                    }`}
+                  >
+                    +{v.toLocaleString('en-US', {
+                      maximumFractionDigits: v >= 100 ? 0 : v >= 10 ? 1 : 2,
+                    })}{' '}
+                    XRP
+                  </span>
+                  <span className="font-mono text-xs tabular-nums text-mist-faint">
+                    ≈ {fmtUsd(v * XRP_PRICE)}
+                  </span>
+                </span>
+              </div>
+            ))}
           </div>
         </motion.div>
       </div>
