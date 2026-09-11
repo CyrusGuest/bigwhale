@@ -170,57 +170,60 @@ function TagScene() {
     }
   }, [])
   return (
-    <div className="px-4 text-center">
-      <AnimatePresence mode="wait">
-        {phase === 0 ? (
-          <motion.div key="title" exit={{ opacity: 0, y: -34, transition: { duration: 0.4 } }}>
-            <motion.p
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.15, duration: 0.5 }}
-              className="font-mono text-xs uppercase tracking-[0.4em] text-azure-bright"
-            >
-              The First
-            </motion.p>
-            <motion.h3
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.35, duration: 0.55 }}
-              className="mt-5 text-3xl font-semibold tracking-[-0.02em] text-mist sm:text-4xl"
-            >
-              Passive-Earning XRP Coin
-            </motion.h3>
-            <motion.p
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.55, duration: 0.5 }}
-              className="mt-4 text-xl italic text-mist-dim"
-            >
-              in
-            </motion.p>
-            <div className="mt-3 flex h-[96px] items-center justify-center sm:h-[110px]">
-              <motion.span
-                data-text="HISTORY"
-                initial={{ opacity: 0, x: 10, skewX: -8 }}
-                animate={{ opacity: [0, 1, 0.55, 1], x: [-8, 5, -2, 0], skewX: [8, -5, 2, 0] }}
-                transition={{ duration: 0.4, delay: 0.8 }}
-                className="glitch text-5xl font-bold tracking-tight text-white sm:text-7xl"
-              >
-                HISTORY
-              </motion.span>
-            </div>
-          </motion.div>
-        ) : (
+    <div className="flex w-full flex-col items-center justify-center px-4 text-center">
+      {/* title block: stays on screen and glides up when availability appears */}
+      <motion.div layout transition={{ layout: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } }}>
+        <motion.p
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15, duration: 0.5 }}
+          className="font-mono text-xs uppercase tracking-[0.4em] text-azure-bright"
+        >
+          The First
+        </motion.p>
+        <motion.h3
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35, duration: 0.55 }}
+          className="mt-5 text-3xl font-semibold tracking-[-0.02em] text-mist sm:text-4xl"
+        >
+          Passive-Earning XRP Coin
+        </motion.h3>
+        <motion.p
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.55, duration: 0.5 }}
+          className="mt-3 text-xl italic text-mist-dim"
+        >
+          in
+        </motion.p>
+        <div className="mt-2 flex h-[84px] items-center justify-center sm:h-[96px]">
+          <motion.span
+            data-text="HISTORY"
+            initial={{ opacity: 0, x: 10, skewX: -8 }}
+            animate={{ opacity: [0, 1, 0.55, 1], x: [-8, 5, -2, 0], skewX: [8, -5, 2, 0] }}
+            transition={{ duration: 0.4, delay: 0.8 }}
+            className="glitch text-5xl font-bold tracking-tight text-white sm:text-6xl"
+          >
+            HISTORY
+          </motion.span>
+        </div>
+      </motion.div>
+
+      {/* availability block pops in beneath; only the wallet word refreshes */}
+      <AnimatePresence>
+        {phase === 1 && (
           <motion.div
-            key="wallets"
-            initial={{ opacity: 0, y: 44 }}
+            layout
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-9"
           >
             <p className="font-mono text-xs uppercase tracking-[0.4em] text-azure-bright">
               Available on
             </p>
-            <div className="mt-4 flex h-[96px] items-center justify-center sm:h-[110px]">
+            <div className="mt-2 flex h-[64px] items-center justify-center sm:h-[76px]">
               <AnimatePresence mode="wait">
                 <motion.span
                   key={wi}
@@ -229,13 +232,13 @@ function TagScene() {
                   animate={{ opacity: [0, 1, 0.55, 1], x: [-8, 5, -2, 0], skewX: [8, -5, 2, 0] }}
                   exit={{ opacity: 0, transition: { duration: 0.12 } }}
                   transition={{ duration: 0.4 }}
-                  className={`glitch text-5xl font-bold tracking-tight sm:text-7xl ${WALLETS[wi].color}`}
+                  className={`glitch text-4xl font-bold tracking-tight sm:text-5xl ${WALLETS[wi].color}`}
                 >
                   {WALLETS[wi].name}
                 </motion.span>
               </AnimatePresence>
             </div>
-            <p className="mt-2 text-2xl font-medium text-mist-dim">wallet</p>
+            <p className="mt-1 text-xl font-medium text-mist-dim">wallet</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -560,7 +563,7 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -60, transition: { duration: 0.5 } }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="relative"
+            className="relative flex w-full justify-center"
           >
             <TagScene />
           </motion.div>
