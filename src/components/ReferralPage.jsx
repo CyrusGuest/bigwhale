@@ -769,39 +769,40 @@ function Person({ size = 34, hot = false }) {
   )
 }
 
-// 8×4 crowd grid, populated center-out in doubling waves: 1 → 2 → 4 → 8 → 16 → 32
-const CROWD_ORDER = Array.from({ length: 32 }, (_, i) => ({
-  i,
-  d: Math.hypot((i % 8) - 3.5, (Math.floor(i / 8) - 1.5) * 1.9),
-}))
-  .sort((a, b) => a.d - b.d)
-  .map((o) => o.i)
+// mitosis layout: generation g has 2^g figures; children emerge from parents
+const GEN_SIZES = [64, 52, 42, 32, 24]
 
-const WAVE_T = [600, 1600, 2300, 2950, 3600, 4200]
-const WAVE_COUNTS = [1, 1, 2, 4, 8, 16]
-
-const CROWD_DELAYS = (() => {
-  const delays = {}
-  let k = 0
-  WAVE_COUNTS.forEach((count, w) => {
-    for (let j = 0; j < count; j++) {
-      delays[CROWD_ORDER[k]] = WAVE_T[w] / 1000 + j * 0.06
-      k++
-    }
+function genSlots(g) {
+  const n = 2 ** g
+  if (n <= 8) {
+    return Array.from({ length: n }, (_, i) => ({
+      x: (i + 0.5) * (320 / n) - 160,
+      y: 8,
+      size: GEN_SIZES[g],
+    }))
+  }
+  return Array.from({ length: 16 }, (_, i) => {
+    const r = i >= 8 ? 1 : 0
+    const c = i % 8
+    return { x: (c + 0.5) * 40 - 160, y: r ? 44 : -22, size: GEN_SIZES[4] }
   })
-  return delays
-})()
+}
 
-const HOLDER_COUNTS = [1, 2, 4, 8, 16, 32]
+const VIRUS_WAVES = [800, 2400, 4000, 5600, 7200]
+const VIRUS_COUNTS = [1, 2, 4, 8, 16]
 
 function ActVirus() {
   const [wave, setWave] = useState(-1)
-  const [slam, setSlam] = useState(false)
+  const [slamPhase, setSlamPhase] = useState(0) // 1: virus slam, 2: ripple bangs it out
   useEffect(() => {
-    const timers = WAVE_T.map((t, i) => setTimeout(() => setWave(i), t))
-    timers.push(setTimeout(() => setSlam(true), 4900))
+    const timers = VIRUS_WAVES.map((t, i) => setTimeout(() => setWave(i), t))
+    timers.push(setTimeout(() => setSlamPhase(1), 8700))
+    timers.push(setTimeout(() => setSlamPhase(2), 11000))
     return () => timers.forEach(clearTimeout)
   }, [])
+
+  const slots = genSlots(Math.max(wave, 0))
+  const parentSlots = wave > 0 ? genSlots(wave - 1) : genSlots(0)
 
   return (
     <motion.div
@@ -812,7 +813,7 @@ function ActVirus() {
         <motion.p
           initial={{ opacity: 0, y: 24, filter: 'blur(6px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          transition={{ duration: 0.5, ease: EASE }}
+          transition={{ duration: 0.6, ease: EASE }}
           className="text-xl font-medium text-mist sm:text-2xl"
         >
           Every movement starts with <span className="text-shimmer">one believer.</span>
@@ -828,34 +829,35 @@ function ActVirus() {
       >
         <span className="text-[13px] text-white/55">Holders</span>
         <motion.span
-          key={slam ? '589' : wave}
+          key={slamPhase > 0 ? '589' : wave}
           initial={{ scale: 1.5, color: '#30D158' }}
-          animate={{ scale: 1, color: slam ? '#30D158' : '#FFFFFF' }}
+          animate={{ scale: 1, color: slamPhase > 0 ? '#30D158' : '#FFFFFF' }}
           transition={{ duration: 0.4 }}
           className="font-display text-[16px] font-bold tabular-nums"
         >
-          {slam ? '589+' : HOLDER_COUNTS[Math.max(wave, 0)]}
+          {slamPhase > 0 ? '589+' : VIRUS_COUNTS[Math.max(wave, 0)]}
         </motion.span>
       </motion.div>
 
-      {/* the crowd multiplying */}
-      <div className="relative mx-auto mt-5 w-fit">
-        {/* the ripple effect: a shockwave crosses the crowd on every doubling */}
+      {/* the mitosis */}
+      <div className="relative mx-auto mt-6 h-[190px] w-[340px]">
+        {/* ripple shockwave on every division */}
         {wave >= 1 && (
           <motion.span
             key={`ripple-${wave}`}
             initial={{ opacity: 0.55, scale: 0.15 }}
-            animate={{ opacity: 0, scale: 2.4 }}
-            transition={{ duration: 0.9, ease: 'easeOut' }}
+            animate={{ opacity: 0, scale: 2.2 }}
+            transition={{ duration: 1.1, ease: 'easeOut' }}
             className="pointer-events-none absolute left-1/2 top-1/2 z-10 h-44 w-44 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-azure/60 shadow-[0_0_30px_rgba(46,155,255,0.4)]"
           />
         )}
-        {/* the first holder's phone lights up */}
+
+        {/* patient zero's phone lights up */}
         <motion.div
           initial={{ opacity: 0, y: 14, scale: 0.6 }}
-          animate={{ opacity: [0, 1, 1, 0], y: [14, -6, -10, -20], scale: [0.6, 1, 1, 0.9] }}
-          transition={{ delay: 0.95, duration: 1.4, times: [0, 0.2, 0.75, 1] }}
-          className="pointer-events-none absolute -top-9 left-1/2 z-20 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-xl bg-[#1d1f27]/95 px-2.5 py-1.5 shadow-[0_8px_20px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)]"
+          animate={{ opacity: [0, 1, 1, 0], y: [14, -4, -8, -18], scale: [0.6, 1, 1, 0.9] }}
+          transition={{ delay: 1.1, duration: 1.6, times: [0, 0.2, 0.75, 1] }}
+          className="pointer-events-none absolute -top-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-xl bg-[#1d1f27]/95 px-2.5 py-1.5 shadow-[0_8px_20px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)]"
         >
           <span
             className="flex h-5 w-5 items-center justify-center rounded-[6px] text-white"
@@ -869,87 +871,107 @@ function ActVirus() {
           <span className="text-[10px] font-semibold text-[#30D158]">+XRP every hour</span>
         </motion.div>
 
-        <div className="grid grid-cols-8 gap-x-2 gap-y-1.5 sm:gap-x-3">
-          {Array.from({ length: 32 }, (_, i) => {
-            const delay = CROWD_DELAYS[i]
-            const isFirst = i === CROWD_ORDER[0]
-            return (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0, y: 14 }}
-                animate={{ opacity: 1, scale: [0, isFirst ? 1.5 : 1.3, 1], y: 0 }}
-                transition={{ delay, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                className="relative"
-              >
-                <Float amt={3} dur={2.6 + (i % 5) * 0.4} delay={delay}>
-                  {isFirst && (
-                    <motion.span
-                      animate={{ opacity: [0.5, 0.15, 0.5], scale: [1, 1.35, 1] }}
-                      transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
-                      className="pointer-events-none absolute -inset-1.5 rounded-full bg-azure/20 blur-[6px]"
-                    />
-                  )}
-                  <Person size={i === CROWD_ORDER[0] ? 40 : 32} hot={isFirst} />
-                </Float>
-                <motion.span
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: [0, 0.7, 0], scale: [0.6, 1.8, 2.2] }}
-                  transition={{ delay: delay + 0.05, duration: 0.55, ease: 'easeOut' }}
-                  className="pointer-events-none absolute inset-0 rounded-full border border-azure/60"
-                />
-              </motion.div>
-            )
-          })}
+        <div className="absolute left-1/2 top-1/2">
+          <AnimatePresence mode="popLayout">
+            {wave >= 0 &&
+              slots.map((s, i) => {
+                const parent = parentSlots[Math.floor(i / 2)] || parentSlots[0]
+                return (
+                  <motion.div
+                    key={`${wave}-${i}`}
+                    initial={
+                      wave === 0
+                        ? { x: s.x, y: s.y, scale: 0, opacity: 0 }
+                        : { x: parent.x, y: parent.y, scale: 0.55, opacity: 0.7 }
+                    }
+                    animate={{ x: s.x, y: s.y, scale: 1, opacity: 1 }}
+                    exit={{ opacity: 0, transition: { duration: 0.18 } }}
+                    transition={{
+                      delay: i * 0.045,
+                      type: 'spring',
+                      stiffness: 150,
+                      damping: 16,
+                    }}
+                    className="absolute -translate-x-1/2 -translate-y-1/2"
+                  >
+                    {wave === 0 && (
+                      <motion.span
+                        animate={{ opacity: [0.5, 0.15, 0.5], scale: [1, 1.35, 1] }}
+                        transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+                        className="pointer-events-none absolute -inset-1.5 rounded-full bg-azure/20 blur-[6px]"
+                      />
+                    )}
+                    <Float amt={3} dur={2.6 + (i % 5) * 0.4} delay={0.4}>
+                      <Person size={s.size} hot={wave === 0} />
+                    </Float>
+                  </motion.div>
+                )
+              })}
+          </AnimatePresence>
         </div>
 
-        {/* lore caption once the doubling is undeniable */}
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={wave >= 3 && !slam ? { opacity: 1, y: 0 } : { opacity: 0 }}
-          transition={{ duration: 0.5 }}
-          className="pointer-events-none absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap font-mono text-[12px] italic tracking-[0.14em] text-azure-bright"
-        >
-          they call it the ripple effect.
-        </motion.p>
-
-        {/* the slam, over the crowd */}
-        {slam && (
-          <div className="absolute inset-0 z-30 flex items-center justify-center">
-            <motion.span
-              initial={{ opacity: 0, scale: 0.4 }}
-              animate={{ opacity: [0, 0.9, 0.7], scale: [0.4, 1.3, 1.15] }}
-              transition={{ duration: 0.7, ease: 'easeOut' }}
-              className="pointer-events-none absolute h-32 w-[380px] rounded-full bg-ink-950/90 blur-2xl"
-            />
-            <motion.h2
-              initial={{ opacity: 0, scale: 2.1, filter: 'blur(12px)' }}
-              animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="text-3d relative text-4xl font-bold leading-[1.08] tracking-[-0.03em] sm:text-6xl"
-            >
-              XPY SPREADS
-              <br />
-              <span data-text="LIKE A VIRUS." className="glitch text-shimmer inline-block">
-                LIKE A VIRUS.
-              </span>
-            </motion.h2>
-          </div>
-        )}
+        {/* the slam, then the ripple line bangs it out */}
+        <div className="absolute inset-0 z-30 flex items-center justify-center">
+          <AnimatePresence mode="popLayout">
+            {slamPhase === 1 && (
+              <motion.div
+                key="slam-virus"
+                initial={{ opacity: 0, scale: 2.1, filter: 'blur(12px)' }}
+                animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+                exit={{
+                  x: -560,
+                  rotate: -10,
+                  opacity: 0,
+                  transition: { duration: 0.45, ease: [0.5, 0, 0.75, 0.4] },
+                }}
+                transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+                className="absolute flex items-center justify-center"
+              >
+                <span className="pointer-events-none absolute h-32 w-[380px] rounded-full bg-ink-950/90 blur-2xl" />
+                <h2 className="text-3d relative text-4xl font-bold leading-[1.08] tracking-[-0.03em] sm:text-6xl">
+                  XPY SPREADS
+                  <br />
+                  <span data-text="LIKE A VIRUS." className="glitch text-shimmer inline-block">
+                    LIKE A VIRUS.
+                  </span>
+                </h2>
+              </motion.div>
+            )}
+            {slamPhase === 2 && (
+              <motion.div
+                key="slam-ripple"
+                initial={{ x: 560, rotate: 8, opacity: 0 }}
+                animate={{ x: 0, rotate: 0, opacity: 1 }}
+                transition={{ type: 'spring', stiffness: 250, damping: 19 }}
+                className="absolute flex items-center justify-center"
+              >
+                <span className="pointer-events-none absolute h-32 w-[400px] rounded-full bg-ink-950/90 blur-2xl" />
+                <h2 className="text-3d relative text-3xl font-bold leading-[1.1] tracking-[-0.03em] sm:text-5xl">
+                  We like to call it
+                  <br />
+                  <span data-text="THE RIPPLE EFFECT." className="glitch text-shimmer inline-block">
+                    THE RIPPLE EFFECT.
+                  </span>
+                </h2>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
 
       <Float delay={0.6} amt={5} dur={5.4}>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 5.9, duration: 0.5, ease: EASE }}
-          className="mx-auto mt-6 max-w-lg text-lg text-mist-dim sm:text-xl"
+          transition={{ delay: 12.3, duration: 0.5, ease: EASE }}
+          className="mx-auto mt-8 max-w-lg text-lg text-mist-dim sm:text-xl"
         >
-          One becomes two. Two become four. Four become a crowd.{' '}
+          One becomes two. Two become four.{' '}
           <span className="inline-flex flex-wrap justify-center gap-x-1.5 font-semibold">
             <WaveWords
               words={['Everyone', 'earning', 'XRP', 'the', 'whole', 'way.']}
               big={[2]}
-              delay={6.5}
+              delay={13}
             />
           </span>
         </motion.p>
@@ -1457,7 +1479,7 @@ function RefDashboard() {
 
 /* ---------------------------------- page ----------------------------------- */
 
-const ACT_DURATIONS = [3400, 13800, 8200, 10600]
+const ACT_DURATIONS = [3400, 13800, 14600, 10600]
 
 export default function ReferralPage() {
   const [act, setAct] = useState(0)
