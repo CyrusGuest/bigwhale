@@ -149,8 +149,69 @@ function makeNotif() {
   return { id: n, type: 'app', ...OTHER_NOTIFS[(n / 2 - 1) % OTHER_NOTIFS.length] }
 }
 
+const TAG_WORDS = ['HISTORY', 'XRP 589', 'XPY 589']
+
+// commercial tagline scene: lines slide in, then the last word glitch-cuts
+function TagScene() {
+  const [w, setW] = useState(0)
+  useEffect(() => {
+    const t1 = setTimeout(() => setW(1), 2400)
+    const t2 = setTimeout(() => setW(2), 3900)
+    return () => {
+      clearTimeout(t1)
+      clearTimeout(t2)
+    }
+  }, [])
+  return (
+    <div className="px-4 text-center">
+      <motion.p
+        initial={{ opacity: 0, y: 18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15, duration: 0.5 }}
+        className="font-mono text-xs uppercase tracking-[0.4em] text-azure-bright"
+      >
+        The First
+      </motion.p>
+      <motion.h3
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.35, duration: 0.55 }}
+        className="mt-5 text-3xl font-semibold tracking-[-0.02em] text-mist sm:text-4xl"
+      >
+        Passive-Earning XRP Coin
+      </motion.h3>
+      <motion.p
+        initial={{ opacity: 0, y: 18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.55, duration: 0.5 }}
+        className="mt-4 text-xl italic text-mist-dim"
+      >
+        in
+      </motion.p>
+      <div className="mt-3 flex h-[96px] items-center justify-center sm:h-[110px]">
+        <AnimatePresence mode="wait">
+          <motion.span
+            key={w}
+            data-text={TAG_WORDS[w]}
+            initial={{ opacity: 0, x: 10, skewX: -8 }}
+            animate={{ opacity: [0, 1, 0.55, 1], x: [-8, 5, -2, 0], skewX: [8, -5, 2, 0] }}
+            exit={{ opacity: 0, transition: { duration: 0.12 } }}
+            transition={{ duration: 0.4, delay: w === 0 ? 0.75 : 0 }}
+            className={`glitch text-5xl font-bold tracking-tight sm:text-7xl ${
+              w === 2 ? 'text-shimmer' : w === 1 ? 'text-azure-bright' : 'text-white'
+            }`}
+          >
+            {TAG_WORDS[w]}
+          </motion.span>
+        </AnimatePresence>
+      </div>
+    </div>
+  )
+}
+
 export default function Hero() {
   const [notifs, setNotifs] = useState(() => Array.from({ length: 4 }, makeNotif).reverse())
+  const [scene, setScene] = useState('phone')
 
   useEffect(() => {
     const ping = setInterval(() => {
@@ -158,6 +219,15 @@ export default function Hero() {
     }, 3200)
     return () => clearInterval(ping)
   }, [])
+
+  // commercial loop: 10s of phone, then the tagline scene, repeat
+  useEffect(() => {
+    const t = setTimeout(
+      () => setScene((s) => (s === 'phone' ? 'tag' : 'phone')),
+      scene === 'phone' ? 10000 : 7200,
+    )
+    return () => clearTimeout(t)
+  }, [scene])
 
   return (
     <section className="relative overflow-hidden pt-16">
@@ -271,11 +341,21 @@ export default function Hero() {
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
-          className="relative flex flex-col items-center"
+          className="relative flex min-h-[560px] flex-col items-center justify-center lg:min-h-[708px]"
         >
           {/* ambient night glow */}
           <div className="pointer-events-none absolute top-1/2 left-1/2 h-[480px] w-[480px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-azure-deep/[0.28] blur-[100px]" />
 
+          <AnimatePresence mode="wait">
+          {scene === 'phone' ? (
+          <motion.div
+            key="phone"
+            initial={{ opacity: 0, x: 70, rotate: 3 }}
+            animate={{ opacity: 1, x: 0, rotate: 0 }}
+            exit={{ opacity: 0, x: 440, rotate: 7, transition: { duration: 0.7, ease: [0.5, 0, 0.75, 0.4] } }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="flex flex-col items-center"
+          >
           <motion.div
             animate={{ y: [0, -9, 0], rotate: [0, 0.6, 0] }}
             transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
@@ -438,6 +518,20 @@ export default function Hero() {
           <p className="relative mt-6 font-mono text-[10px] uppercase tracking-[0.2em] text-mist-faint">
             Simulated preview · Payouts land hourly, even at 3 AM
           </p>
+          </motion.div>
+          ) : (
+          <motion.div
+            key="tagline"
+            initial={{ opacity: 0, y: 70 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -60, transition: { duration: 0.5 } }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="relative"
+          >
+            <TagScene />
+          </motion.div>
+          )}
+          </AnimatePresence>
         </motion.div>
       </div>
     </section>

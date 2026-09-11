@@ -58,6 +58,50 @@
   }
 }
 
+/* RGB-split glitch layers, replayed on every mount of a .glitch element */
+.glitch {
+  position: relative;
+  display: inline-block;
+}
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  -webkit-background-clip: initial;
+  background: none;
+}
+.glitch::before {
+  color: #ff3b5c;
+  clip-path: inset(0 0 52% 0);
+  animation: glitchLayer 0.45s steps(3) both;
+}
+.glitch::after {
+  color: #2e9bff;
+  clip-path: inset(46% 0 0 0);
+  animation: glitchLayer 0.45s steps(3) reverse both;
+}
+@keyframes glitchLayer {
+  0% {
+    opacity: 0.85;
+    transform: translate(-4px, 0);
+  }
+  40% {
+    opacity: 0.85;
+    transform: translate(4px, -2px);
+  }
+  70% {
+    opacity: 0.6;
+    transform: translate(-2px, 1px);
+  }
+  100% {
+    opacity: 0;
+    transform: none;
+  }
+}
+
 /* starfield twinkle */
 @keyframes twinkle {
   0%,
