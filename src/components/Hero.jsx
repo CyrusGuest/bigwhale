@@ -975,7 +975,7 @@ function ActEnd() {
 /* ---------------------------------- hero ----------------------------------- */
 
 // title → phone → sleep → reserve → portal → story → outro (scrolls down) → end card
-const ACT_DURATIONS = [4400, 3900, 3800, 4200, 5800, 9600, 2700]
+const ACT_DURATIONS = [4400, 3900, 3800, 4200, 5800, 9600, 3700]
 
 export default function Hero() {
   const [notifs, setNotifs] = useState(() => Array.from({ length: 4 }, makeNotif).reverse())
@@ -1001,7 +1001,7 @@ export default function Hero() {
     if (window.scrollY > 120) return
     const t = setTimeout(() => {
       document.getElementById('drip')?.scrollIntoView({ behavior: 'smooth' })
-    }, 2000)
+    }, 3000)
     return () => clearTimeout(t)
   }, [act])
 
