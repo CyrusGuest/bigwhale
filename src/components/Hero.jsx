@@ -425,7 +425,7 @@ function ActSleep() {
               key={d.t}
               initial={{ opacity: 0, x: i % 2 ? 360 : -360, rotate: i % 2 ? 5 : -5 }}
               animate={{ opacity: 1, x: 0, rotate: 0 }}
-              transition={{ delay: 0.95 + i * 0.45, type: 'spring', stiffness: 190, damping: 22 }}
+              transition={{ delay: 0.7 + i * 0.32, type: 'spring', stiffness: 200, damping: 22 }}
               className="mx-auto flex w-full max-w-md items-center gap-3 rounded-[20px] border border-white/[0.07] bg-[#2a3040]/60 p-3.5 text-left shadow-lg shadow-black/25 backdrop-blur-2xl"
             >
               <span
@@ -456,7 +456,7 @@ function ActSleep() {
           <motion.p
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 2.6, duration: 0.5 }}
+            transition={{ delay: 1.9, duration: 0.5 }}
             className="mt-8 font-mono text-sm uppercase tracking-[0.26em] text-azure-bright"
           >
             +97.56 XRP while you dreamt
@@ -845,7 +845,7 @@ function ActEnd() {
 /* ---------------------------------- hero ----------------------------------- */
 
 // title → phone → sleep → reserve → portal → story → end card, then push down
-const ACT_DURATIONS = [2600, 5200, 5000, 4200, 5800, 9600]
+const ACT_DURATIONS = [1950, 3900, 3800, 4200, 5800, 9600]
 
 export default function Hero() {
   const [notifs, setNotifs] = useState(() => Array.from({ length: 4 }, makeNotif).reverse())
