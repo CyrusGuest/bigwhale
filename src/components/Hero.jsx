@@ -427,9 +427,27 @@ function ActPhone({ notifs }) {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7, duration: 0.5 }}
-            className="mt-7 font-mono text-sm uppercase tracking-[0.3em] text-azure-bright"
+            className="mt-7 flex flex-wrap justify-center gap-x-2 font-mono text-sm uppercase tracking-[0.3em] text-azure-bright lg:justify-start"
           >
-            Real XRP · Straight to your wallet
+            {['Real', 'XRP', '·', 'Straight', 'to', 'your', 'wallet'].map((w, i) => (
+              <motion.span
+                key={i}
+                animate={{
+                  scale: [1, w === '·' ? 1 : w === 'Real' || w === 'XRP' ? 1.38 : 1.22, 1],
+                  color: ['#66B8FF', '#FFFFFF', '#66B8FF'],
+                }}
+                transition={{
+                  delay: 1.5 + i * 0.14,
+                  duration: 0.5,
+                  repeat: Infinity,
+                  repeatDelay: 1.55,
+                  ease: 'easeInOut',
+                }}
+                className="inline-block origin-center"
+              >
+                {w}
+              </motion.span>
+            ))}
           </motion.p>
         </Float>
       </motion.div>
