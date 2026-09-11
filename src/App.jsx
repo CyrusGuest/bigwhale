@@ -8,9 +8,7 @@ import Reserve from './components/Reserve.jsx'
 import Future from './components/Future.jsx'
 import Calculator from './components/Calculator.jsx'
 import HowItWorks from './components/HowItWorks.jsx'
-import Features from './components/Features.jsx'
 import Stats from './components/Stats.jsx'
-import Transparency from './components/Transparency.jsx'
 import HolderPortal from './components/HolderPortal.jsx'
 import PortalPage from './components/PortalPage.jsx'
 import ReferralPage from './components/ReferralPage.jsx'
@@ -69,9 +67,7 @@ export default function App() {
             <Future />
             <Calculator />
             <HowItWorks />
-            <Features />
             <Stats />
-            <Transparency />
             <HolderPortal />
             <FAQ />
             <CTA />

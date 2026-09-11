@@ -25,7 +25,7 @@ export default function CTA() {
         </p>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <a href="#" className="btn-primary">Buy XPY</a>
-          <a href="#transparency" className="btn-secondary">Inspect the Pool</a>
+          <a href="#faq" className="btn-secondary">Read the Risks</a>
         </div>
         <p className="mx-auto mt-10 max-w-lg border-t border-white/[0.08] pt-6 text-xs leading-relaxed text-mist-faint">
           XPY is a speculative digital asset. Distributions vary with trading
