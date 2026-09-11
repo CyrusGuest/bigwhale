@@ -229,7 +229,7 @@ function ScreenNotif({ text }) {
   )
 }
 
-const PHONE_BEATS = [4300, 5100, 6800, 7500, 9600, 10300, 11700]
+const PHONE_BEATS = [5200, 6200, 8200, 9000, 11400, 12200, 13800]
 
 function ActPhones() {
   const [beat, setBeat] = useState(0)
@@ -263,7 +263,7 @@ function ActPhones() {
         </motion.h2>
       </Float>
 
-      <div className="relative mx-auto mt-6 flex h-[540px] max-w-xl origin-top scale-[0.62] items-center justify-center gap-8 sm:scale-100 sm:gap-16">
+      <div className="relative mx-auto mt-6 flex h-[580px] max-w-xl origin-top scale-[0.62] items-center justify-center gap-8 sm:scale-100 sm:gap-16">
         {/* the invite flying across */}
         {beat >= 1 && beat < 3 && (
           <motion.span
@@ -293,11 +293,24 @@ function ActPhones() {
           />
         )}
 
-        {/* Phone A: you, creating the link */}
+        {/* Phone A: you — featured large for the walkthrough, then zooms out
+            to make room when your friend's phone arrives */}
         <motion.div
-          initial={{ opacity: 0, x: -260, rotate: -14 }}
-          animate={{ opacity: 1, x: 0, rotate: -5 }}
-          transition={{ delay: 0.25, type: 'spring', stiffness: 200, damping: 20 }}
+          layout
+          initial={{ opacity: 0, x: -260, rotate: -14, scale: 1.32 }}
+          animate={{
+            opacity: 1,
+            x: 0,
+            rotate: beat >= 2 ? -5 : -1.5,
+            scale: beat >= 2 ? 1 : 1.32,
+          }}
+          transition={{
+            delay: beat >= 2 ? 0 : 0.25,
+            type: 'spring',
+            stiffness: 160,
+            damping: 21,
+            layout: { type: 'spring', stiffness: 140, damping: 22 },
+          }}
           className="relative"
         >
           {beat >= 4 && beat < 6 && <PopAmt key="a1" amt={1} />}
@@ -321,7 +334,7 @@ function ActPhones() {
                   Create your referral link
                 </p>
                 <div className="mt-2 rounded-xl bg-white/[0.07] px-2.5 py-2 font-mono text-[9px] text-azure-bright ring-1 ring-white/[0.1]">
-                  <TypeText text="7xKXtg2CW8…gAsU" start={1400} speed={75} />
+                  <TypeText text="7xKXtg2CW8…gAsU" start={1800} speed={85} />
                   <motion.span
                     animate={{ opacity: [1, 0, 1] }}
                     transition={{ duration: 0.9, repeat: Infinity }}
@@ -369,9 +382,9 @@ function ActPhones() {
                       transition={{ type: 'spring', stiffness: 300, damping: 18 }}
                       className="mt-2 rounded-xl bg-[#30D158]/12 p-2.5 ring-1 ring-[#30D158]/30"
                     >
-                      <span className="block text-[9px] text-white/55">Your 10% bonus</span>
+                      <span className="block text-[9px] text-white/55">Your 10% · total</span>
                       <span className="font-display text-[15px] font-bold text-[#30D158]">
-                        +{aTotal} XRP
+                        {aTotal} XRP
                       </span>
                     </motion.div>
                   )}
@@ -430,9 +443,9 @@ function ActPhones() {
                         transition={{ type: 'spring', stiffness: 300, damping: 18 }}
                         className="mt-2 rounded-xl bg-[#30D158]/12 p-2.5 ring-1 ring-[#30D158]/30"
                       >
-                        <span className="block text-[9px] text-white/55">XRP earned</span>
+                        <span className="block text-[9px] text-white/55">Total XRP earned</span>
                         <span className="font-display text-[15px] font-bold text-[#30D158]">
-                          +{bTotal} XRP
+                          {bTotal} XRP
                         </span>
                       </motion.div>
                     )}
@@ -1479,7 +1492,7 @@ function RefDashboard() {
 
 /* ---------------------------------- page ----------------------------------- */
 
-const ACT_DURATIONS = [3400, 13800, 14600, 10600]
+const ACT_DURATIONS = [3400, 16200, 14600, 10600]
 
 export default function ReferralPage() {
   const [act, setAct] = useState(0)
