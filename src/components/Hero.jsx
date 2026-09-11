@@ -204,12 +204,12 @@ function PhoneMock({ notifs }) {
                           animate={{ opacity: 1 - i * 0.14, y: 0, scale: 1 - i * 0.02 }}
                           exit={{ opacity: 0, scale: 0.92, transition: { duration: 0.25 } }}
                           transition={{ type: 'spring', stiffness: 240, damping: 26, mass: 0.9 }}
-                          className="rounded-[20px] border border-white/[0.07] bg-[#2a3040]/60 p-3 shadow-lg shadow-black/25 backdrop-blur-2xl"
+                          className="rounded-[24px] bg-[#1d1f27]/80 p-3.5 shadow-[0_10px_26px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.09)] backdrop-blur-2xl"
                         >
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-start gap-3">
                             {n.type === 'pay' ? (
                               <span
-                                className="relative flex h-[38px] w-[38px] flex-none items-center justify-center overflow-hidden rounded-[9.5px] shadow-md shadow-azure/30 ring-1 ring-white/10"
+                                className="relative flex h-[40px] w-[40px] flex-none items-center justify-center overflow-hidden rounded-[10px] shadow-md shadow-azure/30 ring-1 ring-white/10"
                                 style={{
                                   background:
                                     'radial-gradient(130% 105% at 50% 0%, rgba(46,155,255,0.55) 0%, rgba(16,40,88,0.95) 48%, #05080F 100%)',
@@ -219,29 +219,29 @@ function PhoneMock({ notifs }) {
                                 <XrpMark className="relative h-[21px] w-[21px] text-white" strokeWidth={5.2} />
                               </span>
                             ) : (
-                              <span className="h-[38px] w-[38px] flex-none overflow-hidden rounded-[9.5px] shadow-md shadow-black/30">
+                              <span className="h-[40px] w-[40px] flex-none overflow-hidden rounded-[10px] shadow-md shadow-black/30">
                                 <AppIcon kind={n.icon} />
                               </span>
                             )}
                             <div className="min-w-0 flex-1">
                               <div className="flex items-baseline justify-between gap-2">
-                                <span className="text-[13px] font-semibold leading-tight text-white">
+                                <span className="text-[15px] font-semibold leading-tight text-white">
                                   {n.type === 'pay' ? 'XPY' : n.app}
                                 </span>
-                                <span className="text-[11px] text-white/40">
+                                <span className="text-[12px] text-white/45">
                                   {i === 0 ? 'now' : `${i}h ago`}
                                 </span>
                               </div>
                               {n.type === 'pay' ? (
-                                <p className="mt-[1px] text-[12.5px] leading-[1.35] text-white/75">
+                                <p className="mt-[2px] text-[14px] leading-[1.32] text-white/85">
                                   You just got paid{' '}
                                   <span className="font-semibold text-[#8AC5FF]">
                                     +{n.amt.toFixed(2)} XRP
                                   </span>{' '}
-                                  <span className="text-white/40">(≈ ${n.usd.toFixed(2)})</span>
+                                  <span className="text-white/45">(≈ ${n.usd.toFixed(2)})</span>
                                 </p>
                               ) : (
-                                <p className="mt-[1px] text-[12.5px] leading-[1.35] text-white/75">
+                                <p className="mt-[2px] text-[14px] leading-[1.32] text-white/85">
                                   {n.hl ? (
                                     <>
                                       {n.body.split(n.hl)[0]}
@@ -531,10 +531,10 @@ function ActSleep() {
               initial={{ opacity: 0, x: i % 2 ? 360 : -360, rotate: i % 2 ? 5 : -5 }}
               animate={{ opacity: 1, x: 0, rotate: 0 }}
               transition={{ delay: 0.7 + i * 0.32, type: 'spring', stiffness: 200, damping: 22 }}
-              className="mx-auto flex w-full max-w-md items-center gap-3 rounded-[20px] border border-white/[0.07] bg-[#2a3040]/60 p-3.5 text-left shadow-lg shadow-black/25 backdrop-blur-2xl"
+              className="mx-auto flex w-full max-w-md items-start gap-3 rounded-[24px] bg-[#1d1f27]/85 p-4 text-left shadow-[0_14px_34px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.09)] backdrop-blur-2xl"
             >
               <span
-                className="relative flex h-[38px] w-[38px] flex-none items-center justify-center overflow-hidden rounded-[9.5px] shadow-md shadow-azure/30 ring-1 ring-white/10"
+                className="relative flex h-[40px] w-[40px] flex-none items-center justify-center overflow-hidden rounded-[10px] shadow-md shadow-azure/30 ring-1 ring-white/10"
                 style={{
                   background:
                     'radial-gradient(130% 105% at 50% 0%, rgba(46,155,255,0.55) 0%, rgba(16,40,88,0.95) 48%, #05080F 100%)',
@@ -545,10 +545,10 @@ function ActSleep() {
               </span>
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline justify-between gap-2">
-                  <span className="text-[13px] font-semibold text-white">XPY</span>
-                  <span className="text-[11px] text-white/40">{d.t}</span>
+                  <span className="text-[15px] font-semibold text-white">XPY</span>
+                  <span className="text-[12px] text-white/45">{d.t}</span>
                 </div>
-                <p className="mt-[1px] text-[13px] text-white/75">
+                <p className="mt-[2px] text-[14px] leading-[1.32] text-white/85">
                   You just got paid{' '}
                   <span className="font-semibold text-[#8AC5FF]">+{d.amt.toFixed(2)} XRP</span>
                 </p>
