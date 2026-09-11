@@ -5,6 +5,7 @@ import Hero from './components/Hero.jsx'
 import Ticker from './components/Ticker.jsx'
 import Drip from './components/Drip.jsx'
 import Reserve from './components/Reserve.jsx'
+import Future from './components/Future.jsx'
 import Calculator from './components/Calculator.jsx'
 import HowItWorks from './components/HowItWorks.jsx'
 import Features from './components/Features.jsx'
@@ -58,6 +59,7 @@ export default function App() {
             <Ticker />
             <Drip />
             <Reserve />
+            <Future />
             <Calculator />
             <HowItWorks />
             <Features />

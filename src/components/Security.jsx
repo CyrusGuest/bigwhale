@@ -15,7 +15,7 @@ const items = [
   },
   {
     title: 'Licensed money movement',
-    body: 'Fiat legs are executed through licensed partners in each jurisdiction — money transmitter coverage in the US, EMI partners in the UK and EEA, and regulated PSPs across APAC corridors.',
+    body: 'Fiat legs are executed through licensed partners in each jurisdiction, money transmitter coverage in the US, EMI partners in the UK and EEA, and regulated PSPs across APAC corridors.',
   },
   {
     title: 'No chargeback exposure',

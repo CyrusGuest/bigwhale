@@ -32,11 +32,11 @@ function CountUp({ target, prefix = '', suffix = '', duration = 2 }) {
 }
 
 const NODE_INFO = {
-  trades: 'Every buy and sell — new entrants, swing traders, sellers — pays the same 5% fee. Sells pay you too.',
+  trades: 'Every buy and sell, new entrants, swing traders, sellers, pays the same 5% fee. Sells pay you too.',
   fee: 'Collected automatically at execution and converted to XRP. This is the sole source of holder rewards.',
-  holders: '4/5 of every fee, airdropped hourly to all wallets pro-rata. The passive-income engine.',
+  holders: '4/5 of every fee, airdropped every hour to every holder based on how much they hold. The passive income engine.',
   liquidity: '1/5 of every fee deepens the trading pool, tightening spreads for everyone.',
-  reserve: 'The $1M treasury sits apart from this flow — never spent on rewards, always auditable.',
+  reserve: 'The $1M treasury sits apart from this flow, never spent on rewards, always auditable.',
 }
 
 function FlowDiagram() {
@@ -174,7 +174,7 @@ const principles = [
   },
   {
     title: 'Not the source of yield',
-    body: 'Distributions are funded by trading fees — never by drawing down the reserve, and never by new buyers’ principal. The reserve is credibility, not the faucet.',
+    body: 'Distributions are funded by trading fees, never by drawing down the reserve, and never by new buyers’ principal. The reserve is credibility, not the faucet.',
   },
 ]
 
@@ -191,31 +191,42 @@ export default function Reserve() {
             viewport={{ once: true, margin: '-80px' }}
             transition={{ duration: 0.7 }}
           >
-            <p className="eyebrow mb-6">The XRP Reserve</p>
-            <h2 className="text-4xl font-semibold tracking-[-0.02em] sm:text-5xl">
-              A million dollars of XRP,
+            <p className="eyebrow mb-6">First Mover</p>
+            <h2 className="text-5xl font-semibold leading-[1.05] tracking-[-0.03em] sm:text-6xl">
+              The future coin of the
               <br />
-              <span className="text-azure">in public view.</span>
+              <span className="bg-gradient-to-r from-azure to-azure-bright bg-clip-text text-transparent">
+                XRP ecosystem.
+              </span>
             </h2>
-            <p className="mt-6 max-w-lg leading-relaxed text-mist-dim">
-              To our knowledge, XRPVM is the first XRP reserve built to stand
-              behind passive XRP distributions — an algorithmic virtual-mining
-              program funded by trading fees from every buy and sell of the
-              token. The reserve doesn&rsquo;t pay the rewards; the fees do.
-              What the reserve buys is accountability: a standing, on-ledger
-              treasury you can audit before you hold a single token.
+            <p className="mt-6 text-xl font-medium text-mist">
+              Our first coin: XPY with XRP, backed by a $1,000,000 starting
+              reserve of XRP.
+            </p>
+            <p className="mt-4 max-w-lg leading-relaxed text-mist-dim">
+              Nobody else pairs a seven-figure XRP treasury, sitting on the
+              public ledger for anyone to audit, with an algorithm that pays
+              holders every hour. XPY does. The fees pay you. The reserve
+              stands behind the project: our thank-you to the XRP ecosystem we
+              are building in, and our proof of long-term commitment. XPY with
+              XRP is only the first pair. The platform is just getting
+              started.
+            </p>
+            <p className="mt-4 font-mono text-[11px] text-mist-faint">
+              First of its kind as far as we can find. If another project has
+              done this, show us.
             </p>
 
             <div className="mt-9 flex items-end gap-8">
               <div>
-                <span className="block font-mono text-[10px] uppercase tracking-[0.2em] text-mist-faint">
-                  Reserve value
+                <span className="block font-mono text-[10px] uppercase tracking-[0.2em] text-azure-bright">
+                  Starting reserve
                 </span>
-                <span className="mt-1 block text-5xl font-semibold tabular-nums tracking-tight text-mist">
+                <span className="mt-1 block text-6xl font-semibold tabular-nums tracking-tight text-mist [text-shadow:0_0_40px_rgba(46,155,255,0.35)] sm:text-7xl">
                   <CountUp target={RESERVE_USD} prefix="$" />
                 </span>
               </div>
-              <div className="pb-1">
+              <div className="pb-2">
                 <span className="block font-mono text-[10px] uppercase tracking-[0.2em] text-mist-faint">
                   ≈ XRP held
                 </span>

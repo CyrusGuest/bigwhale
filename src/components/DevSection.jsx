@@ -5,7 +5,7 @@ const codeLines = [
   { c: '', t: '' },
   { c: 'text-azure', t: "import { XRPay } from '@xrpay/sdk'" },
   { c: '', t: '' },
-  { c: 'text-mist', t: 'const xrpay = new XRPay({ apiKey: process.env.XRPAY_KEY })' },
+  { c: 'text-mist', t: 'const xrpay = new XRPay({ apiKey: process.env.XPY_KEY })' },
   { c: '', t: '' },
   { c: 'text-mist', t: 'const tx = await xrpay.payments.create({' },
   { c: 'text-mist-dim', t: "  from:   { currency: 'USD', amount: '2500.00' }," },
@@ -13,7 +13,7 @@ const codeLines = [
   { c: 'text-mist-dim', t: "  memo:   'invoice-8841'," },
   { c: 'text-mist', t: '})' },
   { c: '', t: '' },
-  { c: 'text-brass', t: "console.log(tx.status)  // 'settled' — 3.1s later" },
+  { c: 'text-brass', t: "console.log(tx.status)  // 'settled', 3.1s later" },
 ]
 
 const endpoints = [

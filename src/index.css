@@ -39,6 +39,21 @@
   }
 }
 
+/* shimmering gradient text for the hero headline */
+.text-shimmer {
+  background: linear-gradient(90deg, #2e9bff 0%, #a5d1ff 25%, #2e9bff 50%, #a5d1ff 75%, #2e9bff 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 4s linear infinite;
+}
+@keyframes shimmer {
+  to {
+    background-position: -200% center;
+  }
+}
+
 /* starfield twinkle */
 @keyframes twinkle {
   0%,

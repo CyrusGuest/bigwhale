@@ -5,7 +5,7 @@ const steps = [
     num: 'I',
     title: 'Trade',
     tag: 'fee collected at execution',
-    body: 'Every buy and sell of XRPVM carries a 5% fee, collected automatically at execution. This fee is the sole source of holder rewards — there are no token emissions, no inflation, and no yield generated from anyone’s principal.',
+    body: 'Every buy and sell of XPY carries a 5% fee, collected automatically at execution. This fee is the sole source of holder rewards, there are no token emissions, no inflation, and no yield generated from anyone’s principal.',
     spec: '5% per trade · Collected on-chain · Sole reward source',
   },
   {
@@ -18,9 +18,9 @@ const steps = [
   {
     num: 'III',
     title: 'Distribute',
-    tag: 'hourly pro-rata airdrop',
-    body: 'Each hour, the pool is distributed to every wallet holding XRPVM, in proportion to its share of supply. XRP arrives directly in your wallet — no staking contract to enter, no claim button to press, no lockup to exit. Each distribution is an ordinary XRPL transaction you can inspect.',
-    spec: 'Pro-rata · Direct to wallet · Every transaction public',
+    tag: 'hourly airdrop, split by holdings',
+    body: 'Each hour, the pool is distributed to every wallet holding XPY, in proportion to its share of supply. XRP arrives directly in your wallet, no staking contract to enter, no claim button to press, no lockup to exit. Each distribution is an ordinary XRPL transaction you can inspect.',
+    spec: 'Split by holdings · Direct to wallet · Every transaction public',
   },
 ]
 
@@ -40,8 +40,8 @@ export default function HowItWorks() {
         </h2>
         <p className="mt-5 leading-relaxed text-mist-dim">
           Bitcoin pays miners for hashpower, funded by newly issued coins.
-          XRPVM&rsquo;s virtual mining algorithm pays you for holding, funded
-          by trading fees. Same reward loop — a far better seat: no rigs, no
+          XPY&rsquo;s virtual mining algorithm pays you for holding, funded
+          by trading fees. Same reward loop, a far better seat: no rigs, no
           power bills, no pools. Three steps, all on a public ledger.
         </p>
       </motion.div>
@@ -82,17 +82,17 @@ export default function HowItWorks() {
             <tr className="border-b border-white/[0.08] bg-ink-800/80">
               <th className="px-6 py-5"> </th>
               <th className="px-6 py-5 text-[13px] font-medium text-mist-faint">Bitcoin mining</th>
-              <th className="px-6 py-5 text-[13px] font-semibold text-mist">XRPVM virtual mining</th>
+              <th className="px-6 py-5 text-[13px] font-semibold text-mist">XPY virtual mining</th>
             </tr>
           </thead>
           <tbody>
             {[
-              ['What you contribute', 'Hashpower — hardware and electricity', 'Holding the token in your own wallet'],
-              ['Where rewards come from', 'Newly issued BTC plus transaction fees', 'Trading fees only — nothing new is created'],
+              ['What you contribute', 'Hashpower, hardware and electricity', 'Holding the token in your own wallet'],
+              ['Where rewards come from', 'Newly issued BTC plus transaction fees', 'Trading fees only, nothing new is created'],
               ['What is produced', 'New bitcoin enters circulation', 'Nothing is mined; existing XRP is redistributed'],
-              ['Payout rhythm', 'Blocks roughly every 10 minutes', 'Distributions every hour, pro-rata'],
+              ['Payout rhythm', 'Blocks roughly every 10 minutes', 'Payouts every hour, split by holdings'],
               ['Reward driver', 'Your share of network hashpower', 'Your share of supply × trading volume'],
-              ['When activity stops', 'Difficulty adjusts; issuance continues', 'No volume, no fees — distributions pause'],
+              ['When activity stops', 'Difficulty adjusts; issuance continues', 'No volume, no fees, distributions pause'],
             ].map(([label, btc, xrpay]) => (
               <tr key={label} className="border-b border-white/[0.05] last:border-0">
                 <td className="px-6 py-4 font-mono text-[10px] uppercase tracking-[0.12em] text-mist-faint">
@@ -109,8 +109,8 @@ export default function HowItWorks() {
       </motion.div>
       <p className="mt-5 max-w-3xl font-mono text-[11px] leading-relaxed text-mist-faint">
         &ldquo;Virtual mining&rdquo; is a metaphor, in the same family as
-        &ldquo;liquidity mining.&rdquo; XRP itself cannot be mined — the XRP
-        Ledger has no mining — and XRPVM does not create, generate, or mint
+        &ldquo;liquidity mining.&rdquo; XRP itself cannot be mined, the XRP
+        Ledger has no mining, and XPY does not create, generate, or mint
         XRP. The algorithm redistributes fees from real trading activity, which
         is why the last row of this table matters.
       </p>

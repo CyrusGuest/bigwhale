@@ -40,7 +40,7 @@ export default function Compare() {
           <thead>
             <tr className="border-b border-white/[0.08] bg-ink-800/80">
               <th className="px-6 py-5"> </th>
-              <th className="px-6 py-5 text-[13px] font-semibold text-mist">XRPAY</th>
+              <th className="px-6 py-5 text-[13px] font-semibold text-mist">XPY</th>
               <th className="px-6 py-5 text-[13px] font-medium text-mist-faint">SWIFT wire</th>
               <th className="px-6 py-5 text-[13px] font-medium text-mist-faint">Card networks</th>
             </tr>
@@ -63,7 +63,7 @@ export default function Compare() {
       </motion.div>
 
       <p className="mt-5 font-mono text-[11px] text-mist-faint">
-        XRPAY cost shown at the Scale tier (0.25% of settled volume). Card figure reflects standard 2.9% + $0.30 online processing.
+        XPY cost shown at the Scale tier (0.25% of settled volume). Card figure reflects standard 2.9% + $0.30 online processing.
       </p>
     </section>
   )

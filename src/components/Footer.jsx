@@ -22,11 +22,11 @@ export default function Footer() {
             <span className="flex h-8 w-8 items-center justify-center border border-brass/60 font-serif text-sm font-medium text-mist">
               X
             </span>
-            <span className="text-base font-medium tracking-[0.08em]">XRPAY</span>
+            <span className="text-base font-medium tracking-[0.08em]">XPY</span>
           </div>
           <p className="mt-5 max-w-xs text-sm leading-relaxed text-mist-dim">
             Virtual mining on the XRP Ledger: trading fees redistributed to
-            holders in XRP — pro-rata, hourly, and publicly verifiable.
+            holders in XRP, split by holdings, hourly, and publicly verifiable.
           </p>
 
           <form
@@ -77,17 +77,17 @@ export default function Footer() {
       <div className="border-t border-white/[0.07] px-6 py-6">
         <div className="mx-auto max-w-7xl">
           <p className="mx-auto max-w-4xl text-center text-[11px] leading-relaxed text-mist-faint">
-            XRPVM is a speculative digital asset, not an investment product,
+            XPY is a speculative digital asset, not an investment product,
             deposit, or income scheme. Distributions are funded solely by
             trading fees, vary with volume, and may be zero for any period.
             Past distributions do not predict future ones. The token’s market
             price can decline regardless of rewards received, and you may lose
-            your entire outlay. XRP cannot be mined; XRPVM does not mine,
+            your entire outlay. XRP cannot be mined; XPY does not mine,
             generate, or create XRP. The project reserve is a treasury, not
             redemption backing. Nothing on this site is financial advice.
           </p>
           <p className="mt-5 text-center font-mono text-[10px] uppercase tracking-[0.18em] text-mist-faint">
-            © {new Date().getFullYear()} XRPAY
+            © {new Date().getFullYear()} XPY
           </p>
         </div>
       </div>

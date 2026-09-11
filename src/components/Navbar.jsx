@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 const links = [
   { label: 'Reserve', href: '#reserve' },
-  { label: 'Estimator', href: '#calculator' },
+  { label: 'Roadmap', href: '#future' },
   { label: 'Virtual Mining', href: '#how' },
   { label: 'Holder Portal', href: '#/portal' },
   { label: 'FAQ', href: '#faq' },
@@ -24,7 +24,7 @@ export default function Navbar() {
           <span className="flex h-8 w-8 items-center justify-center border border-brass/60 font-serif text-sm font-medium text-mist">
             X
           </span>
-          <span className="text-base font-medium tracking-[0.08em]">XRPAY</span>
+          <span className="text-base font-medium tracking-[0.08em]">XPY</span>
         </a>
 
         <div className="hidden items-center gap-9 md:flex">

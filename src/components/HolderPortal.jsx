@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 
 const previewStats = [
-  ['XRPVM balance', '4,281,904', 'tokens'],
+  ['XPY balance', '4,281,904', 'tokens'],
   ['Share of supply', '0.4282%', 'of 1B supply'],
   ['Est. daily earnings', '56.70 XRP', '≈ $171.24 at $1M avg volume'],
   ['Received, 30 days', '1,534.2 XRP', '≈ $4,633.28'],
@@ -23,10 +23,10 @@ export default function HolderPortal() {
               Watch your XRP stack up.
             </h2>
             <p className="mt-5 max-w-md leading-relaxed text-mist-dim">
-              Drop in your Solana wallet address and see your XRPVM position
+              Drop in your Solana wallet address and see your XPY position
               working: holdings, share of supply, every distribution
               you&rsquo;ve received, and what the algorithm pays your share at
-              average volume. Read-only — the portal never asks you to connect
+              average volume. Read-only, the portal never asks you to connect
               or sign anything.
             </p>
             <a href="#/portal" className="btn-primary mt-9">

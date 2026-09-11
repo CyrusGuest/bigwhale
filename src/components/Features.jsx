@@ -4,12 +4,12 @@ const features = [
   {
     num: '01',
     title: 'Paid in XRP, not the token',
-    body: 'Rewards arrive as XRP — a liquid, widely listed asset — rather than more of the token itself. Your reward is immediately spendable and its value does not depend on XRPVM’s own price at the moment you receive it.',
+    body: 'Rewards arrive as XRP, a liquid, widely listed asset, rather than more of the token itself. Your reward is immediately spendable and its value does not depend on XPY’s own price at the moment you receive it.',
     spec: 'Native XRP airdrops · No reward token · Immediately liquid',
   },
   {
     num: '02',
-    title: 'Pro-rata by construction',
+    title: 'Everyone gets their fair share',
     body: 'Distribution is proportional to holdings at the ledger snapshot, computed the same way for every wallet. A wallet holding 0.1% of supply receives 0.1% of the holder pool. There are no tiers, boosts, referral multipliers, or team preferences.',
     spec: 'One rule · Every wallet · No preferential tiers',
   },
@@ -22,7 +22,7 @@ const features = [
   {
     num: '04',
     title: 'Verifiable, not trusted',
-    body: 'The pool address, every inbound fee, and every outbound distribution are ordinary XRPL transactions. You can audit the entire history yourself with a block explorer — the numbers on this site are a convenience, not the source of truth.',
+    body: 'The pool address, every inbound fee, and every outbound distribution are ordinary XRPL transactions. You can audit the entire history yourself with a block explorer, the numbers on this site are a convenience, not the source of truth.',
     spec: 'Public pool · Public distributions · Audit it yourself',
   },
   {
@@ -34,7 +34,7 @@ const features = [
   {
     num: '06',
     title: 'No principal is ever touched',
-    body: 'Rewards come from realized fees on completed trades — never from new buyers’ principal, never from emissions, never from lending out pooled funds. If the fee revenue isn’t there, the distribution simply is not made.',
+    body: 'Rewards come from realized fees on completed trades, never from new buyers’ principal, never from emissions, never from lending out pooled funds. If the fee revenue isn’t there, the distribution simply is not made.',
     spec: 'Fees only · No emissions · No rehypothecation',
   },
 ]
@@ -54,8 +54,8 @@ export default function Features() {
           Simple enough to verify.
         </h2>
         <p className="mt-5 leading-relaxed text-mist-dim">
-          Reward mechanisms fail when they are too complex to audit. XRPVM’s
-          is one rule applied hourly — and every one of these properties can be
+          Reward mechanisms fail when they are too complex to audit. XPY’s
+          is one rule applied hourly, and every one of these properties can be
           checked against the ledger.
         </p>
       </motion.div>

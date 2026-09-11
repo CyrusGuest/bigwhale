@@ -3,31 +3,52 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { XrpMark } from './Hero.jsx'
 
 const XRP_PRICE = 3.02
-const DAILY_RATE = 0.004 // $1M avg volume × 4% ÷ $10M mcap
+const DAILY_RATE = 0.08 // $10M avg volume × 4% ÷ $5M mcap
+
+// logarithmic slider: fine control at small positions, scales up toward $1M
+const MIN_POS = 100
+const MAX_POS = 1000000
+const posFromT = (t) => {
+  const raw = MIN_POS * Math.pow(MAX_POS / MIN_POS, t / 1000)
+  return raw < 10000 ? Math.round(raw / 100) * 100 : Math.round(raw / 1000) * 1000
+}
 
 const fmtUsd = (n) =>
-  n.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })
+  n.toLocaleString('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: n < 10 ? 2 : 0,
+  })
 
 export default function Drip() {
-  const [position, setPosition] = useState(1000)
-  const [accrued, setAccrued] = useState(0)
+  const [t, setT] = useState(250) // ≈ $1,000
+  const position = posFromT(t)
+  const [elapsed, setElapsed] = useState(0)
   const [drops, setDrops] = useState([])
   const posRef = useRef(position)
   posRef.current = position
+  const startRef = useRef(null)
 
-  // continuous per-frame accrual
+  // restart the clock whenever the position changes, so amount always matches rate × time
+  useEffect(() => {
+    startRef.current = performance.now()
+    setElapsed(0)
+  }, [position])
+
   useEffect(() => {
     let raf
-    let last = performance.now()
     const tick = (now) => {
-      const dt = (now - last) / 1000
-      last = now
-      setAccrued((a) => a + ((posRef.current * DAILY_RATE) / 86400 / XRP_PRICE) * dt)
+      if (startRef.current !== null) setElapsed((now - startRef.current) / 1000)
       raf = requestAnimationFrame(tick)
     }
     raf = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(raf)
   }, [])
+
+  const perSec = (position * DAILY_RATE) / 86400 / XRP_PRICE
+  const accrued = perSec * elapsed
+  const mins = Math.floor(elapsed / 60)
+  const secs = Math.floor(elapsed % 60)
 
   // floating "+hourly drop" chips
   useEffect(() => {
@@ -59,13 +80,13 @@ export default function Drip() {
             <span className="text-azure">while you do nothing.</span>
           </h2>
           <p className="mt-6 max-w-md leading-relaxed text-mist-dim">
-            This is what holding XRPVM feels like: XRP accruing to your
-            position around the clock, paid out every hour, funded by fees on
-            every trade in the market. Drag the slider to your position size
-            and watch the pace.
+            This is what holding XPY feels like: XRP passively earned
+            around the clock and sent to your wallet every hour by the
+            algorithm, even while you sleep. Drag the slider to your position
+            size and watch how fast it adds up.
           </p>
           <p className="mt-4 font-mono text-[11px] text-mist-faint">
-            Simulated at $1M avg daily volume, $10M market cap — arithmetic,
+            Simulated at $10M avg daily volume, $5M market cap, arithmetic,
             not a promise. Real pace rises and falls with volume.
           </p>
         </motion.div>
@@ -84,7 +105,7 @@ export default function Drip() {
               <span className="flex h-6 w-6 items-center justify-center rounded-full bg-azure/10 text-azure">
                 <XrpMark className="h-3.5 w-3.5" strokeWidth={4.5} />
               </span>
-              Accruing since you opened this page
+              Amount of XRP passively earned in {mins > 0 ? `${mins}m ` : ''}{secs}s
             </span>
             <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-azure">
               <span className="h-1.5 w-1.5 animate-pulseSoft rounded-full bg-azure" />
@@ -96,6 +117,11 @@ export default function Drip() {
             <div className="font-mono text-5xl font-medium tabular-nums tracking-tight text-mist sm:text-6xl">
               {accrued.toFixed(7)}
               <span className="ml-3 text-xl text-azure">XRP</span>
+            </div>
+            <div className="mt-2 font-mono text-lg tabular-nums text-mist-faint">
+              ≈ $
+              {(accrued * XRP_PRICE).toFixed(accrued * XRP_PRICE < 10 ? 4 : 2)}
+              <span className="ml-2 text-xs uppercase tracking-[0.15em]">USD</span>
             </div>
             {/* rising hourly-drop chips */}
             <div className="pointer-events-none absolute -top-2 right-0">
@@ -125,30 +151,51 @@ export default function Drip() {
             </div>
             <input
               type="range"
-              min="100"
-              max="50000"
-              step="100"
-              value={position}
-              onChange={(e) => setPosition(Number(e.target.value))}
+              min="0"
+              max="1000"
+              step="1"
+              value={t}
+              onChange={(e) => setT(Number(e.target.value))}
               className="w-full accent-[#2E9BFF]"
             />
+            <div className="mt-1 flex justify-between font-mono text-[10px] text-mist-faint">
+              <span>$100</span>
+              <span>$1M</span>
+            </div>
           </div>
 
-          <div className="mt-7 grid grid-cols-2 gap-4">
-            <div className="rounded-md border border-white/[0.06] bg-white/[0.03] px-5 py-4">
+          <div className="mt-7 grid grid-cols-3 gap-3">
+            <div className="rounded-md border border-white/[0.06] bg-white/[0.03] px-4 py-4">
               <span className="block font-mono text-[9px] uppercase tracking-[0.18em] text-mist-faint">
                 Every hour
               </span>
-              <span className="mt-1 block font-mono text-lg tabular-nums text-azure-bright">
-                +{hourly.toFixed(4)} XRP
+              <span className="mt-1 block font-mono text-base tabular-nums text-azure-bright sm:text-lg">
+                +{hourly.toFixed(hourly >= 10 ? 2 : 4)} XRP
+              </span>
+              <span className="mt-0.5 block font-mono text-[11px] text-mist-faint">
+                ≈ {fmtUsd(hourly * XRP_PRICE)}
               </span>
             </div>
-            <div className="rounded-md border border-white/[0.06] bg-white/[0.03] px-5 py-4">
+            <div className="rounded-md border border-white/[0.06] bg-white/[0.03] px-4 py-4">
               <span className="block font-mono text-[9px] uppercase tracking-[0.18em] text-mist-faint">
                 Every day
               </span>
-              <span className="mt-1 block font-mono text-lg tabular-nums text-mist">
-                +{daily.toFixed(3)} XRP
+              <span className="mt-1 block font-mono text-base tabular-nums text-mist sm:text-lg">
+                +{daily.toFixed(daily >= 10 ? 2 : 3)} XRP
+              </span>
+              <span className="mt-0.5 block font-mono text-[11px] text-mist-faint">
+                ≈ {fmtUsd(daily * XRP_PRICE)}
+              </span>
+            </div>
+            <div className="rounded-md border border-white/[0.06] bg-white/[0.03] px-4 py-4">
+              <span className="block font-mono text-[9px] uppercase tracking-[0.18em] text-mist-faint">
+                Every month
+              </span>
+              <span className="mt-1 block font-mono text-base tabular-nums text-mist sm:text-lg">
+                +{(daily * 30).toFixed(daily * 30 >= 10 ? 1 : 3)} XRP
+              </span>
+              <span className="mt-0.5 block font-mono text-[11px] text-mist-faint">
+                ≈ {fmtUsd(daily * 30 * XRP_PRICE)}
               </span>
             </div>
           </div>

@@ -47,20 +47,48 @@ function makeDrop() {
   }
 }
 
+const XRP_PRICE = 3.02
+
+let coinCounter = 0
+function makeCoin() {
+  return {
+    id: ++coinCounter,
+    x: 6 + Math.random() * 82, // % across the stage
+    amt: 4 + Math.random() * 26,
+    dur: 0.95 + Math.random() * 0.45,
+    rot: -140 + Math.random() * 280,
+  }
+}
+
 export default function Hero() {
-  const [rows, setRows] = useState(() => Array.from({ length: 6 }, makeDrop))
+  const [rows, setRows] = useState(() => Array.from({ length: 3 }, makeDrop))
   const [next, setNext] = useState(2148)
+  const [coins, setCoins] = useState([])
+  const [wallet, setWallet] = useState(1834.2)
+  const [lastAmt, setLastAmt] = useState(null)
+  const [bump, setBump] = useState(0)
 
   useEffect(() => {
     const feed = setInterval(() => {
-      setRows((prev) => [makeDrop(), ...prev].slice(0, 6))
+      setRows((prev) => [makeDrop(), ...prev].slice(0, 3))
     }, 2600)
     const clock = setInterval(() => setNext((s) => (s > 0 ? s - 1 : 3600)), 1000)
+    const rain = setInterval(() => {
+      setCoins((prev) => [...prev.slice(-7), makeCoin()])
+    }, 1500)
     return () => {
       clearInterval(feed)
       clearInterval(clock)
+      clearInterval(rain)
     }
   }, [])
+
+  const catchCoin = (coin) => {
+    setCoins((prev) => prev.filter((c) => c.id !== coin.id))
+    setWallet((w) => w + coin.amt)
+    setLastAmt(coin.amt)
+    setBump((b) => b + 1)
+  }
 
   const mm = String(Math.floor(next / 60)).padStart(2, '0')
   const ss = String(next % 60).padStart(2, '0')
@@ -87,25 +115,25 @@ export default function Hero() {
             className="mb-8 inline-flex items-center gap-2.5 rounded-full border border-azure/25 bg-azure/[0.06] px-4 py-2 font-mono text-[11px] uppercase tracking-[0.2em] text-azure-bright"
           >
             <span className="h-1.5 w-1.5 animate-pulseSoft rounded-full bg-azure" />
-            Distributions live · Paid in XRP
+            First pair live: XPY / XRP · Paying hourly
           </motion.div>
 
           <motion.h1
             variants={item}
             className="font-sans text-5xl font-semibold leading-[1.04] tracking-[-0.03em] sm:text-6xl lg:text-[4.4rem]"
           >
-            Buy XRPVM.
+            Buy XPY.
             <br />
-            Get paid in <span className="text-azure">XRP</span>.
+            Get paid in <span className="text-shimmer">XRP</span>.
           </motion.h1>
 
           <motion.p variants={item} className="mt-7 max-w-lg text-lg leading-relaxed text-mist-dim">
-            The virtual XRP algorithm miner. Every trade in the market pays a
-            5% fee — and four fifths of it goes straight to holders as real
-            XRP, every hour, automatically. No hardware. No staking. No
-            claiming. Your only job is to hold. The more the market trades,
-            the more you earn — rewards scale with volume and are never
-            guaranteed.
+            The virtual XRP algorithm miner. Hold XPY and get paid in real
+            XRP every hour, automatically. The algorithm collects a 5% fee
+            from every trade and sends most of it straight to holders&rsquo;
+            wallets. No hardware. No staking. No claiming. You hold, you get
+            paid, even while you sleep. Rewards rise and fall with trading
+            volume and are never guaranteed.
           </motion.p>
 
           <motion.div variants={item} className="mt-10 flex flex-wrap items-center gap-4">
@@ -114,7 +142,7 @@ export default function Hero() {
               className="inline-flex items-center gap-2.5 rounded-full bg-azure px-7 py-3.5 text-sm font-semibold text-white transition-all hover:bg-azure-bright hover:shadow-[0_0_36px_-8px_rgba(46,155,255,0.6)]"
             >
               <XrpMark className="h-4 w-4" strokeWidth={4} />
-              Buy XRPVM
+              Buy XPY
             </a>
             <a href="#how" className="btn-secondary">How Virtual Mining Works</a>
           </motion.div>
@@ -140,7 +168,7 @@ export default function Hero() {
                   $1,000,000 in XRP
                 </span>
                 <span className="mt-1 block text-xs leading-relaxed text-mist-faint">
-                  A treasury held in a public on-ledger account — audit it any
+                  A treasury held in a public on-ledger account, audit it any
                   time. Not redemption backing.
                 </span>
               </div>
@@ -172,7 +200,7 @@ export default function Hero() {
           </motion.div>
         </motion.div>
 
-        {/* distribution feed panel */}
+        {/* wallet catching XRP */}
         <motion.div
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
@@ -186,35 +214,97 @@ export default function Hero() {
                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-azure/10 text-azure">
                   <XrpMark className="h-3.5 w-3.5" strokeWidth={4.5} />
                 </span>
-                XRP Distribution Feed
+                Watch a holder get paid
               </span>
               <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-azure">
                 <span className="h-1.5 w-1.5 animate-pulseSoft rounded-full bg-azure" />
-                Live
+                Live sim
               </span>
             </div>
 
-            <div className="grid grid-cols-[1fr_auto_auto] gap-x-6 border-b border-white/[0.05] bg-ink-800/60 px-6 py-2.5 font-mono text-[10px] uppercase tracking-[0.15em] text-mist-faint">
-              <span>Holder</span>
-              <span className="text-right">Supply share</span>
-              <span className="text-right">Airdropped</span>
+            {/* coin rain stage */}
+            <div className="relative h-44 overflow-hidden">
+              <AnimatePresence>
+                {coins.map((c) => (
+                  <motion.div
+                    key={c.id}
+                    initial={{ y: -44, opacity: 0, rotate: 0 }}
+                    animate={{ y: 132, opacity: [0, 1, 1, 0.9], rotate: c.rot }}
+                    exit={{ opacity: 0, scale: 0.4 }}
+                    transition={{ duration: c.dur, ease: [0.45, 0.05, 0.85, 0.6] }}
+                    onAnimationComplete={() => catchCoin(c)}
+                    className="absolute top-0"
+                    style={{ left: `${c.x}%` }}
+                  >
+                    <span className="flex h-9 w-9 items-center justify-center rounded-full border border-azure/60 bg-gradient-to-b from-ink-700 to-ink-900 text-azure shadow-[0_0_18px_-2px_rgba(46,155,255,0.55)]">
+                      <XrpMark className="h-4 w-4" strokeWidth={4.5} />
+                    </span>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-azure/[0.10] to-transparent" />
             </div>
 
-            <div>
+            {/* wallet balance, pulses on every catch */}
+            <div className="relative px-6 pb-5">
+              <motion.div
+                key={bump}
+                initial={{ scale: 1.02 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                className="relative rounded-md border border-azure/30 bg-ink-800/80 px-6 py-5"
+              >
+                <motion.span
+                  key={`ring-${bump}`}
+                  initial={{ opacity: 0.5, scale: 0.97 }}
+                  animate={{ opacity: 0, scale: 1.12 }}
+                  transition={{ duration: 0.8 }}
+                  className="pointer-events-none absolute inset-0 rounded-md border-2 border-azure/50"
+                />
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-mist-faint">
+                    Holder wallet · rXPY…HODL
+                  </span>
+                  {lastAmt !== null && (
+                    <motion.span
+                      key={`amt-${bump}`}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: [0, 1, 1, 0], y: -14 }}
+                      transition={{ duration: 1.6 }}
+                      className="font-mono text-sm font-medium text-azure-bright"
+                    >
+                      +{lastAmt.toFixed(2)} XRP
+                    </motion.span>
+                  )}
+                </div>
+                <div className="mt-2 font-mono text-4xl font-medium tabular-nums tracking-tight text-mist sm:text-5xl">
+                  {wallet.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  <span className="ml-2.5 text-lg text-azure">XRP</span>
+                </div>
+                <div className="mt-1 font-mono text-sm tabular-nums text-mist-faint">
+                  ≈ ${(wallet * XRP_PRICE).toLocaleString('en-US', { maximumFractionDigits: 0 })} USD
+                </div>
+              </motion.div>
+            </div>
+
+            {/* other holders */}
+            <div className="border-t border-white/[0.05] px-6 py-3">
+              <p className="mb-2 font-mono text-[9px] uppercase tracking-[0.2em] text-mist-faint">
+                Other holders getting paid right now
+              </p>
               <AnimatePresence initial={false} mode="popLayout">
                 {rows.map((d) => (
                   <motion.div
                     key={d.id}
                     layout
-                    initial={{ opacity: 0, y: -10 }}
+                    initial={{ opacity: 0, y: -8 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                    className="grid grid-cols-[1fr_auto_auto] items-center gap-x-6 border-b border-white/[0.04] px-6 py-3.5 font-mono text-xs last:border-0"
+                    transition={{ duration: 0.4 }}
+                    className="flex items-center justify-between py-1.5 font-mono text-xs"
                   >
                     <span className="text-mist-dim">{d.addr}</span>
-                    <span className="text-right tabular-nums text-mist-faint">{d.share}</span>
-                    <span className="text-right tabular-nums font-medium text-azure">{d.xrp}</span>
+                    <span className="tabular-nums font-medium text-azure">{d.xrp}</span>
                   </motion.div>
                 ))}
               </AnimatePresence>
@@ -224,7 +314,7 @@ export default function Hero() {
               <span className="text-mist-dim">
                 Next distribution <span className="tabular-nums text-azure-bright">{mm}:{ss}</span>
               </span>
-              <span className="text-mist-faint">Pro-rata · All wallets</span>
+              <span className="text-mist-faint">Simulated preview</span>
             </div>
           </div>
         </motion.div>

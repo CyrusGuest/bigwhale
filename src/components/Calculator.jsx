@@ -150,8 +150,8 @@ function GrowthChart({ position, dailyRate, compHourly, days, simpleTotal, compT
 
 export default function Calculator() {
   const [position, setPosition] = useState(1000)
-  const [mcap, setMcap] = useState(10000000)
-  const [volume, setVolume] = useState(1000000)
+  const [mcap, setMcap] = useState(5000000)
+  const [volume, setVolume] = useState(10000000)
   const [compound, setCompound] = useState(false)
   const [days, setDays] = useState(30)
 
@@ -197,8 +197,8 @@ export default function Calculator() {
       value: volume,
       set: setVolume,
       min: 0,
-      max: 5000000,
-      step: 10000,
+      max: 20000000,
+      step: 50000,
       display: fmtShort(volume),
       note: 'Default = recent average. Historical, not a promise.',
     },
@@ -220,7 +220,7 @@ export default function Calculator() {
         <p className="mt-5 leading-relaxed text-mist-dim">
           One formula, nothing hidden: daily volume × 4% × your share of
           market cap. Set your assumptions, pick a horizon, flip on
-          compounding — and see the pace for yourself.
+          compounding, and see the pace for yourself.
         </p>
       </motion.div>
 
@@ -284,7 +284,7 @@ export default function Calculator() {
             <span>
               <span className="block text-sm font-medium text-mist">Compound hourly</span>
               <span className="mt-0.5 block text-[11px] text-mist-faint">
-                Swap each XRP payout back into XRPVM · includes the 5% re-buy fee
+                Swap each XRP payout back into XPY · includes the 5% re-buy fee
               </span>
             </span>
           </label>
@@ -354,7 +354,7 @@ export default function Calculator() {
               {compound && ` · hourly ×(1 + ${(hourlyRate * 100).toFixed(4)}% × 95%)`}
             </span>
             <span>
-              Arithmetic at your inputs, not a projection — volume is
+              Arithmetic at your inputs, not a projection, volume is
               unknowable, and at zero volume distributions are zero.
             </span>
           </div>

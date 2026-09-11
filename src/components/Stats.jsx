@@ -84,7 +84,7 @@ export default function Stats() {
       <div className="relative mx-auto max-w-7xl px-6 py-24">
         <div className="mb-12 text-center">
           <span className="inline-block rounded-full border border-brass/30 bg-brass/[0.05] px-4 py-1.5 font-mono text-[9px] uppercase tracking-[0.2em] text-brass">
-            Illustrative — live metrics connect at launch
+            Illustrative, live metrics connect at launch
           </span>
         </div>
         <div className="grid grid-cols-2 gap-y-14 lg:grid-cols-4">

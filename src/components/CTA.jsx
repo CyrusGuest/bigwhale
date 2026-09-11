@@ -19,17 +19,16 @@ export default function CTA() {
           Be holding when they do.
         </h2>
         <p className="mx-auto mt-7 max-w-xl text-lg leading-relaxed text-mist-dim">
-          Verify the pool, run your own numbers, read the risks — then take
-          your seat. The algorithm doesn’t care whether you believe in it: it
-          pays every holding wallet, pro-rata, on the hour, and every payment
-          is on the public ledger.
+          Verify the pool, run your own numbers, read the risks. Then take
+          your seat. The algorithm pays every holder, every hour, based on
+          how much they hold, and every payment is on the public ledger.
         </p>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-          <a href="#" className="btn-primary">Buy XRPVM</a>
+          <a href="#" className="btn-primary">Buy XPY</a>
           <a href="#transparency" className="btn-secondary">Inspect the Pool</a>
         </div>
         <p className="mx-auto mt-10 max-w-lg border-t border-white/[0.08] pt-6 text-xs leading-relaxed text-mist-faint">
-          XRPVM is a speculative digital asset. Distributions vary with trading
+          XPY is a speculative digital asset. Distributions vary with trading
           volume, may be zero, and are not income guarantees. The token’s price
           can decline regardless of rewards. Nothing on this site constitutes
           financial, investment, or tax advice.

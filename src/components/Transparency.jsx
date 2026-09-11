@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 const sources = [
   {
     title: 'Trading fees',
-    body: 'The 5% fee on completed XRPVM trades. This is the only inflow to the rewards pool.',
+    body: 'The 5% fee on completed XPY trades. This is the only inflow to the rewards pool.',
     included: true,
   },
 ]
@@ -12,11 +12,11 @@ const notSources = [
   { title: 'New buyers’ principal', body: 'Purchase capital is never routed to earlier holders. Rewards are funded exclusively by realized fees.' },
   { title: 'Token emissions', body: 'Supply is fixed. No new tokens are minted to simulate yield.' },
   { title: 'Lending or rehypothecation', body: 'Pooled XRP sits in the distribution wallet until it is airdropped. It is not lent, staked, or deployed anywhere.' },
-  { title: 'Actual mining of any kind', body: 'XRP cannot be mined — the XRP Ledger has no mining. “Virtual mining” is our name for the fee-redistribution algorithm, not a claim that anything is mined. A project claiming to literally mine XRP for you is misrepresenting how the ledger works.' },
+  { title: 'Actual mining of any kind', body: 'XRP cannot be mined, the XRP Ledger has no mining. “Virtual mining” is our name for the fee-redistribution algorithm, not a claim that anything is mined. A project claiming to literally mine XRP for you is misrepresenting how the ledger works.' },
 ]
 
 const ledgerLinks = [
-  { label: 'XRP reserve address', value: 'Attestation pending', note: 'The $1M treasury — publishes when funded' },
+  { label: 'XRP reserve address', value: 'Attestation pending', note: 'The $1M treasury, publishes when funded' },
   { label: 'Rewards pool address', value: 'rXPAYp00L…9fKq', note: 'Live balance, all inflows' },
   { label: 'Distribution history', value: '8,760 transactions', note: 'Every hourly airdrop since launch' },
   { label: 'Fee collection', value: 'Per-trade records', note: 'Each fee traceable to its trade' },
@@ -36,7 +36,7 @@ export default function Transparency() {
         >
           <p className="eyebrow mb-5">Transparency</p>
           <h2 className="font-serif text-4xl font-medium tracking-[-0.01em] sm:text-5xl">
-            Where rewards come from — and where they don’t.
+            Where rewards come from, and where they don’t.
           </h2>
           <p className="mt-5 leading-relaxed text-mist-dim">
             The clearest way to distinguish a real fee-sharing mechanism from a
@@ -110,7 +110,7 @@ export default function Transparency() {
               </div>
               <div className="border-t border-white/[0.07] bg-ink-800/40 px-6 py-4 text-xs leading-relaxed text-mist-faint">
                 These links open a public XRPL explorer. Nothing on this page
-                requires trusting us — if a number here ever disagrees with the
+                requires trusting us, if a number here ever disagrees with the
                 ledger, the ledger is right.
               </div>
             </div>
@@ -122,12 +122,12 @@ export default function Transparency() {
               <p className="mt-3 text-sm leading-relaxed text-mist-dim">
                 Virtual mining is our name for the distribution algorithm:
                 like Bitcoin mining, it pays participants on a fixed rhythm in
-                proportion to their stake in the system — but the resemblance
+                proportion to their stake in the system, but the resemblance
                 is economic, not mechanical. Nothing is mined and no XRP is
                 created. Rewards are a share of fees from real trading
                 activity, and when trading slows, rewards slow with it. We use
                 the familiar term, and we define it precisely, because you
-                should understand the mechanism exactly — not just like the
+                should understand the mechanism exactly, not just like the
                 sound of it.
               </p>
             </div>
