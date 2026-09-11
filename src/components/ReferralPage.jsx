@@ -238,8 +238,9 @@ function ActPhones() {
     return () => timers.forEach(clearTimeout)
   }, [])
 
-  const bTotal = beat >= 5 ? 30 : beat >= 3 ? 10 : 0
-  const aTotal = beat >= 6 ? 3 : beat >= 4 ? 1 : 0
+  // tiles mirror the latest payout exactly, so they always match the floats
+  const bLatest = beat >= 5 ? 20 : beat >= 3 ? 10 : 0
+  const aLatest = beat >= 6 ? 2 : beat >= 4 ? 1 : 0
 
   return (
     <motion.div
@@ -247,10 +248,22 @@ function ActPhones() {
       className="w-full px-4 text-center"
     >
       <Float amt={5} dur={5}>
+        {/* slides left while the featured phone is big, recenters when both phones show */}
         <motion.h2
-          initial={{ opacity: 0, y: 26, filter: 'blur(8px)' }}
-          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          transition={{ duration: 0.5, ease: EASE }}
+          initial={{ opacity: 0, y: 26, x: -110, rotate: -2, filter: 'blur(8px)' }}
+          animate={{
+            opacity: 1,
+            y: 0,
+            x: beat >= 2 ? 0 : -110,
+            rotate: beat >= 2 ? 0 : -2,
+            filter: 'blur(0px)',
+          }}
+          transition={{
+            duration: 0.5,
+            ease: EASE,
+            x: { type: 'spring', stiffness: 140, damping: 20 },
+            rotate: { type: 'spring', stiffness: 140, damping: 20 },
+          }}
           className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-5xl"
         >
           Watch how it{' '}
@@ -374,17 +387,17 @@ function ActPhones() {
                   )}
                 </AnimatePresence>
                 <AnimatePresence>
-                  {aTotal > 0 && (
+                  {aLatest > 0 && (
                     <motion.div
-                      key={aTotal}
+                      key={aLatest}
                       initial={{ scale: 1.35 }}
                       animate={{ scale: 1 }}
                       transition={{ type: 'spring', stiffness: 300, damping: 18 }}
                       className="mt-2 rounded-xl bg-[#30D158]/12 p-2.5 ring-1 ring-[#30D158]/30"
                     >
-                      <span className="block text-[9px] text-white/55">Your 10% · total</span>
+                      <span className="block text-[9px] text-white/55">Your 10% match</span>
                       <span className="font-display text-[15px] font-bold text-[#30D158]">
-                        {aTotal} XRP
+                        +{aLatest} XRP
                       </span>
                     </motion.div>
                   )}
@@ -435,17 +448,17 @@ function ActPhones() {
                     <span className="font-display text-[15px] font-bold text-white">XPY</span>
                   </motion.div>
                   <AnimatePresence>
-                    {bTotal > 0 && (
+                    {bLatest > 0 && (
                       <motion.div
-                        key={bTotal}
+                        key={bLatest}
                         initial={{ scale: 1.35 }}
                         animate={{ scale: 1 }}
                         transition={{ type: 'spring', stiffness: 300, damping: 18 }}
                         className="mt-2 rounded-xl bg-[#30D158]/12 p-2.5 ring-1 ring-[#30D158]/30"
                       >
-                        <span className="block text-[9px] text-white/55">Total XRP earned</span>
+                        <span className="block text-[9px] text-white/55">Latest payout</span>
                         <span className="font-display text-[15px] font-bold text-[#30D158]">
-                          {bTotal} XRP
+                          +{bLatest} XRP
                         </span>
                       </motion.div>
                     )}
@@ -1080,9 +1093,9 @@ function ActFlywheel() {
         </Float>
       </div>
 
-      <div className="grid items-center gap-10 lg:grid-cols-2">
+      <div className="grid items-center gap-6 lg:grid-cols-2 lg:gap-10">
         {/* the wheel */}
-        <div className="relative mx-auto h-[300px] w-[300px] sm:h-[380px] sm:w-[380px]">
+        <div className="relative mx-auto h-[250px] w-[250px] sm:h-[380px] sm:w-[380px]">
           {/* rotating dashed ring, speeds up at the finale */}
           <motion.div
             animate={{ rotate: 360 }}
@@ -1131,7 +1144,7 @@ function ActFlywheel() {
             <motion.div
               animate={{ scale: fast ? [1, 1.08, 1] : [1, 1.03, 1] }}
               transition={{ duration: fast ? 1.2 : 2.4, repeat: Infinity, ease: 'easeInOut' }}
-              className="mx-auto flex h-24 w-24 items-center justify-center rounded-full text-white ring-1 ring-azure/50 shadow-[0_0_50px_-8px_rgba(46,155,255,0.8)]"
+              className="mx-auto flex h-16 w-16 items-center justify-center rounded-full text-white ring-1 ring-azure/50 shadow-[0_0_50px_-8px_rgba(46,155,255,0.8)] sm:h-24 sm:w-24"
               style={{
                 background:
                   'radial-gradient(120% 120% at 50% 0%, rgba(46,155,255,0.65) 0%, rgba(16,42,92,0.95) 60%, #0A1128 100%)',
@@ -1166,24 +1179,24 @@ function ActFlywheel() {
         </div>
 
         {/* the story beats */}
-        <div className="space-y-5">
+        <div className="space-y-3.5 sm:space-y-5">
           {WHEEL_BEATS.map((line, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, x: 60 }}
               animate={beat > i ? { opacity: 1, x: 0 } : {}}
               transition={{ type: 'spring', stiffness: 200, damping: 22 }}
-              className="flex items-start gap-4"
+              className="flex items-start gap-3 text-left sm:gap-4"
             >
               <span
-                className={`mt-0.5 flex h-8 w-8 flex-none items-center justify-center rounded-full font-display text-[14px] font-bold ${
+                className={`mt-0.5 flex h-7 w-7 flex-none items-center justify-center rounded-full font-display text-[13px] font-bold sm:h-8 sm:w-8 sm:text-[14px] ${
                   i === 3 ? 'bg-azure text-white' : 'bg-white/[0.08] text-azure-bright ring-1 ring-white/[0.12]'
                 }`}
               >
                 {i + 1}
               </span>
               <p
-                className={`text-[15px] leading-relaxed sm:text-[17px] ${
+                className={`text-[13.5px] leading-snug sm:text-[17px] sm:leading-relaxed ${
                   i === 3 ? 'font-display font-semibold text-white' : 'text-white/75'
                 }`}
               >
@@ -1246,6 +1259,36 @@ function ActFlywheel() {
         </div>
       </div>
     </motion.div>
+  )
+}
+
+// compact how-it-works strip under the link card
+function StepStrip() {
+  const steps = [
+    ['🔗', 'Share your link'],
+    ['💎', 'Friends hold & earn'],
+    ['💰', 'You earn 10% on top'],
+  ]
+  return (
+    <div className="mx-auto mt-8 flex max-w-2xl flex-wrap items-center justify-center gap-2.5">
+      {steps.map(([e, t], i) => (
+        <div key={t} className="flex items-center gap-2.5">
+          {i > 0 && <span className="text-[15px] text-white/30">→</span>}
+          <motion.span
+            initial={{ opacity: 0, y: 18, scale: 0.8 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 + i * 0.15, type: 'spring', stiffness: 240, damping: 20 }}
+            className="flex items-center gap-2 rounded-full bg-white/[0.06] px-4 py-2.5 ring-1 ring-white/[0.1] backdrop-blur"
+          >
+            <Float amt={3} dur={2.4 + i * 0.4}>
+              <span className="text-[16px]">{e}</span>
+            </Float>
+            <span className="font-display text-[13px] font-semibold text-white">{t}</span>
+          </motion.span>
+        </div>
+      ))}
+    </div>
   )
 }
 
@@ -1541,33 +1584,38 @@ export default function ReferralPage() {
           transition={{ duration: 0.5 }}
           className="relative mx-auto max-w-6xl px-6 pb-24 pt-14 sm:pt-20"
         >
-          <div className="mb-12 text-center">
+          <div className="mb-10 text-center">
             <motion.p
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: [0, 1.15, 1] }}
               transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
               className="eyebrow mb-6"
             >
-              Referrals
+              Your turn
             </motion.p>
             <Float amt={6} dur={5.5}>
               <motion.h1
-                initial={{ opacity: 0, x: -200 }}
+                initial={{ opacity: 0, x: -220 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, ease: EASE }}
-                className="font-display text-4xl font-semibold tracking-[-0.03em] sm:text-6xl"
+                className="font-display text-5xl font-semibold tracking-[-0.03em] sm:text-7xl"
               >
-                Bring your friends.
+                Get started
               </motion.h1>
             </Float>
             <Float delay={0.4} amt={7} dur={5}>
               <motion.h1
-                initial={{ opacity: 0, x: 200 }}
+                initial={{ opacity: 0, x: 220 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.12, duration: 0.5, ease: EASE }}
-                className="font-display text-4xl font-semibold tracking-[-0.03em] sm:text-6xl"
+                className="font-display text-5xl font-semibold tracking-[-0.03em] sm:text-7xl"
               >
-                Earn <span className="text-shimmer">10% of their XRP.</span>
+                <span className="relative inline-block">
+                  <span className="text-shimmer">referring.</span>
+                  <span aria-hidden className="text-glint absolute inset-0">
+                    referring.
+                  </span>
+                </span>
               </motion.h1>
             </Float>
             <motion.p
@@ -1576,17 +1624,15 @@ export default function ReferralPage() {
               transition={{ delay: 0.35, duration: 0.5, ease: EASE }}
               className="mx-auto mt-5 max-w-xl text-lg text-mist-dim"
             >
-              Every hour your friends get paid, you get a 10% match on top,
-              funded by the 1/5 marketing &amp; referral slice of the fee.
-              Their payouts never shrink. No caps, no expiry: your bonus
-              scales with every friend, for as long as they hold.
+              10 seconds to grab your link. A lifetime of 10% on everything
+              your friends earn.
             </motion.p>
           </div>
 
           <LinkCard />
-          <StepCards />
-          <FeeSplit />
+          <StepStrip />
           <RefCalculator />
+          <FeeSplit />
           <RefDashboard />
         </motion.div>
       )}
