@@ -50,7 +50,7 @@ const OTHER_NOTIFS = [
   {
     app: 'X',
     icon: 'x',
-    body: '@xrpwhale: 1 XPY = 1 XRP. i said what i said.',
+    body: '@XRP589: 1 XPY = 1 XRP. i said what i said.',
     hl: '1 XPY = 1 XRP',
   },
   {
