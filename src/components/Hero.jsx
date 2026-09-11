@@ -307,68 +307,96 @@ function Float({ children, delay = 0, amt = 8, dur = 5, className = '' }) {
   )
 }
 
-// Act 1: macro camera glides across the giant type, then pulls back to reveal
+// Act 1: movie cold-open — letterbox, per-letter reveal, light sweep, slow dolly
+const TITLE_TOKENS = [
+  { line: 0, tokens: ['B', 'U', 'Y', ' ', 'X', 'P', 'Y', '.'] },
+  { line: 1, tokens: ['E', 'A', 'R', 'N', ' ', { t: 'XRP', shimmer: true }, '.'] },
+]
+
 function ActTitle() {
   return (
-    <motion.div
-      exit={actExit}
-      className="relative w-full px-4 text-center"
-      style={{ perspective: 1000 }}
-    >
-      {/* deep glow pulse behind the whole title */}
+    <motion.div exit={actExit} className="relative w-full px-4 text-center">
+      {/* letterbox bars */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.4 }}
-        animate={{ opacity: [0, 0.9, 0.45], scale: [0.4, 1.25, 1] }}
-        transition={{ delay: 1.7, duration: 1, ease: 'easeOut' }}
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[380px] w-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-azure-deep/40 blur-[110px]"
+        initial={{ y: '-100%' }}
+        animate={{ y: 0 }}
+        exit={{ y: '-100%', transition: { duration: 0.5, ease: EASE } }}
+        transition={{ duration: 0.8, ease: EASE }}
+        className="pointer-events-none fixed inset-x-0 top-0 z-30 h-[9vh] bg-black"
+      />
+      <motion.div
+        initial={{ y: '100%' }}
+        animate={{ y: 0 }}
+        exit={{ y: '100%', transition: { duration: 0.5, ease: EASE } }}
+        transition={{ duration: 0.8, ease: EASE }}
+        className="pointer-events-none fixed inset-x-0 bottom-0 z-30 h-[9vh] bg-black"
+      />
+      {/* vignette */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0, transition: { duration: 0.4 } }}
+        transition={{ duration: 1.2 }}
+        className="pointer-events-none fixed inset-0 z-20"
+        style={{
+          background:
+            'radial-gradient(ellipse at center, transparent 52%, rgba(3,6,15,0.85) 100%)',
+        }}
       />
 
-      {/* the camera: zoomed way in, drifting across the letters, then pulling back */}
+      {/* slow dolly push-in for the whole act */}
       <motion.div
-        initial={{ opacity: 0, scale: 3, x: '-24%', y: '10%', rotate: -3 }}
-        animate={{
-          opacity: [0, 1, 1, 1],
-          scale: [3, 2.9, 2.7, 1],
-          x: ['-24%', '-14%', '16%', '0%'],
-          y: ['10%', '6%', '-8%', '0%'],
-          rotate: [-3, -2, 2, 0],
-        }}
-        transition={{
-          duration: 2.15,
-          times: [0, 0.18, 0.62, 1],
-          ease: ['easeOut', 'easeInOut', [0.16, 1, 0.3, 1]],
-        }}
+        initial={{ scale: 0.93 }}
+        animate={{ scale: 1.07 }}
+        transition={{ duration: 4.4, ease: 'easeInOut' }}
+        className="relative"
       >
-        {/* dimensional drift after the camera settles */}
+        {/* light beam sweeping across the title */}
         <motion.div
-          animate={{ rotateX: [0, 3.5, 0, -2.5, 0], rotateY: [0, -4, 0, 4, 0], y: [0, -8, 0] }}
-          transition={{ delay: 2.2, duration: 9, repeat: Infinity, ease: 'easeInOut' }}
-          style={{ transformStyle: 'preserve-3d' }}
-          className="relative"
-        >
-          {/* shockwave ring when the pull-back lands */}
-          <motion.span
-            initial={{ opacity: 0, scale: 0.35 }}
-            animate={{ opacity: [0, 0.55, 0], scale: [0.35, 1.35, 1.8] }}
-            transition={{ delay: 1.95, duration: 0.7, ease: 'easeOut' }}
-            className="pointer-events-none absolute left-1/2 top-1/2 h-40 w-[min(92vw,560px)] -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-azure/50 blur-[1px]"
-          />
-          <h1 className="text-3d text-6xl font-bold leading-[1.04] tracking-[-0.03em] sm:text-8xl lg:text-9xl">
-            BUY XPY.
-          </h1>
-          <h1 className="text-3d text-6xl font-bold leading-[1.04] tracking-[-0.03em] sm:text-8xl lg:text-9xl">
-            EARN <span className="text-shimmer">XRP</span>.
-          </h1>
+          initial={{ x: '-160%', opacity: 0 }}
+          animate={{ x: '160%', opacity: [0, 0.9, 0] }}
+          transition={{ delay: 1.5, duration: 1.1, ease: 'easeInOut' }}
+          className="pointer-events-none absolute inset-y-[-40px] left-0 z-10 w-40 rotate-[16deg] bg-gradient-to-r from-transparent via-white/[0.14] to-transparent blur-[6px]"
+        />
+        {/* ambient glow rising behind */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.6 }}
+          transition={{ delay: 1.8, duration: 1.4 }}
+          className="pointer-events-none absolute left-1/2 top-1/2 h-[360px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-azure-deep/40 blur-[110px]"
+        />
 
-          <motion.p
-            initial={{ opacity: 0, letterSpacing: '0.1em', y: 16 }}
-            animate={{ opacity: 1, letterSpacing: '0.32em', y: 0 }}
-            transition={{ delay: 2.05, duration: 0.55, ease: EASE }}
-            className="mt-8 font-mono text-sm uppercase text-azure-bright sm:text-base"
+        {TITLE_TOKENS.map(({ line, tokens }) => (
+          <h1
+            key={line}
+            className="text-3d text-6xl font-bold leading-[1.06] tracking-[-0.03em] sm:text-8xl lg:text-9xl"
           >
-            Passively · Hourly
-          </motion.p>
-        </motion.div>
+            {tokens.map((tok, i) => {
+              const isObj = typeof tok === 'object'
+              const delay = 0.55 + line * 0.85 + i * 0.07
+              return (
+                <motion.span
+                  key={i}
+                  initial={{ opacity: 0, y: 26, rotateX: 50, filter: 'blur(7px)' }}
+                  animate={{ opacity: 1, y: 0, rotateX: 0, filter: 'blur(0px)' }}
+                  transition={{ delay, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  className={`inline-block ${isObj && tok.shimmer ? 'text-shimmer' : ''}`}
+                >
+                  {isObj ? tok.t : tok}
+                </motion.span>
+              )
+            })}
+          </h1>
+        ))}
+
+        <motion.p
+          initial={{ opacity: 0, letterSpacing: '0.1em', y: 14 }}
+          animate={{ opacity: 1, letterSpacing: '0.32em', y: 0 }}
+          transition={{ delay: 2.6, duration: 0.6, ease: EASE }}
+          className="mt-8 font-mono text-sm uppercase text-azure-bright sm:text-base"
+        >
+          Passively · Hourly
+        </motion.p>
       </motion.div>
     </motion.div>
   )
@@ -929,7 +957,7 @@ function ActEnd() {
 /* ---------------------------------- hero ----------------------------------- */
 
 // title → phone → sleep → reserve → portal → story → outro (scrolls down) → end card
-const ACT_DURATIONS = [3500, 3900, 3800, 4200, 5800, 9600, 2700]
+const ACT_DURATIONS = [4400, 3900, 3800, 4200, 5800, 9600, 2700]
 
 export default function Hero() {
   const [notifs, setNotifs] = useState(() => Array.from({ length: 4 }, makeNotif).reverse())
