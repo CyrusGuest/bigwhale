@@ -292,102 +292,169 @@ function PhoneMock({ notifs }) {
 
 /* ------------------------------ opening acts ------------------------------- */
 
-const actExit = { opacity: 0, y: -46, scale: 0.97, transition: { duration: 0.5, ease: EASE } }
+const actExit = { opacity: 0, y: -46, scale: 0.97, transition: { duration: 0.35, ease: EASE } }
+
+// gentle perpetual float so text never sits still
+function Float({ children, delay = 0, amt = 8, dur = 5, className = '' }) {
+  return (
+    <motion.div
+      animate={{ y: [0, -amt, 0] }}
+      transition={{ duration: dur, repeat: Infinity, ease: 'easeInOut', delay }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  )
+}
 
 // Act 1: the whole screen is just the core message
 function ActTitle() {
   return (
     <motion.div exit={actExit} className="w-full px-4 text-center">
       {['BUY XPY.', 'EARN XRP.'].map((line, i) => (
-        <motion.h1
-          key={line}
-          initial={{ opacity: 0, y: 40, filter: 'blur(10px)' }}
-          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          transition={{ delay: 0.25 + i * 0.35, duration: 0.7, ease: EASE }}
-          className="text-6xl font-bold leading-[1.02] tracking-[-0.03em] sm:text-8xl"
-        >
-          {i === 1 ? (
-            <>
-              EARN <span className="text-shimmer">XRP</span>.
-            </>
-          ) : (
-            line
-          )}
-        </motion.h1>
+        <Float key={line} delay={i * 0.6} amt={7} dur={4.5}>
+          <motion.h1
+            initial={{ opacity: 0, y: 40, filter: 'blur(10px)' }}
+            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            transition={{ delay: 0.15 + i * 0.25, duration: 0.55, ease: EASE }}
+            className="text-6xl font-bold leading-[1.02] tracking-[-0.03em] sm:text-8xl"
+          >
+            {i === 1 ? (
+              <>
+                EARN <span className="text-shimmer">XRP</span>.
+              </>
+            ) : (
+              line
+            )}
+          </motion.h1>
+        </Float>
       ))}
-      <motion.p
-        initial={{ opacity: 0, letterSpacing: '0.12em' }}
-        animate={{ opacity: 1, letterSpacing: '0.5em' }}
-        transition={{ delay: 1.15, duration: 0.9, ease: EASE }}
-        className="mt-8 font-mono text-sm uppercase text-azure-bright sm:text-base"
-      >
-        Passively · Hourly
-      </motion.p>
+      <Float delay={0.9} amt={5} dur={5.5}>
+        <motion.p
+          initial={{ opacity: 0, letterSpacing: '0.12em' }}
+          animate={{ opacity: 1, letterSpacing: '0.5em' }}
+          transition={{ delay: 0.75, duration: 0.7, ease: EASE }}
+          className="mt-8 font-mono text-sm uppercase text-azure-bright sm:text-base"
+        >
+          Passively · Hourly
+        </motion.p>
+      </Float>
     </motion.div>
   )
 }
 
-// Act 2: the condensed making-history explanation
+// Act 2: the phone, early, with floating copy beside it
+function ActPhone({ notifs }) {
+  return (
+    <motion.div
+      exit={{ opacity: 0, x: -320, transition: { duration: 0.4, ease: EASE } }}
+      className="grid w-full items-center gap-10 lg:grid-cols-2"
+    >
+      <motion.div
+        initial={{ opacity: 0, x: -90 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.7, ease: EASE, delay: 0.25 }}
+        className="text-center lg:text-left"
+      >
+        <Float amt={9} dur={5}>
+          <h2 className="text-5xl font-bold leading-[1.05] tracking-[-0.03em] sm:text-7xl">
+            Get paid
+            <br />
+            <span className="text-shimmer">while you sleep.</span>
+          </h2>
+        </Float>
+        <Float delay={0.5} amt={6} dur={6}>
+          <motion.p
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7, duration: 0.5 }}
+            className="mt-7 font-mono text-sm uppercase tracking-[0.3em] text-azure-bright"
+          >
+            Real XRP · Straight to your wallet
+          </motion.p>
+        </Float>
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0, x: 520, rotate: 10 }}
+        animate={{ opacity: 1, x: 0, rotate: 0 }}
+        transition={{ duration: 0.8, ease: EASE }}
+        className="relative flex origin-top scale-[0.88] justify-center sm:scale-95"
+      >
+        <div className="pointer-events-none absolute top-1/2 left-1/2 h-[460px] w-[460px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-azure-deep/[0.28] blur-[100px]" />
+        <PhoneMock notifs={notifs} />
+      </motion.div>
+    </motion.div>
+  )
+}
+
+// Act 3: the condensed making-history explanation
 function ActHistory() {
   return (
     <motion.div exit={actExit} className="w-full px-4 text-center">
-      <motion.p
-        initial={{ opacity: 0, letterSpacing: '0.1em' }}
-        animate={{ opacity: 1, letterSpacing: '0.42em' }}
-        transition={{ delay: 0.1, duration: 0.9, ease: EASE }}
-        className="font-mono text-xs uppercase text-azure-bright"
-      >
-        XPY is the first
-      </motion.p>
-      <motion.h2
-        initial={{ opacity: 0, scale: 1.25, filter: 'blur(10px)' }}
-        animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-        transition={{ delay: 0.45, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="text-luster mx-auto mt-5 max-w-3xl text-4xl font-bold tracking-[-0.02em] sm:text-6xl"
-      >
-        Virtual XRP Algorithm Miner
-      </motion.h2>
-      <div className="mx-auto mt-8 max-w-xl space-y-3">
+      <Float amt={5} dur={5.5}>
+        <motion.p
+          initial={{ opacity: 0, letterSpacing: '0.1em' }}
+          animate={{ opacity: 1, letterSpacing: '0.42em' }}
+          transition={{ delay: 0.05, duration: 0.7, ease: EASE }}
+          className="font-mono text-xs uppercase text-azure-bright"
+        >
+          XPY is the first
+        </motion.p>
+      </Float>
+      <Float delay={0.3} amt={8} dur={4.8}>
+        <motion.h2
+          initial={{ opacity: 0, scale: 1.25, filter: 'blur(10px)' }}
+          animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+          transition={{ delay: 0.3, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="text-luster mx-auto mt-5 max-w-3xl text-4xl font-bold tracking-[-0.02em] sm:text-6xl"
+        >
+          Virtual XRP Algorithm Miner
+        </motion.h2>
+      </Float>
+      <div className="mx-auto mt-7 max-w-xl space-y-3">
         {[
           'No rigs. No power bills. No staking.',
           'Every trade pays a fee. Every hour, holders get XRP.',
         ].map((line, i) => (
-          <motion.p
-            key={line}
-            initial={{ opacity: 0, y: 22, filter: 'blur(6px)' }}
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            transition={{ delay: 1.2 + i * 0.5, duration: 0.55, ease: EASE }}
-            className="text-lg text-mist-dim sm:text-xl"
-          >
-            {line}
-          </motion.p>
+          <Float key={line} delay={0.6 + i * 0.4} amt={5} dur={5.8}>
+            <motion.p
+              initial={{ opacity: 0, y: 22, filter: 'blur(6px)' }}
+              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              transition={{ delay: 0.85 + i * 0.35, duration: 0.45, ease: EASE }}
+              className="text-lg text-mist-dim sm:text-xl"
+            >
+              {line}
+            </motion.p>
+          </Float>
         ))}
       </div>
-      <div className="relative mt-8 flex h-[72px] items-center justify-center sm:h-[84px]">
+      <div className="relative mt-7 flex h-[72px] items-center justify-center sm:h-[84px]">
         <motion.span
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: [0, 0.55, 0], scale: [0.5, 1.5, 1.9] }}
-          transition={{ delay: 2.7, duration: 0.9, ease: 'easeOut' }}
+          transition={{ delay: 2.15, duration: 0.8, ease: 'easeOut' }}
           className="pointer-events-none absolute h-20 w-80 rounded-full bg-azure/30 blur-2xl"
         />
-        <motion.span
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2.35, duration: 0.4 }}
-          className="text-2xl font-medium text-mist sm:text-3xl"
-        >
-          This is how we make{' '}
+        <Float delay={1.2} amt={6} dur={5}>
           <motion.span
-            data-text="HISTORY"
-            initial={{ opacity: 0, scale: 1.4, filter: 'blur(8px)' }}
-            animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-            transition={{ delay: 2.6, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="glitch text-luster inline-block text-3xl font-bold sm:text-4xl"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.8, duration: 0.35 }}
+            className="text-2xl font-medium text-mist sm:text-3xl"
           >
-            HISTORY
+            This is how we make{' '}
+            <motion.span
+              data-text="HISTORY"
+              initial={{ opacity: 0, scale: 1.4, filter: 'blur(8px)' }}
+              animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+              transition={{ delay: 2.05, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+              className="glitch text-luster inline-block text-3xl font-bold sm:text-4xl"
+            >
+              HISTORY
+            </motion.span>
+            .
           </motion.span>
-          .
-        </motion.span>
+        </Float>
       </div>
     </motion.div>
   )
@@ -399,12 +466,12 @@ const WALLETS = [
   { name: 'Coinbase', color: 'text-[#4A80FF]', bar: '#4A80FF', glow: 'rgba(74,128,255,0.30)' },
 ]
 
-// Act 3: availability, in the middle of it all
+// Act 4: availability, in the middle of it all
 function ActWallets() {
   const [wi, setWi] = useState(0)
   useEffect(() => {
-    const t1 = setTimeout(() => setWi(1), 2000)
-    const t2 = setTimeout(() => setWi(2), 3600)
+    const t1 = setTimeout(() => setWi(1), 1500)
+    const t2 = setTimeout(() => setWi(2), 2900)
     return () => {
       clearTimeout(t1)
       clearTimeout(t2)
@@ -461,58 +528,47 @@ function ActWallets() {
   )
 }
 
-// Act 4: resting layout, text shifts left as the phone sweeps in from the right
-function ActResting({ notifs }) {
+// Final frame: floating end card, stays until refresh
+function ActEnd() {
   return (
-    <div className="grid w-full items-center gap-14 lg:grid-cols-[1.05fr_0.95fr]">
-      <motion.div
-        initial={{ opacity: 0, x: 150 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.9, ease: EASE }}
-      >
-        <div className="mb-7 inline-flex items-center gap-2.5 rounded-full border border-azure/25 bg-azure/[0.06] px-4 py-2 font-mono text-[11px] uppercase tracking-[0.2em] text-azure-bright">
-          <span className="h-1.5 w-1.5 animate-pulseSoft rounded-full bg-azure" />
-          First pair live: XPY / XRP · Paying hourly
-        </div>
-        <h1 className="text-5xl font-semibold leading-[1.04] tracking-[-0.03em] sm:text-6xl lg:text-[4.2rem]">
+    <div className="w-full px-4 text-center">
+      <Float amt={8} dur={5}>
+        <h1 className="text-5xl font-bold leading-[1.05] tracking-[-0.03em] sm:text-7xl">
           Buy XPY.
           <br />
-          Get paid in <span className="text-shimmer">XRP</span>.
+          Earn <span className="text-shimmer">XRP</span>.
         </h1>
-        <p className="mt-6 max-w-md text-lg leading-relaxed text-mist-dim">
-          The virtual XRP algorithm miner. Hold XPY and the algorithm sends
-          XRP to your wallet every hour, funded by fees on every trade. You
-          hold, you get paid, even while you sleep. Rewards move with volume
-          and are never guaranteed.
+      </Float>
+      <Float delay={0.4} amt={5} dur={6}>
+        <p className="mt-6 font-mono text-sm uppercase tracking-[0.4em] text-azure-bright">
+          Passively · Hourly · On-chain
         </p>
-        <div className="mt-9 flex flex-wrap items-center gap-4">
+      </Float>
+      <Float delay={0.7} amt={6} dur={5.5}>
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.6, ease: EASE }}
+          className="mt-9 flex flex-wrap items-center justify-center gap-4"
+        >
           <a
             href="#"
-            className="inline-flex items-center gap-2.5 rounded-full bg-azure px-7 py-3.5 text-sm font-semibold text-white transition-all hover:bg-azure-bright hover:shadow-[0_0_36px_-8px_rgba(46,155,255,0.6)]"
+            className="inline-flex items-center gap-2.5 rounded-full bg-azure px-8 py-4 text-sm font-semibold text-white transition-all hover:bg-azure-bright hover:shadow-[0_0_36px_-8px_rgba(46,155,255,0.6)]"
           >
             <XrpMark className="h-4 w-4" strokeWidth={4} />
             Buy XPY
           </a>
           <a href="#how" className="btn-secondary">How Virtual Mining Works</a>
-        </div>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, x: 480, rotate: 8 }}
-        animate={{ opacity: 1, x: 0, rotate: 0 }}
-        transition={{ duration: 0.95, ease: EASE }}
-        className="relative flex justify-center"
-      >
-        <div className="pointer-events-none absolute top-1/2 left-1/2 h-[480px] w-[480px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-azure-deep/[0.28] blur-[100px]" />
-        <PhoneMock notifs={notifs} />
-      </motion.div>
+        </motion.div>
+      </Float>
     </div>
   )
 }
 
 /* ---------------------------------- hero ----------------------------------- */
 
-const ACT_DURATIONS = [3800, 5400, 5400]
+// title → phone → history → wallets → end card, then push down to the site
+const ACT_DURATIONS = [2600, 5200, 4400, 4400]
 
 export default function Hero() {
   const [notifs, setNotifs] = useState(() => Array.from({ length: 4 }, makeNotif).reverse())
@@ -525,10 +581,20 @@ export default function Hero() {
     return () => clearInterval(ping)
   }, [])
 
-  // opening sequence: title → history → wallets → resting (stays)
   useEffect(() => {
-    if (act >= 3) return
+    if (act >= 4) return
     const t = setTimeout(() => setAct(act + 1), ACT_DURATIONS[act])
+    return () => clearTimeout(t)
+  }, [act])
+
+  // when the sequence ends, push the site down to the next section
+  // (only if the viewer hasn't already scrolled away on their own)
+  useEffect(() => {
+    if (act !== 4) return
+    if (window.scrollY > 120) return
+    const t = setTimeout(() => {
+      document.getElementById('drip')?.scrollIntoView({ behavior: 'smooth' })
+    }, 1400)
     return () => clearTimeout(t)
   }, [act])
 
@@ -551,11 +617,18 @@ export default function Hero() {
         <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center py-12">
           <AnimatePresence mode="wait">
             {act === 0 && <ActTitle key="act-title" />}
-            {act === 1 && <ActHistory key="act-history" />}
-            {act === 2 && <ActWallets key="act-wallets" />}
-            {act === 3 && (
-              <motion.div key="act-resting" className="w-full">
-                <ActResting notifs={notifs} />
+            {act === 1 && <ActPhone key="act-phone" notifs={notifs} />}
+            {act === 2 && <ActHistory key="act-history" />}
+            {act === 3 && <ActWallets key="act-wallets" />}
+            {act === 4 && (
+              <motion.div
+                key="act-end"
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, ease: EASE }}
+                className="w-full"
+              >
+                <ActEnd />
               </motion.div>
             )}
           </AnimatePresence>
