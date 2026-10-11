@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 const codeLines = [
   { c: 'text-mist-faint', t: '// settle a cross-border payment' },
   { c: '', t: '' },
-  { c: 'text-azure', t: "import { XRPay } from '@xrpay/sdk'" },
+  { c: 'text-gold', t: "import { XRPay } from '@xrpay/sdk'" },
   { c: '', t: '' },
   { c: 'text-mist', t: 'const xrpay = new XRPay({ apiKey: process.env.XPY_KEY })' },
   { c: '', t: '' },
@@ -118,7 +118,7 @@ export default function DevSection() {
                   <div key={e.path} className="flex items-center gap-4 px-5 py-2.5">
                     <span
                       className={`w-10 flex-none text-[10px] font-medium ${
-                        e.method === 'POST' ? 'text-azure' : 'text-brass'
+                        e.method === 'POST' ? 'text-gold' : 'text-brass'
                       }`}
                     >
                       {e.method}

@@ -3,8 +3,8 @@ import { motion } from 'framer-motion'
 const previewStats = [
   ['XPY balance', '4,281,904', 'tokens'],
   ['Share of supply', '0.4282%', 'of 1B supply'],
-  ['Est. daily earnings', '1,278.2 XRP', '≈ $1,712.80 at $10M avg volume'],
-  ['Received, 30 days', '38,346 XRP', '≈ $51,384'],
+  ['Est. daily earnings', '$1,712.80', 'of oil stock at $10M avg volume'],
+  ['Received, 30 days', '$51,384', 'of oil stock'],
 ]
 
 export default function HolderPortal() {

@@ -3,26 +3,26 @@ import { motion } from 'framer-motion'
 const features = [
   {
     num: '01',
-    title: 'Paid in XRP, not the token',
-    body: 'Rewards arrive as XRP, a liquid, widely listed asset, rather than more of the token itself. Your reward is immediately spendable and its value does not depend on XPY’s own price at the moment you receive it.',
-    spec: 'Native XRP airdrops · No reward token · Immediately liquid',
+    title: 'Paid in oil stock, not the token',
+    body: 'Rewards arrive as oil stock, a liquid, widely listed asset, rather than more of the token itself. Your reward is immediately spendable and its value does not depend on XPY’s own price at the moment you receive it.',
+    spec: 'Native oil stock airdrops · No reward token · Immediately liquid',
   },
   {
     num: '02',
     title: 'Everyone gets their fair share',
-    body: 'Distribution is proportional to holdings at the ledger snapshot, computed the same way for every wallet. A wallet holding 0.1% of supply receives 0.1% of the holder pool. There are no tiers, boosts, referral multipliers, or team preferences.',
+    body: 'Distribution is proportional to holdings at the ledger snapshot, computed the same way for every wallet. A wallet holding 0.1% of supply receives 0.1% of the holder pool. There are no tiers, boosts, or team preferences.',
     spec: 'One rule · Every wallet · No preferential tiers',
   },
   {
     num: '03',
     title: 'Nothing to stake or claim',
-    body: 'Holding in a self-custodied XRPL wallet is the only requirement. There is no staking contract that can be exploited, no claim deadline to miss, and no lockup standing between you and your assets. Sell any time; you simply stop receiving future distributions.',
+    body: 'Holding in a self-custodied wallet is the only requirement. There is no staking contract that can be exploited, no claim deadline to miss, and no lockup standing between you and your assets. Sell any time; you simply stop receiving future distributions.',
     spec: 'Self-custody · No lockups · Exit any time',
   },
   {
     num: '04',
     title: 'Verifiable, not trusted',
-    body: 'The pool address, every inbound fee, and every outbound distribution are ordinary XRPL transactions. You can audit the entire history yourself with a block explorer, the numbers on this site are a convenience, not the source of truth.',
+    body: 'The pool address, every inbound fee, and every outbound distribution are ordinary on-chain transactions. You can audit the entire history yourself with a block explorer, the numbers on this site are a convenience, not the source of truth.',
     spec: 'Public pool · Public distributions · Audit it yourself',
   },
   {
@@ -68,7 +68,7 @@ export default function Features() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.55, delay: (i % 3) * 0.08, ease: [0.22, 1, 0.36, 1] }}
-            className="group flex flex-col rounded-lg border border-white/[0.06] bg-white/[0.03] p-8 transition-colors duration-300 hover:border-azure/25 hover:bg-white/[0.05]"
+            className="group flex flex-col rounded-lg border border-white/[0.06] bg-white/[0.03] p-8 transition-colors duration-300 hover:border-gold/25 hover:bg-white/[0.05]"
           >
             <span className="font-mono text-[11px] text-brass">{f.num}</span>
             <h3 className="mb-3 mt-5 text-lg font-medium tracking-tight">{f.title}</h3>

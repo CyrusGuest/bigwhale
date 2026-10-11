@@ -3,28 +3,40 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 const faqs = [
   {
-    q: 'Is anything actually being mined?',
-    a: 'No, and we say so everywhere the term appears. XRP cannot be mined: the XRP Ledger has no mining, and all XRP was created at the ledger’s launch. “Virtual mining” is our name for the distribution algorithm, used the way DeFi uses “liquidity mining”: a familiar metaphor for a reward loop. The economics resemble mining, regular payouts, proportional to your stake, but the fuel is trading fees on the token, not new coins. Be wary of any project that claims to literally mine XRP for you; that mechanism does not exist.',
+    q: 'What is XPY, in one sentence?',
+    a: 'XPY is the first crypto coin that pays you oil stock just for holding it. Every hour, a slice of every trade is turned into oil stock and sent to every holder, split by how much each person holds. It is the simplest way an American has ever had to build a position in oil.',
   },
   {
-    q: 'When will I earn back what I put in?',
-    a: 'We don’t know, and neither does anyone else, so we won’t publish a payback target. Distributions depend entirely on trading volume, which varies unpredictably and can fall to zero. The token’s market price also moves independently of rewards, so your position can lose value faster than rewards add up. Treat XPY as a speculative asset whose rewards are a variable bonus, not as an income product with a schedule.',
+    q: 'What do I actually get paid?',
+    a: 'Oil stock, shown to you in plain dollars. A $40 payout is $40 worth of oil stock, sitting in your wallet. Keep it and let it grow, or sell it whenever you like. It is yours the moment it lands.',
   },
   {
-    q: 'Where exactly does the XRP come from?',
-    a: 'From the 5% fee charged on each completed trade of the token. Fees are converted to XRP and pooled; four fifths of each fee is airdropped to holders each hour based on how much they hold, and one fifth funds marketing and the referral program. No part of any reward comes from new buyers’ principal, token emissions, or lending out pooled funds, the pool’s inflows and outflows are public XRPL transactions you can audit.',
+    q: 'Where does the money come from?',
+    a: 'From trading. Every buy or sell of XPY pays a 4% fee, and 100% of that fee is turned into oil stock and paid out to holders every hour. The team holds XPY too, and earns exactly the way you do: same rules, same hourly payouts, no special cut. Nothing is printed, and nothing comes from new buyers’ money. Real trading, real oil stock.',
   },
   {
-    q: 'What happens when trading volume falls?',
-    a: 'Distributions fall with it, proportionally and immediately. An hour with little trading produces a small airdrop; an hour with none produces none. This is the honest cost of a mechanism funded by real activity rather than by inflation or new deposits, the rewards are genuine precisely because they are not guaranteed.',
+    q: 'Why is it good to get in early?',
+    a: 'Because every trade made after you buy in pays you. The earlier you hold, the more trades you collect from. As more Americans discover XPY and start trading, the fee pool grows, your hourly payouts grow with it, and so does the oil stock position you are building.',
   },
   {
-    q: 'Do I need to stake, lock, or claim anything?',
-    a: 'No. Hold XPY in a self-custodied XRPL wallet and distributions arrive automatically. There is no staking contract, no claim interface, and no lockup period. If you sell, you simply stop receiving future distributions, nothing you have already received is affected.',
+    q: 'Do I have to do anything?',
+    a: 'No. Buy XPY, keep it in your own wallet, and the payouts arrive on their own, around the clock. Nothing to stake, nothing to lock, nothing to claim. If you ever sell, the payouts stop, and you keep every dollar of oil stock you already earned.',
+  },
+  {
+    q: 'What makes XPY different from every other coin?',
+    a: 'Other coins pay you in more of themselves. XPY pays you in something real: oil stock, the industry that powers America and the world economy. No other crypto coin has ever done this. Our distribution algorithm, what we call virtual drilling, turns every trade into oil stock for holders, automatically, every hour.',
+  },
+  {
+    q: 'Is anything actually being drilled?',
+    a: 'No wells, no rigs. “Virtual drilling” is our name for the payout system: like a producing well, it pays out steadily to everyone with a stake. The fuel is trading activity, not crude in the ground, and that is exactly why it can pay every hour of every day.',
+  },
+  {
+    q: 'What happens when trading slows down?',
+    a: 'Payouts move with trading. A busy hour means a bigger payout; a quiet hour means a smaller one. That is what makes the rewards real: they come from actual activity, not from printing coins. And it is why growing the movement grows everyone’s payouts.',
   },
   {
     q: 'What are the risks?',
-    a: 'The principal ones: the token’s price can fall, including to near zero; trading volume, and therefore rewards, can dry up; smart-contract and operational failures are possible despite public auditability; and regulatory treatment of fee-redistribution tokens is unsettled in most jurisdictions, which could affect exchange listings or your local ability to hold it. Only commit funds you can afford to lose entirely. Nothing on this site is financial advice.',
+    a: 'XPY is a crypto coin, not a security. It is purely a coin running on an algorithm that pays its holders back in oil stock, which is what sets it apart from most other coins. But it is still crypto, and crypto comes with the same ground rules as every other coin: there are no promises from the team, there is no roadmap, and prices are extremely volatile compared to a regular stock. The price can fall, trading can slow, and payouts can shrink with it. Put in what you are comfortable holding through the swings. XPY is not a security.',
   },
 ]
 
@@ -46,7 +58,7 @@ export default function FAQ() {
         </h2>
       </motion.div>
 
-      <div className="divide-y divide-white/[0.07] border-y border-white/[0.07]">
+      <div className="divide-y divide-navy/[0.07] border-y border-navy/[0.07]">
         {faqs.map((f, i) => {
           const isOpen = open === i
           return (

@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { XrpMark } from './Hero.jsx'
+import { OilMark } from './Hero.jsx'
 
 const XRP_PRICE = 1.34
-const DAILY_RATE = 0.08 // $10M avg volume × 4% ÷ $5M mcap
+const DAILY_RATE = 0.08 // $10M avg volume × 4% fee (100% to holders) ÷ $5M mcap
 
 // logarithmic slider: fine control at small positions, scales up toward $1M
 const MIN_POS = 100
@@ -72,13 +72,13 @@ export default function Drip() {
           transition={{ duration: 0.7 }}
         >
           <p className="eyebrow mb-6">Passive by Design</p>
-          <h2 className="text-4xl font-semibold tracking-[-0.02em] sm:text-5xl">
+          <h2 className="font-serif text-4xl font-semibold tracking-[-0.01em] sm:text-5xl">
             Your wallet earns
             <br />
-            <span className="text-azure">while you do nothing.</span>
+            <span className="text-gold">while you do nothing.</span>
           </h2>
           <p className="mt-6 max-w-md leading-relaxed text-mist-dim">
-            This is what holding XPY feels like: XRP passively earned
+            This is what holding XPY feels like: oil stock passively earned
             around the clock and sent to your wallet every hour by the
             algorithm, even while you sleep. Drag the slider to your position
             size and watch how fast it adds up.
@@ -96,17 +96,17 @@ export default function Drip() {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="panel relative overflow-hidden rounded-lg p-8 sm:p-10"
         >
-          <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-azure/[0.08] blur-[80px]" />
+          <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-gold/[0.08] blur-[80px]" />
 
           <div className="flex items-center justify-between">
             <span className="flex items-center gap-2.5 text-[13px] font-medium text-mist">
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-azure/10 text-azure">
-                <XrpMark className="h-3.5 w-3.5" strokeWidth={4.5} />
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-gold/10 text-gold">
+                <OilMark className="h-3.5 w-3.5" strokeWidth={4.5} />
               </span>
               Passive earnings
             </span>
-            <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-azure">
-              <span className="h-1.5 w-1.5 animate-pulseSoft rounded-full bg-azure" />
+            <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-gold">
+              <span className="h-1.5 w-1.5 animate-pulseSoft rounded-full bg-gold" />
               Live sim
             </span>
           </div>
@@ -114,20 +114,16 @@ export default function Drip() {
           <div className="relative mt-7">
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
               <span className="text-sm font-medium text-mist sm:text-[15px]">
-                XRP earned since you opened this page
+                Oil stock earned since you opened this page
               </span>
-              <span className="rounded-full border border-azure/30 bg-azure/[0.08] px-2.5 py-0.5 font-mono text-[11px] tabular-nums text-azure-bright">
+              <span className="rounded-full border border-gold/30 bg-gold/[0.08] px-2.5 py-0.5 font-mono text-[11px] tabular-nums text-gold-deep">
                 {mins > 0 ? `${mins}m ` : ''}
                 {secs}s
               </span>
             </div>
             <div className="mt-2 text-4xl font-semibold tabular-nums tracking-tight text-mist sm:text-6xl">
-              {accrued.toFixed(4)}
-              <span className="ml-3 text-xl font-medium text-azure">XRP</span>
-            </div>
-            <div className="mt-1.5 text-xl font-semibold tabular-nums text-mist sm:text-2xl">
-              ≈ ${(accrued * XRP_PRICE).toFixed(2)}
-              <span className="ml-2 text-sm font-normal text-mist-dim">USD</span>
+              ${(accrued * XRP_PRICE).toFixed(4)}
+              <span className="ml-3 text-xl font-medium text-gold">of oil stock</span>
             </div>
           </div>
 
@@ -148,7 +144,7 @@ export default function Drip() {
               onPointerUp={commitPosition}
               onKeyUp={commitPosition}
               onBlur={commitPosition}
-              className="w-full accent-[#2E9BFF]"
+              className="w-full accent-[#0A3161]"
             />
             <div className="mt-1 flex justify-between font-mono text-[10px] text-mist-faint">
               <span>$100</span>
@@ -156,7 +152,7 @@ export default function Drip() {
             </div>
           </div>
 
-          <div className="mt-7 divide-y divide-white/[0.05] rounded-lg border border-white/[0.06] bg-white/[0.03]">
+          <div className="mt-7 divide-y divide-navy/[0.05] rounded-lg border border-navy/[0.06] bg-navy/[0.03]">
             {[
               ['Every hour', hourly, true],
               ['Every day', daily, false],
@@ -167,18 +163,12 @@ export default function Drip() {
                 <span className="flex flex-wrap items-baseline justify-end gap-x-2.5 text-right">
                   <span
                     className={`text-base font-semibold tabular-nums sm:text-lg ${
-                      hot ? 'text-azure-bright' : 'text-mist'
+                      hot ? 'text-gold-deep' : 'text-mist'
                     }`}
                   >
-                    +{v.toLocaleString('en-US', {
-                      maximumFractionDigits: v >= 100 ? 0 : v >= 10 ? 1 : 2,
-                    })}{' '}
-                    XRP
+                    +{fmtUsd(v * XRP_PRICE)}
                   </span>
-                  <span className="text-sm text-mist-faint">·</span>
-                  <span className="text-base font-semibold tabular-nums text-mist sm:text-lg">
-                    ≈ {fmtUsd(v * XRP_PRICE)}
-                  </span>
+                  <span className="text-sm text-mist-dim">of oil stock</span>
                 </span>
               </div>
             ))}

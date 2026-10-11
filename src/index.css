@@ -3,8 +3,49 @@
 @tailwind utilities;
 
 @layer base {
+  /* light: white paper, navy ink, gold accents */
+  :root {
+    --paper: 255 255 255;
+    --ink-950: 255 255 255;
+    --ink-900: 255 255 255;
+    --ink-850: 245 248 252;
+    --ink-800: 234 240 248;
+    --ink-700: 217 226 238;
+    --mist: 11 31 58;
+    --mist-dim: 75 91 116;
+    --mist-faint: 124 135 152;
+    --gold: 200 150 30;
+    --gold-bright: 217 168 47;
+    --gold-deep: 138 106 20;
+    --navy: 10 49 97;
+    --navy-deep: 6 32 63;
+    --blue: 30 91 216;
+    --blue-bright: 59 130 246;
+    --blue-soft: 232 240 253;
+  }
+  /* dark: deep navy-black paper, ivory ink, brighter gold */
+  .dark {
+    --paper: 15 19 28;
+    --ink-950: 7 10 16;
+    --ink-900: 11 14 21;
+    --ink-850: 17 22 32;
+    --ink-800: 24 30 43;
+    --ink-700: 36 44 60;
+    --mist: 242 238 230;
+    --mist-dim: 181 174 162;
+    --mist-faint: 128 134 148;
+    --gold: 212 167 44;
+    --gold-bright: 242 196 90;
+    --gold-deep: 224 179 64;
+    --navy: 96 150 240;
+    --navy-deep: 10 49 97;
+    --blue: 96 150 240;
+    --blue-bright: 125 170 255;
+    --blue-soft: 21 33 58;
+    color-scheme: dark;
+  }
   html {
-    @apply bg-ink-900 text-mist antialiased;
+    @apply bg-paper text-mist antialiased;
   }
   /* anchor jumps land below the fixed navbar */
   [id] {
@@ -14,42 +55,48 @@
     @apply overflow-x-hidden font-sans text-[15px] font-[450];
   }
   ::selection {
-    @apply bg-azure-deep text-mist;
+    @apply bg-blue-soft text-navy;
+  }
+  /* section headings carry the engraved serif of a prospectus */
+  h1,
+  h2 {
+    font-feature-settings: 'kern', 'liga';
   }
 }
 
 @layer components {
   .eyebrow {
-    @apply inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-mist-dim;
+    @apply inline-flex items-center gap-2 rounded-sm border border-gold/40 bg-gold/[0.08] px-3.5 py-1.5 font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-gold-deep;
   }
   .eyebrow::before {
     content: '';
-    @apply h-1.5 w-1.5 rounded-full bg-azure;
+    @apply h-1.5 w-1.5 rounded-full bg-gold;
   }
   .panel {
-    @apply border border-white/[0.06] bg-white/[0.03];
+    @apply border border-navy/10 bg-paper;
   }
   .panel-hover {
-    @apply transition-colors duration-300 hover:border-azure/30 hover:bg-white/[0.05];
+    @apply transition-colors duration-300 hover:border-blue/40 hover:bg-blue-soft/40;
   }
   .card {
-    @apply rounded-lg border border-white/[0.06] bg-white/[0.03];
+    @apply rounded-lg border border-navy/10 bg-paper shadow-[0_10px_30px_-18px_rgba(10,49,97,0.25)];
   }
   .btn-primary {
-    @apply inline-block rounded-full bg-azure px-7 py-3.5 text-sm font-semibold text-white transition-all hover:bg-azure-bright hover:shadow-[0_0_32px_-8px_rgba(46,155,255,0.55)];
+    @apply inline-block rounded-sm bg-navy px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.08em] text-white transition-all hover:bg-blue dark:text-ink-950 dark:hover:bg-blue-bright hover:shadow-[0_12px_28px_-10px_rgba(30,91,216,0.55)];
   }
   .btn-secondary {
-    @apply inline-block rounded-full border border-white/10 bg-white/[0.05] px-7 py-3.5 text-sm font-medium text-mist transition-colors hover:bg-white/[0.09];
+    @apply inline-block rounded-sm border border-navy/25 bg-paper px-7 py-3.5 text-sm font-medium uppercase tracking-[0.08em] text-navy transition-colors hover:border-navy hover:bg-blue-soft;
   }
 }
 
-/* shimmering gradient text for the hero headline */
+/* gold-leaf gradient text for headline emphasis */
 .text-shimmer {
-  background: linear-gradient(90deg, #2e9bff 0%, #a5d1ff 25%, #2e9bff 50%, #a5d1ff 75%, #2e9bff 100%);
+  background: linear-gradient(90deg, #b07f12 0%, #e0b340 25%, #b07f12 50%, #e0b340 75%, #b07f12 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  text-shadow: none;
   animation: shimmer 4s linear infinite;
 }
 @keyframes shimmer {
@@ -58,22 +105,20 @@
   }
 }
 
-/* layered extrusion + glow that makes display text read as solid 3D */
+/* soft lift that makes display text read as solid print on paper */
 .text-3d {
   text-shadow:
-    0 1px 0 #1d3f70,
-    0 2px 0 #193864,
-    0 3px 0 #153058,
-    0 4px 0 #12294c,
-    0 5px 0 #0e2140,
-    0 7px 14px rgba(0, 0, 0, 0.6),
-    0 14px 40px rgba(46, 155, 255, 0.3);
+    0 1px 0 #c9d4e3,
+    0 2px 0 #bcc9db,
+    0 3px 0 #afbed3,
+    0 8px 18px rgba(10, 49, 97, 0.18),
+    0 18px 40px rgba(200, 150, 30, 0.12);
 }
 
 /* bright specular glint that sweeps through the glyphs, then rests */
 .text-glint {
   color: transparent;
-  background: linear-gradient(110deg, transparent 42%, rgba(255, 255, 255, 0.95) 50%, transparent 58%);
+  background: linear-gradient(110deg, transparent 42%, rgba(255, 255, 255, 0.85) 50%, transparent 58%);
   background-size: 250% auto;
   -webkit-background-clip: text;
   background-clip: text;
@@ -91,28 +136,28 @@
   }
 }
 
-/* bubbly retro slam title: Titan One, sticker outline, offset-print depth */
+/* slam title: heavy engraved serif, stamped like a seal */
 .font-bubble {
-  font-family: 'Titan One', 'Inter Tight', sans-serif;
-  font-weight: 400;
-  letter-spacing: 0.01em;
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 .text-retro {
   text-shadow:
-    -1.5px -1.5px 0 #0a1128,
-    1.5px -1.5px 0 #0a1128,
-    -1.5px 1.5px 0 #0a1128,
-    3px 3px 0 #0a1128,
-    5px 5px 0 #123063,
-    8px 8px 0 rgba(46, 155, 255, 0.28),
-    0 0 42px rgba(46, 155, 255, 0.4);
+    -1.5px -1.5px 0 #0b0a08,
+    1.5px -1.5px 0 #0b0a08,
+    -1.5px 1.5px 0 #0b0a08,
+    3px 3px 0 #0b0a08,
+    5px 5px 0 #5b4610,
+    8px 8px 0 rgba(212, 167, 44, 0.28),
+    0 0 42px rgba(212, 167, 44, 0.35);
 }
-/* CRT scanline texture clipped inside the glyphs */
+/* fine engraved hatching clipped inside the glyphs */
 .text-scan {
   color: transparent;
   background: repeating-linear-gradient(
     0deg,
-    rgba(255, 255, 255, 0.2) 0 1.5px,
+    rgba(255, 248, 225, 0.2) 0 1.5px,
     transparent 1.5px 5px
   );
   -webkit-background-clip: text;
@@ -120,32 +165,32 @@
   pointer-events: none;
 }
 
-/* gamified slam title: italic punch, hard outline, stacked depth, arena glow */
+/* slam title: hard outline, stacked depth, amber floodlight */
 .text-game {
-  font-style: italic;
   letter-spacing: -0.02em;
   text-shadow:
-    2px 2px 0 #0a1128,
-    -2px 2px 0 #0a1128,
-    2px -2px 0 #0a1128,
-    -2px -2px 0 #0a1128,
-    0 4px 0 #123063,
-    0 6px 0 #0e2140,
+    2px 2px 0 #0b0a08,
+    -2px 2px 0 #0b0a08,
+    2px -2px 0 #0b0a08,
+    -2px -2px 0 #0b0a08,
+    0 4px 0 #5b4610,
+    0 6px 0 #2e2308,
     0 10px 24px rgba(0, 0, 0, 0.6),
-    0 0 44px rgba(46, 155, 255, 0.4);
+    0 0 44px rgba(212, 167, 44, 0.35);
 }
 
-/* white text with a slow traveling luster highlight */
+/* navy text with a slow traveling blue luster */
 .text-luster {
-  background: linear-gradient(100deg, #ffffff 35%, #8fc2ff 50%, #ffffff 65%);
+  background: linear-gradient(100deg, #0a3161 35%, #3b82f6 50%, #0a3161 65%);
   background-size: 220% auto;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  text-shadow: none;
   animation: shimmer 3.2s linear infinite;
 }
 
-/* RGB-split glitch layers, replayed on every mount of a .glitch element */
+/* two-tone split layers, replayed on every mount of a .glitch element */
 .glitch {
   position: relative;
   display: inline-block;
@@ -161,12 +206,12 @@
   background: none;
 }
 .glitch::before {
-  color: #ff3b5c;
+  color: #b31942;
   clip-path: inset(0 0 52% 0);
   animation: glitchLayer 0.45s steps(3) both;
 }
 .glitch::after {
-  color: #2e9bff;
+  color: #1e5bd8;
   clip-path: inset(46% 0 0 0);
   animation: glitchLayer 0.45s steps(3) reverse both;
 }
@@ -189,7 +234,7 @@
   }
 }
 
-/* starfield twinkle */
+/* slow breathing of the backdrop's amber field lights */
 @keyframes twinkle {
   0%,
   100% {
@@ -210,12 +255,37 @@
   width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #0a0f1a;
+  background: #f5f8fc;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1a2439;
+  background: #d9e2ee;
   border-radius: 8px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #2c4a80;
+  background: #0a3161;
+}
+
+/* dark-mode retunes for the effects above */
+.dark .text-3d {
+  text-shadow:
+    0 1px 0 #6a5214,
+    0 2px 0 #5b4610,
+    0 3px 0 #4c3a0d,
+    0 8px 18px rgba(0, 0, 0, 0.55),
+    0 18px 40px rgba(212, 167, 44, 0.22);
+}
+.dark .text-luster {
+  background-image: linear-gradient(100deg, #f7f3ea 35%, #8fb8ff 50%, #f7f3ea 65%);
+}
+.dark .text-shimmer {
+  background-image: linear-gradient(90deg, #d4a72c 0%, #f6dc8e 25%, #d4a72c 50%, #f6dc8e 75%, #d4a72c 100%);
+}
+.dark ::-webkit-scrollbar-track {
+  background: #0b0e15;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #242c3c;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #6096f0;
 }

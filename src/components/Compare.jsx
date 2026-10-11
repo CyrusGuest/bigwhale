@@ -51,7 +51,7 @@ export default function Compare() {
                 <td className="px-6 py-4 font-mono text-[10px] uppercase tracking-[0.12em] text-mist-faint">
                   {r.label}
                 </td>
-                <td className="border-x border-white/[0.06] bg-azure-deep/[0.10] px-6 py-4 font-medium text-mist">
+                <td className="border-x border-white/[0.06] bg-gold-deep/[0.10] px-6 py-4 font-medium text-mist">
                   {r.xrpay}
                 </td>
                 <td className="px-6 py-4 text-mist-dim">{r.swift}</td>

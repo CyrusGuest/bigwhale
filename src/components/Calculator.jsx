@@ -33,8 +33,8 @@ function GrowthChart({ position, dailyRate, days, total }) {
       <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full">
         <defs>
           <linearGradient id="calcArea" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#2E9BFF" stopOpacity="0.22" />
-            <stop offset="100%" stopColor="#2E9BFF" stopOpacity="0" />
+            <stop offset="0%" stopColor="#D4A72C" stopOpacity="0.22" />
+            <stop offset="100%" stopColor="#D4A72C" stopOpacity="0" />
           </linearGradient>
         </defs>
 
@@ -51,16 +51,16 @@ function GrowthChart({ position, dailyRate, days, total }) {
         ))}
 
         <path d={area} fill="url(#calcArea)" />
-        <path d={line} fill="none" stroke="#2E9BFF" strokeWidth="2.5" />
+        <path d={line} fill="none" stroke="#D4A72C" strokeWidth="2.5" />
 
-        <circle cx={x(N)} cy={y(total)} r="4" fill="#2E9BFF" />
-        <circle cx={x(N)} cy={y(total)} r="8" fill="#2E9BFF" fillOpacity="0.25">
+        <circle cx={x(N)} cy={y(total)} r="4" fill="#D4A72C" />
+        <circle cx={x(N)} cy={y(total)} r="8" fill="#D4A72C" fillOpacity="0.25">
           <animate attributeName="r" values="6;11;6" dur="2.5s" repeatCount="indefinite" />
         </circle>
         <text
           x={x(N) + 10}
           y={y(total) + 4}
-          fill="#66B8FF"
+          fill="#F2C45A"
           fontSize="12"
           fontFamily="IBM Plex Mono, monospace"
         >
@@ -82,7 +82,7 @@ function GrowthChart({ position, dailyRate, days, total }) {
         </text>
       </svg>
       <div className="mt-1 font-mono text-[10px] text-mist-faint">
-        Total XRP earned over time, in dollars, at your inputs
+        Total oil stock earned over time, in dollars, at your inputs
       </div>
     </div>
   )
@@ -178,7 +178,7 @@ export default function Calculator() {
                 step={s.step}
                 value={s.value}
                 onChange={(e) => s.set(Number(e.target.value))}
-                className="w-full accent-[#2E9BFF]"
+                className="w-full accent-[#D4A72C]"
               />
               {s.note && <p className="mt-2 text-[11px] text-mist-faint">{s.note}</p>}
             </div>

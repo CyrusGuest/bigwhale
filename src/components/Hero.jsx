@@ -1,22 +1,27 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { Star } from './Stars.jsx'
 
-// XRP-style mark: two thick wishbone halves forming the X, arms at ~45°,
-// deep rounded junctions and round caps, nearly touching at the center
-export function XrpMark({ className = '', strokeWidth = 5 }) {
+// Oil mark: a single crude drop, outlined in the current color with a faint
+// fill and a specular highlight, so it reads at favicon size and at 560px
+export function OilMark({ className = '', strokeWidth = 5 }) {
+  const sw = Math.min(strokeWidth, 3.6)
   return (
     <svg viewBox="0 0 32 32" fill="none" className={className}>
       <path
-        d="M4.5 4.5 L12.2 11.8 Q16 15.4 19.8 11.8 L27.5 4.5"
+        d="M16 3.2 C16 3.2 6.4 14.2 6.4 20.4 A9.6 9.6 0 0 0 25.6 20.4 C25.6 14.2 16 3.2 16 3.2 Z"
+        fill="currentColor"
+        fillOpacity="0.16"
         stroke="currentColor"
-        strokeWidth={strokeWidth}
-        strokeLinecap="round"
+        strokeWidth={sw}
+        strokeLinejoin="round"
       />
       <path
-        d="M4.5 27.5 L12.2 20.2 Q16 16.6 19.8 20.2 L27.5 27.5"
+        d="M11.2 20.6 A4.9 4.9 0 0 0 14.6 25.1"
         stroke="currentColor"
-        strokeWidth={strokeWidth}
+        strokeWidth={Math.max(sw * 0.55, 1.1)}
         strokeLinecap="round"
+        opacity="0.9"
       />
     </svg>
   )
@@ -31,31 +36,25 @@ const OTHER_NOTIFS = [
   {
     app: 'X',
     icon: 'x',
-    body: '@XPYOFFICIAL: We just purchased $1,000,000 worth of XRP for our Reserve to support the XRP ecosystem…',
-    hl: '$1,000,000 worth of XRP',
+    body: '@XPYOFFICIAL: The $1,000,000 oil stock reserve is funded. Attestation publishes this week.',
+    hl: '$1,000,000 oil stock reserve',
   },
   {
     app: 'Stocks',
     icon: 'stocks',
-    body: 'BTC $118,240 (+2.4%) · SOL $236 (+3.1%) · XRP $1.34 (+5.2%)',
-  },
-  {
-    app: 'X',
-    icon: 'x',
-    body: '@XRP589: 1 XPY = 1 XRP. i said what i said.',
-    hl: '1 XPY = 1 XRP',
+    body: 'WTI Crude $78.40 (+1.8%) · Oil stock +5.2% · XPY +3.1%',
   },
   {
     app: 'News',
     icon: 'news',
-    body: 'BREAKING: degens can’t stop tweeting “1 XPY = 1 XRP”',
-    hl: '“1 XPY = 1 XRP”',
+    body: 'U.S. crude output holds near record highs as American energy demand climbs',
+    hl: 'record highs',
   },
   {
     app: 'X',
     icon: 'x',
-    body: '@SolWhaleCap: a $1M XRP reserve behind an hourly-payout coin is the most bullish thing in the XRP ecosystem rn',
-    hl: '$1M XRP reserve',
+    body: '@XPYOFFICIAL: 24 distributions in the last 24 hours. Every one of them on the ledger.',
+    hl: '24 distributions',
   },
 ]
 
@@ -130,7 +129,7 @@ function PhoneMock({ notifs }) {
         className="relative w-[310px]"
       >
         {/* titanium frame */}
-        <div className="relative rounded-[3.2rem] bg-gradient-to-b from-[#55607a] via-[#2a3147] to-[#171c2e] p-[3px] shadow-[0_44px_110px_-24px_rgba(0,0,0,0.9),0_0_90px_-28px_rgba(46,155,255,0.45)]">
+        <div className="relative rounded-[3.2rem] bg-gradient-to-b from-[#55607a] via-[#2a3147] to-[#171c2e] p-[3px] shadow-[0_44px_110px_-24px_rgba(0,0,0,0.9),0_0_90px_-28px_rgba(212,167,44,0.45)]">
           {/* side buttons */}
           <div className="absolute -left-[2.5px] top-[104px] h-7 w-[3px] rounded-l-full bg-gradient-to-b from-[#5b6680] to-[#2a3147]" />
           <div className="absolute -left-[2.5px] top-[144px] h-12 w-[3px] rounded-l-full bg-gradient-to-b from-[#5b6680] to-[#2a3147]" />
@@ -140,10 +139,10 @@ function PhoneMock({ notifs }) {
           {/* black bezel */}
           <div className="rounded-[3.05rem] bg-black p-[9px]">
             {/* screen */}
-            <div className="relative overflow-hidden rounded-[2.5rem] bg-[#070B1A]">
+            <div className="relative overflow-hidden rounded-[2.5rem] bg-[#0A0908]">
               {/* wallpaper glow */}
-              <div className="pointer-events-none absolute -top-24 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-azure-deep/40 blur-[70px]" />
-              <div className="pointer-events-none absolute bottom-0 right-0 h-48 w-48 rounded-full bg-azure/10 blur-[60px]" />
+              <div className="pointer-events-none absolute -top-24 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-gold-deep/40 blur-[70px]" />
+              <div className="pointer-events-none absolute bottom-0 right-0 h-48 w-48 rounded-full bg-gold/10 blur-[60px]" />
               {/* glass glare */}
               <div className="pointer-events-none absolute -left-24 -top-10 h-[130%] w-36 rotate-12 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent" />
               {/* screen wake flash on new payout */}
@@ -185,15 +184,15 @@ function PhoneMock({ notifs }) {
                     </svg>
                     Do Not Disturb
                   </div>
-                  <div className="mt-2 text-[15px] font-medium text-white/70">Tuesday, 5:89 AM</div>
+                  <div className="mt-2 text-[15px] font-medium text-white/70">Tuesday, 3:30 AM</div>
                   <div className="bg-gradient-to-b from-white to-white/70 bg-clip-text text-[68px] font-semibold leading-[1.05] tracking-tight text-transparent">
-                    5:89
+                    3:30
                   </div>
                 </div>
 
                 {/* notifications: fixed-height stage so the phone never resizes */}
                 <div className="relative mt-4 h-[280px] overflow-hidden">
-                  <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-14 bg-gradient-to-t from-[#070B1A] to-transparent" />
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-14 bg-gradient-to-t from-[#0A0908] to-transparent" />
                   <div className="flex flex-col gap-2">
                     <AnimatePresence initial={false} mode="popLayout">
                       {notifs.map((n, i) => (
@@ -226,14 +225,14 @@ function PhoneMock({ notifs }) {
                           <div className="flex items-start gap-3">
                             {n.type === 'pay' ? (
                               <span
-                                className="relative flex h-[40px] w-[40px] flex-none items-center justify-center overflow-hidden rounded-[10px] shadow-md shadow-azure/30 ring-1 ring-white/10"
+                                className="relative flex h-[40px] w-[40px] flex-none items-center justify-center overflow-hidden rounded-[10px] shadow-md shadow-gold/30 ring-1 ring-white/10"
                                 style={{
                                   background:
-                                    'radial-gradient(130% 105% at 50% 0%, rgba(46,155,255,0.55) 0%, rgba(16,40,88,0.95) 48%, #05080F 100%)',
+                                    'radial-gradient(130% 105% at 50% 0%, rgba(212,167,44,0.55) 0%, rgba(58,46,16,0.95) 48%, #060504 100%)',
                                 }}
                               >
                                 <span className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/[0.18] to-transparent" />
-                                <XrpMark className="relative h-[21px] w-[21px] text-white" strokeWidth={5.2} />
+                                <OilMark className="relative h-[21px] w-[21px] text-white" strokeWidth={5.2} />
                               </span>
                             ) : (
                               <span className="h-[40px] w-[40px] flex-none overflow-hidden rounded-[10px] shadow-md shadow-black/30">
@@ -252,17 +251,17 @@ function PhoneMock({ notifs }) {
                               {n.type === 'pay' ? (
                                 <p className="mt-[2px] text-[14px] leading-[1.32] text-white/85">
                                   You just got paid{' '}
-                                  <span className="font-semibold text-[#8AC5FF]">
-                                    +{n.amt.toFixed(2)} XRP
+                                  <span className="font-semibold text-[#F2C45A]">
+                                    ${n.usd.toFixed(2)}
                                   </span>{' '}
-                                  <span className="text-white/45">(≈ ${n.usd.toFixed(2)})</span>
+                                  of oil stock
                                 </p>
                               ) : (
                                 <p className="mt-[2px] text-[14px] leading-[1.32] text-white/85">
                                   {n.hl ? (
                                     <>
                                       {n.body.split(n.hl)[0]}
-                                      <span className="font-semibold text-[#8AC5FF]">{n.hl}</span>
+                                      <span className="font-semibold text-[#F2C45A]">{n.hl}</span>
                                       {n.body.split(n.hl)[1]}
                                     </>
                                   ) : (
@@ -301,7 +300,7 @@ function PhoneMock({ notifs }) {
       </motion.div>
 
       <p className="relative mt-6 font-mono text-[10px] uppercase tracking-[0.2em] text-mist-faint">
-        Simulated preview · Payouts land hourly, even at 5:89
+        Simulated preview · Payouts land hourly, even at 3:30 AM
       </p>
     </div>
   )
@@ -344,9 +343,9 @@ function Burst({ delay }) {
           initial={{ opacity: 0, x: 0, y: 0, scale: 0.3, rotate: 0 }}
           animate={{ opacity: [0, 1, 0], x: b.x, y: b.y, scale: b.s, rotate: b.r }}
           transition={{ delay, duration: 0.75, ease: 'easeOut' }}
-          className="absolute text-azure"
+          className="absolute text-gold"
         >
-          <XrpMark className="h-5 w-5" strokeWidth={4} />
+          <OilMark className="h-5 w-5" strokeWidth={4} />
         </motion.span>
       ))}
     </span>
@@ -359,7 +358,7 @@ function ImpactPulse({ delay }) {
       initial={{ opacity: 0, scale: 0.3 }}
       animate={{ opacity: [0, 0.7, 0], scale: [0.3, 1.4, 1.8] }}
       transition={{ delay, duration: 0.6, ease: 'easeOut' }}
-      className="pointer-events-none absolute left-1/2 top-1/2 h-32 w-[min(88vw,460px)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-azure/25 blur-3xl"
+      className="pointer-events-none absolute left-1/2 top-1/2 h-32 w-[min(88vw,460px)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold/25 blur-3xl"
     />
   )
 }
@@ -400,13 +399,13 @@ function ActTitle() {
             transition={{ delay: 0.8, type: 'spring', stiffness: 210, damping: 13 }}
             className="text-3d origin-bottom text-6xl font-bold leading-[1.1] tracking-[-0.03em] sm:text-8xl lg:text-9xl"
           >
-            EARN <span className="text-shimmer">XRP</span>.
+            EARN <span className="text-shimmer">OIL STOCK</span>.
           </motion.h1>
         </div>
 
         {/* tagline words pop like impacts */}
-        <div className="mt-7 flex items-center justify-center gap-3 font-mono text-sm uppercase tracking-[0.3em] text-azure-bright sm:text-base">
-          {['Passively', '·', 'Hourly'].map((w, i) => (
+        <div className="mt-7 flex items-center justify-center gap-3 font-mono text-sm uppercase tracking-[0.3em] text-gold-deep sm:text-base">
+          {['For', 'the', 'American', 'people'].map((w, i) => (
             <motion.span
               key={w + i}
               initial={{ opacity: 0, scale: 0 }}
@@ -447,14 +446,14 @@ function ActPhone({ notifs }) {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7, duration: 0.5 }}
-            className="mt-7 flex flex-wrap justify-center gap-x-2 font-mono text-sm uppercase tracking-[0.3em] text-azure-bright lg:justify-start"
+            className="mt-7 flex flex-wrap justify-center gap-x-2 font-mono text-sm uppercase tracking-[0.3em] text-gold-deep lg:justify-start"
           >
-            {['Real', 'XRP', '·', 'Straight', 'to', 'your', 'wallet'].map((w, i) => (
+            {['Real', 'Oil', '·', 'Straight', 'to', 'your', 'wallet'].map((w, i) => (
               <motion.span
                 key={i}
                 animate={{
-                  scale: [1, w === '·' ? 1 : w === 'Real' || w === 'XRP' ? 1.38 : 1.22, 1],
-                  color: ['#66B8FF', '#FFFFFF', '#66B8FF'],
+                  scale: [1, w === '·' ? 1 : w === 'Real' || w === 'Oil' ? 1.38 : 1.22, 1],
+                  color: ['#F2C45A', '#FFFFFF', '#F2C45A'],
                 }}
                 transition={{
                   delay: 1.5 + i * 0.14,
@@ -477,7 +476,7 @@ function ActPhone({ notifs }) {
         transition={{ duration: 0.8, ease: EASE }}
         className="relative flex origin-top scale-[0.88] justify-center sm:scale-95"
       >
-        <div className="pointer-events-none absolute top-1/2 left-1/2 h-[460px] w-[460px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-azure-deep/[0.28] blur-[100px]" />
+        <div className="pointer-events-none absolute top-1/2 left-1/2 h-[460px] w-[460px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold-deep/[0.28] blur-[100px]" />
         {/* z z z drifting off the sleeping phone */}
         {[0, 1, 2].map((i) => (
           <motion.span
@@ -491,7 +490,7 @@ function ActPhone({ notifs }) {
               repeatDelay: 0.3,
               ease: 'easeOut',
             }}
-            className="pointer-events-none absolute right-[18%] top-16 font-bold text-azure-bright"
+            className="pointer-events-none absolute right-[18%] top-16 font-bold text-gold-deep"
             style={{ fontSize: 15 + i * 7 }}
           >
             z
@@ -505,9 +504,9 @@ function ActPhone({ notifs }) {
 
 // Act 3: earning in your sleep — payout cards fly in from the screen edges
 const SLEEP_DROPS = [
-  { t: '3:47 AM', amt: 32.84 },
-  { t: '4:47 AM', amt: 29.1 },
-  { t: '5:47 AM', amt: 35.62 },
+  { t: '3:47 AM', amt: 44.01 },
+  { t: '4:47 AM', amt: 38.99 },
+  { t: '5:47 AM', amt: 47.73 },
 ]
 
 function ActSleep() {
@@ -551,14 +550,14 @@ function ActSleep() {
               className="mx-auto flex w-full max-w-md items-start gap-3 rounded-[24px] bg-[#1d1f27]/85 p-4 text-left shadow-[0_14px_34px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.09)] backdrop-blur-2xl"
             >
               <span
-                className="relative flex h-[40px] w-[40px] flex-none items-center justify-center overflow-hidden rounded-[10px] shadow-md shadow-azure/30 ring-1 ring-white/10"
+                className="relative flex h-[40px] w-[40px] flex-none items-center justify-center overflow-hidden rounded-[10px] shadow-md shadow-gold/30 ring-1 ring-white/10"
                 style={{
                   background:
-                    'radial-gradient(130% 105% at 50% 0%, rgba(46,155,255,0.55) 0%, rgba(16,40,88,0.95) 48%, #05080F 100%)',
+                    'radial-gradient(130% 105% at 50% 0%, rgba(212,167,44,0.55) 0%, rgba(58,46,16,0.95) 48%, #060504 100%)',
                 }}
               >
                 <span className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/[0.18] to-transparent" />
-                <XrpMark className="relative h-[21px] w-[21px] text-white" strokeWidth={5.2} />
+                <OilMark className="relative h-[21px] w-[21px] text-white" strokeWidth={5.2} />
               </span>
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline justify-between gap-2">
@@ -567,7 +566,7 @@ function ActSleep() {
                 </div>
                 <p className="mt-[2px] text-[14px] leading-[1.32] text-white/85">
                   You just got paid{' '}
-                  <span className="font-semibold text-[#8AC5FF]">+{d.amt.toFixed(2)} XRP</span>
+                  <span className="font-semibold text-[#F2C45A]">${d.amt.toFixed(2)}</span> of oil stock
                 </p>
               </div>
             </motion.div>
@@ -579,14 +578,14 @@ function ActSleep() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.9, duration: 0.5 }}
-            className="mt-8 flex flex-wrap justify-center gap-x-2 font-mono text-sm uppercase tracking-[0.26em] text-azure-bright"
+            className="mt-8 flex flex-wrap justify-center gap-x-2 font-mono text-sm uppercase tracking-[0.26em] text-gold-deep"
           >
-            {['+97.56', 'XRP', 'while', 'you', 'dreamt'].map((w, i) => (
+            {['$130.73', 'of', 'oil', 'stock', 'while', 'you', 'slept'].map((w, i) => (
               <motion.span
                 key={i}
                 animate={{
                   scale: [1, i < 2 ? 1.35 : 1.18, 1],
-                  color: ['#66B8FF', '#FFFFFF', '#66B8FF'],
+                  color: ['#F2C45A', '#FFFFFF', '#F2C45A'],
                 }}
                 transition={{
                   delay: 2.3 + i * 0.14,
@@ -638,7 +637,7 @@ function ActReserve() {
           initial={{ opacity: 0, letterSpacing: '0.1em' }}
           animate={{ opacity: 1, letterSpacing: '0.34em' }}
           transition={{ delay: 0.1, duration: 0.7, ease: EASE }}
-          className="font-mono text-sm uppercase text-azure-bright"
+          className="font-mono text-sm uppercase text-gold-deep"
         >
           Standing behind XPY
         </motion.p>
@@ -657,14 +656,14 @@ function ActReserve() {
                 repeat: Infinity,
                 ease: 'easeOut',
               }}
-              className="pointer-events-none absolute left-1/2 top-1/2 h-36 w-[min(82vw,560px)] -translate-x-1/2 -translate-y-1/2 rounded-full border border-azure/40"
+              className="pointer-events-none absolute left-1/2 top-1/2 h-36 w-[min(82vw,560px)] -translate-x-1/2 -translate-y-1/2 rounded-full border border-gold/40"
             />
           ))}
           <motion.h2
             initial={{ opacity: 0, scale: 1.3, filter: 'blur(10px)' }}
             animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
             transition={{ delay: 0.35, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-6 text-6xl font-bold tabular-nums tracking-[-0.03em] text-mist [text-shadow:0_0_60px_rgba(46,155,255,0.45)] sm:text-8xl"
+            className="mt-6 text-6xl font-bold tabular-nums tracking-[-0.03em] text-mist [text-shadow:0_0_60px_rgba(212,167,44,0.45)] sm:text-8xl"
           >
             {/* heartbeat once the roll-up settles */}
             <motion.span
@@ -684,7 +683,7 @@ function ActReserve() {
           transition={{ delay: 1.3, duration: 0.5, ease: EASE }}
           className="mt-5 text-2xl font-medium text-mist sm:text-3xl"
         >
-          of <span className="text-shimmer">XRP</span> in our starting reserve
+          of <span className="text-shimmer">oil stock</span> in our starting reserve
         </motion.p>
       </Float>
       <Float delay={0.9} amt={4} dur={6}>
@@ -704,9 +703,9 @@ function ActReserve() {
 // Act 5: your earnings curve draws itself live, payouts popping along the way
 const PORTAL_PTS = [0, 5, 8, 14, 17, 24, 28, 35, 39, 47, 54, 62]
 const PORTAL_POPS = [
-  { i: 4, label: '+8,412 XRP' },
-  { i: 8, label: '+12,930 XRP' },
-  { i: 11, label: '+38,346 XRP' },
+  { i: 4, label: '+$11,272' },
+  { i: 8, label: '+$17,326' },
+  { i: 11, label: '+$51,384' },
 ]
 
 function ActPortal() {
@@ -764,19 +763,18 @@ function ActPortal() {
           initial={{ opacity: 0, y: 90, scale: 0.93, rotate: -1.5 }}
           animate={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
           transition={{ delay: 0.5, type: 'spring', stiffness: 170, damping: 20 }}
-          className="mx-auto mt-8 w-full max-w-xl rounded-lg border border-white/[0.08] bg-ink-900/85 p-6 text-left shadow-2xl shadow-black/50 backdrop-blur"
+          className="mx-auto mt-8 w-full max-w-xl rounded-lg border border-navy/10 bg-ink-900/85 p-6 text-left shadow-2xl shadow-navy/20 backdrop-blur"
         >
           <div className="flex items-end justify-between gap-4">
             <div>
               <span className="block font-mono text-[9px] uppercase tracking-[0.18em] text-mist-faint">
-                XRP earned, all time
+                Oil stock earned, all time
               </span>
               <span className="mt-1 block font-mono text-3xl font-semibold tabular-nums text-mist sm:text-4xl">
-                <RollUp target={38346} dur={1.9} delay={1.1} />
-                <span className="ml-2 text-lg text-azure">XRP</span>
+                <RollUp target={51384} prefix="$" dur={1.9} delay={1.1} />
               </span>
-              <span className="mt-0.5 block font-mono text-sm tabular-nums text-azure-bright">
-                ≈ <RollUp target={51384} prefix="$" dur={1.9} delay={1.2} />
+              <span className="mt-0.5 block font-mono text-sm tabular-nums text-gold-deep">
+                worth of oil stock, paid to one wallet
               </span>
             </div>
             <div className="pb-1 text-right">
@@ -793,8 +791,8 @@ function ActPortal() {
             <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full">
               <defs>
                 <linearGradient id="actPortalArea" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#2E9BFF" stopOpacity="0.32" />
-                  <stop offset="100%" stopColor="#2E9BFF" stopOpacity="0" />
+                  <stop offset="0%" stopColor="#D4A72C" stopOpacity="0.32" />
+                  <stop offset="100%" stopColor="#D4A72C" stopOpacity="0" />
                 </linearGradient>
               </defs>
               <motion.path
@@ -807,7 +805,7 @@ function ActPortal() {
               <motion.path
                 d={line}
                 fill="none"
-                stroke="#2E9BFF"
+                stroke="#D4A72C"
                 strokeWidth="3"
                 strokeLinecap="round"
                 initial={{ pathLength: 0 }}
@@ -820,7 +818,7 @@ function ActPortal() {
                   cx={px(i)}
                   cy={py(PORTAL_PTS[i])}
                   r="5"
-                  fill="#66B8FF"
+                  fill="#F2C45A"
                   initial={{ opacity: 0, scale: 0 }}
                   animate={{ opacity: 1, scale: [0, 1.6, 1] }}
                   transition={{ delay: popDelay(i), duration: 0.4 }}
@@ -834,7 +832,7 @@ function ActPortal() {
                 initial={{ opacity: 0, y: 12, scale: 0.6 }}
                 animate={{ opacity: 1, y: 0, scale: [0.6, 1.15, 1] }}
                 transition={{ delay: popDelay(i) + 0.08, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute -translate-x-1/2 -translate-y-full whitespace-nowrap rounded-full border border-azure/40 bg-ink-900/95 px-3 py-1 font-mono text-[11px] font-medium text-azure-bright shadow-lg shadow-azure/20"
+                className="absolute -translate-x-1/2 -translate-y-full whitespace-nowrap rounded-full border border-gold/40 bg-ink-900/95 px-3 py-1 font-mono text-[11px] font-medium text-gold-deep shadow-lg shadow-gold/20"
                 style={{
                   left: `${(px(i) / W) * 100}%`,
                   top: `${(py(PORTAL_PTS[i]) / H) * 100 - 6}%`,
@@ -853,7 +851,7 @@ function ActPortal() {
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 1, scale: [0, 1.15, 1] }}
           transition={{ delay: 3.1, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-7 inline-flex items-center gap-2 rounded-full border border-azure/30 bg-azure/[0.08] px-6 py-3 font-mono text-xs uppercase tracking-[0.18em] text-azure-bright transition-colors hover:bg-azure/[0.15]"
+          className="mt-7 inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/[0.08] px-6 py-3 font-mono text-xs uppercase tracking-[0.18em] text-gold-deep transition-colors hover:bg-gold/[0.15]"
         >
           Open your Holder Portal →
         </motion.a>
@@ -895,7 +893,7 @@ function ActStory() {
           initial={{ opacity: 0, letterSpacing: '0.1em' }}
           animate={{ opacity: 1, letterSpacing: '0.42em' }}
           transition={{ delay: 0.05, duration: 0.7, ease: EASE }}
-          className="font-mono text-xs uppercase text-azure-bright"
+          className="font-mono text-xs uppercase text-gold-deep"
         >
           XPY is the first
         </motion.p>
@@ -907,13 +905,13 @@ function ActStory() {
           transition={{ delay: 0.3, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           className="text-luster mx-auto mt-5 max-w-3xl text-4xl font-bold tracking-[-0.02em] sm:text-6xl"
         >
-          Virtual XRP Algorithm Miner
+          Virtual Oil Drilling Algorithm
         </motion.h2>
       </Float>
       <div className="mx-auto mt-7 max-w-xl space-y-3">
         {[
-          'No rigs. No power bills. No staking.',
-          'Every trade pays a fee. Every hour, holders get XRP.',
+          'A movement for the American people.',
+          'Everyone gets a piece of the oil market. Every hour.',
         ].map((line, i) => (
           <Float key={line} delay={0.6 + i * 0.4} amt={5} dur={5.8}>
             <motion.p
@@ -943,7 +941,7 @@ function ActStory() {
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: [0, 0.55, 0], scale: [0.5, 1.5, 1.9] }}
           transition={{ delay: 2.15, duration: 0.8, ease: 'easeOut' }}
-          className="pointer-events-none absolute h-20 w-80 rounded-full bg-azure/30 blur-2xl"
+          className="pointer-events-none absolute h-20 w-80 rounded-full bg-blue/20 blur-2xl"
         />
         <Float delay={1.2} amt={6} dur={5}>
           <motion.span
@@ -958,7 +956,7 @@ function ActStory() {
               initial={{ opacity: 0, scale: 1.4, filter: 'blur(8px)' }}
               animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
               transition={{ delay: 2.05, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-              className="glitch text-luster inline-block text-3xl font-bold sm:text-4xl"
+              className="glitch text-shimmer inline-block font-serif text-4xl font-bold tracking-[0.04em] sm:text-5xl"
             >
               HISTORY
             </motion.span>
@@ -982,7 +980,7 @@ function ActStory() {
               initial={{ opacity: 0, letterSpacing: '0.1em' }}
               animate={{ opacity: 1, letterSpacing: '0.35em' }}
               transition={{ duration: 0.7, ease: EASE }}
-              className="font-mono text-sm uppercase text-azure-bright"
+              className="font-mono text-sm uppercase text-gold-deep"
             >
               Available on
             </motion.p>
@@ -1012,7 +1010,7 @@ function ActStory() {
                 </motion.span>
               </AnimatePresence>
             </div>
-            <div className="mx-auto mt-2.5 h-[2px] w-48 overflow-hidden rounded-full bg-white/[0.06]">
+            <div className="mx-auto mt-2.5 h-[2px] w-48 overflow-hidden rounded-full bg-navy/10">
               <motion.div
                 key={`bar-${wi}`}
                 initial={{ x: '-100%' }}
@@ -1031,7 +1029,7 @@ function ActStory() {
 }
 
 const WALLETS = [
-  { name: 'FOMO', color: 'text-white', bar: '#E8ECF4', glow: 'rgba(232,236,244,0.22)' },
+  { name: 'FOMO', color: 'text-navy', bar: '#0A3161', glow: 'rgba(10,49,97,0.22)' },
   { name: 'Phantom', color: 'text-[#AB9FF2]', bar: '#AB9FF2', glow: 'rgba(171,159,242,0.30)' },
   { name: 'Coinbase', color: 'text-[#4A80FF]', bar: '#4A80FF', glow: 'rgba(74,128,255,0.30)' },
   { name: 'Robinhood', color: 'text-[#00C805]', bar: '#00C805', glow: 'rgba(0,200,5,0.28)' },
@@ -1076,12 +1074,12 @@ function ActOutro() {
         <motion.div
           animate={{ y: [0, 14, 0] }}
           transition={{ duration: 1.1, repeat: Infinity, ease: 'easeInOut' }}
-          className="relative flex h-12 w-12 items-center justify-center rounded-full border border-azure/40 bg-azure/10 text-azure shadow-[0_0_30px_-8px_rgba(46,155,255,0.6)]"
+          className="relative flex h-12 w-12 items-center justify-center rounded-full border border-gold/40 bg-gold/10 text-gold shadow-[0_0_30px_-8px_rgba(212,167,44,0.6)]"
         >
           <motion.span
             animate={{ scale: [1, 1.9], opacity: [0.6, 0] }}
             transition={{ duration: 1.1, repeat: Infinity, ease: 'easeOut' }}
-            className="pointer-events-none absolute inset-0 rounded-full border border-azure/60"
+            className="pointer-events-none absolute inset-0 rounded-full border border-gold/60"
           />
           <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none">
             <path
@@ -1098,134 +1096,23 @@ function ActOutro() {
   )
 }
 
-// Act: earn from referrals — pure type, slotted before the story finale
-function ActRefer() {
-  const [copied, setCopied] = useState(false)
-  useEffect(() => {
-    const t = setTimeout(() => setCopied(true), 2600)
-    return () => clearTimeout(t)
-  }, [])
-  return (
-    <motion.div exit={actExit} className="w-full px-4 text-center">
-      <Float amt={5} dur={5.5}>
-        <motion.p
-          initial={{ opacity: 0, letterSpacing: '0.1em' }}
-          animate={{ opacity: 1, letterSpacing: '0.32em' }}
-          transition={{ delay: 0.1, duration: 0.7, ease: EASE }}
-          className="font-mono text-xs uppercase text-azure-bright"
-        >
-          Then bring your friends
-        </motion.p>
-      </Float>
-      <Float delay={0.3} amt={7} dur={5}>
-        <motion.h2
-          initial={{ opacity: 0, x: -240 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.25, duration: 0.55, ease: EASE }}
-          className="mt-5 text-4xl font-bold tracking-[-0.03em] sm:text-6xl"
-        >
-          Invite friends.
-        </motion.h2>
-      </Float>
-      <Float delay={0.5} amt={8} dur={4.6}>
-        <motion.h2
-          initial={{ opacity: 0, x: 240 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.45, duration: 0.55, ease: EASE }}
-          className="text-4xl font-bold tracking-[-0.03em] sm:text-6xl"
-        >
-          Earn <span className="text-shimmer">10%</span> of everything they earn.
-        </motion.h2>
-      </Float>
-      {/* your referral link getting copied */}
-      <Float delay={0.7} amt={5} dur={5}>
-        <motion.div
-          initial={{ opacity: 0, y: 22, scale: 0.9 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ delay: 1.2, type: 'spring', stiffness: 220, damping: 20 }}
-          className="mx-auto mt-7 flex w-fit items-center gap-3 rounded-full bg-white/[0.06] py-2 pl-5 pr-2 ring-1 ring-white/[0.12] backdrop-blur"
-        >
-          <span className="font-mono text-[13px] text-azure-bright">xpy.io/?ref=7xKX</span>
-          <span className="relative">
-            <motion.span
-              key={copied ? 'copied' : 'copy'}
-              initial={copied ? { scale: 1.25 } : false}
-              animate={{ scale: 1 }}
-              transition={{ type: 'spring', stiffness: 320, damping: 18 }}
-              className={`block rounded-full px-4 py-1.5 text-[12px] font-semibold ${
-                copied ? 'bg-[#30D158] text-ink-950' : 'bg-white text-ink-950'
-              }`}
-            >
-              {copied ? 'Copied ✓' : 'Copy'}
-            </motion.span>
-            {copied && (
-              <motion.span
-                initial={{ opacity: 0.6, scale: 0.7 }}
-                animate={{ opacity: 0, scale: 1.8 }}
-                transition={{ duration: 0.55, ease: 'easeOut' }}
-                className="pointer-events-none absolute inset-0 rounded-full border-2 border-[#30D158]/70"
-              />
-            )}
-          </span>
-        </motion.div>
-      </Float>
-
-      <Float delay={0.9} amt={5} dur={5.2}>
-        <motion.p
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 3.2, duration: 0.5, ease: EASE }}
-          className="mx-auto mt-7 flex max-w-lg flex-wrap justify-center gap-x-2 text-lg font-medium text-mist-dim sm:text-xl"
-        >
-          {['Their', 'payouts', 'never', 'shrink.', 'Your', 'bonus', 'never', 'stops.'].map(
-            (w, i) => (
-              <motion.span
-                key={i}
-                animate={{
-                  scale: [1, i === 3 || i === 7 ? 1.24 : 1.12, 1],
-                  color: ['#A6B0C5', '#FFFFFF', '#A6B0C5'],
-                }}
-                transition={{
-                  delay: 3.8 + i * 0.13,
-                  duration: 0.5,
-                  repeat: Infinity,
-                  repeatDelay: 1.7,
-                  ease: 'easeInOut',
-                }}
-                className="inline-block origin-center"
-              >
-                {w}
-              </motion.span>
-            ),
-          )}
-        </motion.p>
-      </Float>
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 4.4, duration: 0.5 }}
-        className="mt-6 font-mono text-[11px] uppercase tracking-[0.2em] text-mist-faint"
-      >
-        Full program in the Referrals tab
-      </motion.p>
-    </motion.div>
-  )
-}
-
-// Final frame: floating end card, seen when people scroll back up
+// end card: the resting state of the hero once the intro has played
 function ActEnd() {
   return (
     <div className="w-full px-4 text-center">
       <Float amt={8} dur={5}>
-        <h1 className="text-5xl font-bold leading-[1.05] tracking-[-0.03em] sm:text-7xl">
+        <p className="mb-6 flex items-center justify-center gap-3 font-mono text-xs uppercase tracking-[0.3em] text-gold-deep">
+          <Star className="h-3 w-3" /> A movement for the American people <Star className="h-3 w-3" />
+        </p>
+        <h1 className="font-serif text-5xl font-semibold leading-[1.05] tracking-[-0.015em] sm:text-7xl">
           Buy XPY.
           <br />
-          Earn <span className="text-shimmer">XRP</span>.
+          Get paid in <span className="text-shimmer">oil stock</span>.
         </h1>
       </Float>
       <Float delay={0.4} amt={5} dur={6}>
-        <p className="mt-6 font-mono text-sm uppercase tracking-[0.28em] text-azure-bright">
-          Passively · Hourly · On-chain
+        <p className="mt-6 font-mono text-sm uppercase tracking-[0.28em] text-gold-deep">
+          Every hour · Automatically · Open to every American
         </p>
       </Float>
       <Float delay={0.7} amt={6} dur={5.5}>
@@ -1239,12 +1126,12 @@ function ActEnd() {
             href="#"
             animate={{ scale: [1, 1.045, 1] }}
             transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
-            className="inline-flex items-center gap-2.5 rounded-full bg-azure px-8 py-4 text-sm font-semibold text-white transition-all hover:bg-azure-bright hover:shadow-[0_0_36px_-8px_rgba(46,155,255,0.6)]"
+            className="btn-primary inline-flex items-center gap-2.5 !px-8 !py-4"
           >
-            <XrpMark className="h-4 w-4" strokeWidth={4} />
+            <OilMark className="h-4 w-4" strokeWidth={4} />
             Buy XPY
           </motion.a>
-          <a href="#how" className="btn-secondary">How Virtual Mining Works</a>
+          <a href="#how" className="btn-secondary">How It Works</a>
         </motion.div>
       </Float>
     </div>
@@ -1254,11 +1141,12 @@ function ActEnd() {
 /* ---------------------------------- hero ----------------------------------- */
 
 // title → phone → sleep → reserve → portal → story → outro (scrolls down) → end card
-const ACT_DURATIONS = [2950, 3900, 3800, 4200, 5000, 6400, 11700, 3000]
+const ACT_DURATIONS = [2950, 3900, 3800, 4200, 5000, 11700, 3000]
 
 export default function Hero() {
   const [notifs, setNotifs] = useState(() => Array.from({ length: 4 }, makeNotif).reverse())
-  const [act, setAct] = useState(0)
+  // ?intro=0 skips straight to the end card (handy for reviewing the page)
+  const [act, setAct] = useState(() => (window.location.search.includes('intro=0') ? 7 : 0))
 
   useEffect(() => {
     const ping = setInterval(() => {
@@ -1268,7 +1156,7 @@ export default function Hero() {
   }, [])
 
   useEffect(() => {
-    if (act >= 8) return
+    if (act >= 7) return
     const t = setTimeout(() => setAct(act + 1), ACT_DURATIONS[act])
     return () => clearTimeout(t)
   }, [act])
@@ -1276,7 +1164,7 @@ export default function Hero() {
   // during the outro, glide the page down to the live simulation
   // (only if the viewer hasn't already scrolled away on their own)
   useEffect(() => {
-    if (act !== 7) return
+    if (act !== 6) return
     if (window.scrollY > 120) return
     const t = setTimeout(() => {
       document.getElementById('drip')?.scrollIntoView({ behavior: 'smooth' })
@@ -1287,8 +1175,8 @@ export default function Hero() {
   return (
     <section className="relative overflow-x-clip pt-16">
       {/* XRP-blue washes */}
-      <div className="pointer-events-none absolute -top-56 left-1/3 h-[620px] w-[980px] -translate-x-1/2 rounded-full bg-azure-deep/[0.22] blur-[150px]" />
-      <div className="pointer-events-none absolute right-[-180px] top-1/4 h-[420px] w-[420px] rounded-full bg-azure/[0.07] blur-[120px]" />
+      <div className="pointer-events-none absolute -top-56 left-1/3 h-[620px] w-[980px] -translate-x-1/2 rounded-full bg-blue/[0.08] blur-[150px]" />
+      <div className="pointer-events-none absolute right-[-180px] top-1/4 h-[420px] w-[420px] rounded-full bg-gold/[0.10] blur-[120px]" />
 
       {/* giant watermark X */}
       <motion.div
@@ -1296,7 +1184,7 @@ export default function Hero() {
         transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
         className="pointer-events-none absolute -right-40 top-24"
       >
-        <XrpMark className="h-[560px] w-[560px] text-azure opacity-[0.05]" strokeWidth={2.2} />
+        <OilMark className="h-[560px] w-[560px] text-gold opacity-[0.05]" strokeWidth={2.2} />
       </motion.div>
 
       <div className="relative mx-auto max-w-7xl px-6">
@@ -1307,10 +1195,9 @@ export default function Hero() {
             {act === 2 && <ActSleep key="act-sleep" />}
             {act === 3 && <ActReserve key="act-reserve" />}
             {act === 4 && <ActPortal key="act-portal" />}
-            {act === 5 && <ActRefer key="act-refer" />}
-            {act === 6 && <ActStory key="act-story" />}
-            {act === 7 && <ActOutro key="act-outro" />}
-            {act === 8 && (
+            {act === 5 && <ActStory key="act-story" />}
+            {act === 6 && <ActOutro key="act-outro" />}
+            {act === 7 && (
               <motion.div
                 key="act-end"
                 initial={{ opacity: 0, scale: 0.96 }}

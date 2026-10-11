@@ -1,4 +1,4 @@
-import { XrpMark } from './Hero.jsx'
+import { OilMark } from './Hero.jsx'
 
 const columns = [
   {
@@ -7,7 +7,7 @@ const columns = [
   },
   {
     title: 'Verify',
-    links: ['Rewards Pool Address', 'XRPL Explorer', 'Fee Collection Records', 'Supply Attestation'],
+    links: ['Rewards Pool Address', 'Ledger Explorer', 'Fee Collection Records', 'Supply Attestation'],
   },
   {
     title: 'Legal',
@@ -17,33 +17,33 @@ const columns = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-white/[0.07] bg-ink-850/60">
+    <footer className="border-t border-navy/[0.07] bg-ink-850">
       <div className="mx-auto grid max-w-7xl gap-12 px-6 py-16 sm:grid-cols-2 lg:grid-cols-5">
         <div className="lg:col-span-2">
           <div className="flex items-center gap-3">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-azure/10 text-azure">
-              <XrpMark className="h-4 w-4" strokeWidth={5} />
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gold/10 text-gold">
+              <OilMark className="h-4 w-4" strokeWidth={5} />
             </span>
             <span className="text-base font-semibold tracking-[0.08em]">XPY</span>
           </div>
           <p className="mt-5 max-w-xs text-sm leading-relaxed text-mist-dim">
-            Virtual mining on the XRP Ledger: trading fees redistributed to
-            holders in XRP, split by holdings, hourly, and publicly verifiable.
+            Virtual drilling on a public ledger: trading fees redistributed to
+            holders in oil stock, split by holdings, hourly, and publicly verifiable.
           </p>
 
           <form
             onSubmit={(e) => e.preventDefault()}
-            className="mt-8 flex max-w-sm overflow-hidden rounded-sm border border-white/10 focus-within:border-white/25"
+            className="mt-8 flex max-w-sm overflow-hidden rounded-sm border border-navy/10 focus-within:border-navy/25"
           >
             <input
               type="email"
               required
               placeholder="you@example.com"
-              className="w-full bg-ink-900 px-4 py-3 text-[13px] text-mist placeholder:text-mist-faint focus:outline-none"
+              className="w-full bg-paper px-4 py-3 text-[13px] text-mist placeholder:text-mist-faint focus:outline-none"
             />
             <button
               type="submit"
-              className="whitespace-nowrap bg-mist px-5 text-[12px] font-medium text-ink-950 transition-colors hover:bg-white"
+              className="whitespace-nowrap bg-navy px-5 text-[12px] font-medium text-white transition-colors hover:bg-blue"
             >
               Subscribe
             </button>
@@ -53,7 +53,7 @@ export default function Footer() {
           </p>
 
           <div className="mt-8 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em] text-mist-faint">
-            <span className="h-1.5 w-1.5 animate-pulseSoft rounded-full bg-azure" />
+            <span className="h-1.5 w-1.5 animate-pulseSoft rounded-full bg-gold" />
             Distributions operating normally
           </div>
         </div>
@@ -76,7 +76,7 @@ export default function Footer() {
         ))}
       </div>
 
-      <div className="border-t border-white/[0.07] px-6 py-6">
+      <div className="border-t border-navy/[0.07] px-6 py-6">
         <div className="mx-auto max-w-7xl">
           <p className="mx-auto max-w-4xl text-center text-[11px] leading-relaxed text-mist-faint">
             XPY is a speculative digital asset, not an investment product,
@@ -84,8 +84,8 @@ export default function Footer() {
             trading fees, vary with volume, and may be zero for any period.
             Past distributions do not predict future ones. The token’s market
             price can decline regardless of rewards received, and you may lose
-            your entire outlay. XRP cannot be mined; XPY does not mine,
-            generate, or create XRP. The project reserve is a treasury, not
+            your entire outlay. XPY owns no wells and drills nothing; it does
+            not produce, generate, or create oil. The project reserve is a treasury, not
             redemption backing. Nothing on this site is financial advice.
           </p>
           <p className="mt-5 text-center font-mono text-[10px] uppercase tracking-[0.18em] text-mist-faint">

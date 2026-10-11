@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { XrpMark } from './Hero.jsx'
+import { OilMark } from './Hero.jsx'
 
 const EASE = [0.22, 1, 0.36, 1]
 const XRP_PRICE = 1.34
@@ -51,7 +51,7 @@ const principles = [
   },
   {
     title: 'Never lent, never mixed',
-    body: 'Reserve XRP is not lent out, staked, or commingled with the rewards pool or team funds. It sits, visibly, as the project’s standing treasury.',
+    body: 'Reserve oil stock is not lent out, staked, or commingled with the rewards pool or team funds. It sits, visibly, as the project’s standing treasury.',
   },
   {
     title: 'Not the source of yield',
@@ -62,8 +62,8 @@ const principles = [
 export default function Reserve() {
   return (
     <section id="reserve" className="relative overflow-x-clip border-y border-white/[0.06]">
-      <div className="pointer-events-none absolute -left-64 top-0 h-[480px] w-[720px] rounded-full bg-azure-deep/[0.18] blur-[140px]" />
-      <div className="pointer-events-none absolute -right-40 bottom-0 h-[380px] w-[520px] rounded-full bg-azure/[0.06] blur-[120px]" />
+      <div className="pointer-events-none absolute -left-64 top-0 h-[480px] w-[720px] rounded-full bg-gold-deep/[0.18] blur-[140px]" />
+      <div className="pointer-events-none absolute -right-40 bottom-0 h-[380px] w-[520px] rounded-full bg-gold/[0.06] blur-[120px]" />
 
       <div className="relative mx-auto max-w-7xl px-6 py-20 sm:py-28">
         {/* headline: lines slam in from opposite sides */}
@@ -83,7 +83,7 @@ export default function Reserve() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: '-80px' }}
               transition={{ duration: 0.55, ease: EASE }}
-              className="text-4xl font-bold tracking-[-0.03em] sm:text-6xl"
+              className="font-serif text-4xl font-semibold tracking-[-0.015em] sm:text-6xl"
             >
               The future coin of the
             </motion.h2>
@@ -94,14 +94,14 @@ export default function Reserve() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: '-80px' }}
               transition={{ delay: 0.15, duration: 0.55, ease: EASE }}
-              className="text-4xl font-bold tracking-[-0.03em] sm:text-6xl"
+              className="font-serif text-4xl font-semibold tracking-[-0.015em] sm:text-6xl"
             >
               <span className="relative inline-block">
-                <span className="bg-gradient-to-r from-azure to-azure-bright bg-clip-text text-transparent">
-                  XRP ecosystem.
+                <span className="bg-gradient-to-r from-gold to-gold-bright bg-clip-text text-transparent">
+                  Oil stock ecosystem.
                 </span>
                 <span aria-hidden className="text-glint absolute inset-0">
-                  XRP ecosystem.
+                  Oil stock ecosystem.
                 </span>
               </span>
             </motion.h2>
@@ -116,7 +116,7 @@ export default function Reserve() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: [0, 0.3, 0], scale: [0.85, 1.5] }}
                   transition={{ delay: 2.4 + i * 1.5, duration: 3, repeat: Infinity, ease: 'easeOut' }}
-                  className="pointer-events-none absolute left-1/2 top-1/2 h-32 w-[min(80vw,560px)] -translate-x-1/2 -translate-y-1/2 rounded-full border border-azure/40"
+                  className="pointer-events-none absolute left-1/2 top-1/2 h-32 w-[min(80vw,560px)] -translate-x-1/2 -translate-y-1/2 rounded-full border border-gold/40"
                 />
               ))}
               <motion.div
@@ -124,7 +124,7 @@ export default function Reserve() {
                 whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
                 viewport={{ once: true, margin: '-80px' }}
                 transition={{ delay: 0.35, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-                className="text-5xl font-bold tabular-nums tracking-[-0.03em] text-mist [text-shadow:0_0_60px_rgba(46,155,255,0.4)] sm:text-8xl"
+                className="text-5xl font-bold tabular-nums tracking-[-0.03em] text-mist [text-shadow:0_0_60px_rgba(212,167,44,0.4)] sm:text-8xl"
               >
                 <motion.span
                   animate={{ scale: [1, 1.03, 1] }}
@@ -143,7 +143,7 @@ export default function Reserve() {
             transition={{ delay: 0.6, duration: 0.5, ease: EASE }}
             className="mt-4 text-xl font-medium text-mist sm:text-2xl"
           >
-            starting reserve of <span className="text-shimmer">XRP</span>
+            starting reserve, held in <span className="text-shimmer">oil stock</span>
           </motion.p>
 
           {/* verification pill row */}
@@ -154,9 +154,9 @@ export default function Reserve() {
             transition={{ delay: 0.8, duration: 0.5, ease: EASE }}
             className="mt-7 flex flex-wrap items-center justify-center gap-3"
           >
-            <span className="flex items-center gap-2 rounded-full border border-azure/30 bg-azure/[0.08] px-4 py-2 text-sm font-medium tabular-nums text-azure-bright">
-              <XrpMark className="h-3.5 w-3.5" strokeWidth={5} />
-              ≈ <CountUp target={RESERVE_XRP} suffix=" XRP" /> held
+            <span className="flex items-center gap-2 rounded-full border border-gold/30 bg-gold/[0.08] px-4 py-2 text-sm font-medium tabular-nums text-gold-bright">
+              <OilMark className="h-3.5 w-3.5" strokeWidth={5} />
+              100% held in oil stock
             </span>
             <span className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-mist-dim">
               Public on-ledger address
@@ -173,10 +173,10 @@ export default function Reserve() {
             transition={{ delay: 0.95, duration: 0.55, ease: EASE }}
             className="mx-auto mt-7 max-w-2xl leading-relaxed text-mist-dim"
           >
-            Nobody else pairs a seven-figure XRP treasury, sitting on the
+            Nobody else pairs a seven-figure oil stock treasury, sitting on the
             public ledger for anyone to audit, with an algorithm that pays
             holders every hour. XPY does. The fees pay you. The reserve stands
-            behind the project: our thank-you to the XRP ecosystem we are
+            behind the project: our thank-you to the oil stock ecosystem we are
             building in, and our proof of long-term commitment.
           </motion.p>
           <motion.p
@@ -200,9 +200,9 @@ export default function Reserve() {
                 whileInView={{ opacity: 1, x: 0, rotate: 0 }}
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ delay: i * 0.12, type: 'spring', stiffness: 190, damping: 21 }}
-                className="h-full rounded-lg border border-white/[0.06] bg-white/[0.03] p-7 transition-colors hover:border-azure/25"
+                className="h-full rounded-lg border border-white/[0.06] bg-white/[0.03] p-7 transition-colors hover:border-gold/25"
               >
-                <span className="font-mono text-[11px] text-azure">0{i + 1}</span>
+                <span className="font-mono text-[11px] text-gold">0{i + 1}</span>
                 <h3 className="mb-2.5 mt-4 font-medium tracking-tight">{p.title}</h3>
                 <p className="text-sm leading-relaxed text-mist-dim">{p.body}</p>
               </motion.div>
