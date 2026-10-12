@@ -36,13 +36,13 @@ const OTHER_NOTIFS = [
   {
     app: 'X',
     icon: 'x',
-    body: '@XPYOFFICIAL: The $1,000,000 $USO reserve is funded. Attestation publishes this week.',
+    body: '@XTOOFFICIAL: The $1,000,000 $USO reserve is funded. Attestation publishes this week.',
     hl: '$1,000,000 $USO reserve',
   },
   {
     app: 'Stocks',
     icon: 'stocks',
-    body: 'WTI Crude $78.40 (+1.8%) · $USO +5.2% · XPY +3.1%',
+    body: 'WTI Crude $78.40 (+1.8%) · $USO +5.2% · XTO +3.1%',
   },
   {
     app: 'News',
@@ -53,7 +53,7 @@ const OTHER_NOTIFS = [
   {
     app: 'X',
     icon: 'x',
-    body: '@XPYOFFICIAL: 24 distributions in the last 24 hours. Every one of them on the ledger.',
+    body: '@XTOOFFICIAL: 24 distributions in the last 24 hours. Every one of them on the ledger.',
     hl: '24 distributions',
   },
 ]
@@ -242,7 +242,7 @@ function PhoneMock({ notifs }) {
                             <div className="min-w-0 flex-1">
                               <div className="flex items-baseline justify-between gap-2">
                                 <span className="text-[15px] font-semibold leading-tight text-white">
-                                  {n.type === 'pay' ? 'XPY' : n.app}
+                                  {n.type === 'pay' ? 'XTO' : n.app}
                                 </span>
                                 <span className="text-[12px] text-white/45">
                                   {i === 0 ? 'now' : `${i}h ago`}
@@ -367,7 +367,7 @@ function ActTitle() {
   return (
     <motion.div exit={actExit} className="relative w-full px-4 text-center">
       <Float amt={8} dur={5} delay={1.8}>
-        {/* line 1: BUY + XPY. slam in from opposite sides and collide */}
+        {/* line 1: BUY + XTO. slam in from opposite sides and collide */}
         <div className="relative flex flex-wrap items-center justify-center gap-x-5">
           <ImpactPulse delay={0.55} />
           <Burst delay={0.55} />
@@ -385,7 +385,7 @@ function ActTitle() {
             transition={{ delay: 0.26, type: 'spring', stiffness: 230, damping: 16 }}
             className="text-3d inline-block text-6xl font-bold tracking-[-0.03em] sm:text-8xl lg:text-9xl"
           >
-            XPY.
+            XTO.
           </motion.span>
         </div>
 
@@ -561,7 +561,7 @@ function ActSleep() {
               </span>
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline justify-between gap-2">
-                  <span className="text-[15px] font-semibold text-white">XPY</span>
+                  <span className="text-[15px] font-semibold text-white">XTO</span>
                   <span className="text-[12px] text-white/45">{d.t}</span>
                 </div>
                 <p className="mt-[2px] text-[14px] leading-[1.32] text-white/85">
@@ -639,7 +639,7 @@ function ActReserve() {
           transition={{ delay: 0.1, duration: 0.7, ease: EASE }}
           className="font-mono text-sm uppercase text-gold-deep"
         >
-          Standing behind XPY
+          Standing behind XTO
         </motion.p>
       </Float>
       <Float delay={0.3} amt={9} dur={4.8}>
@@ -895,7 +895,7 @@ function ActStory() {
           transition={{ delay: 0.05, duration: 0.7, ease: EASE }}
           className="font-mono text-xs uppercase text-gold-deep"
         >
-          XPY is the first
+          XTO is the first
         </motion.p>
       </Float>
       <Float delay={0.3} amt={8} dur={4.8}>
@@ -1105,7 +1105,7 @@ function ActEnd() {
           <Star className="h-3 w-3" /> A movement for the American people <Star className="h-3 w-3" />
         </p>
         <h1 className="font-serif text-5xl font-semibold leading-[1.05] tracking-[-0.015em] sm:text-7xl">
-          Buy XPY.
+          Buy XTO.
           <br />
           Get paid in <span className="text-shimmer">$USO</span>.
         </h1>
@@ -1129,7 +1129,7 @@ function ActEnd() {
             className="btn-primary inline-flex items-center gap-2.5 !px-8 !py-4"
           >
             <OilMark className="h-4 w-4" strokeWidth={4} />
-            Buy XPY
+            Buy XTO
           </motion.a>
           <a href="#how" className="btn-secondary">How It Works</a>
         </motion.div>

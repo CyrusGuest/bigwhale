@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 
 const previewStats = [
-  ['XPY balance', '4,281,904', 'tokens'],
+  ['XTO balance', '4,281,904', 'tokens'],
   ['Share of supply', '0.4282%', 'of 1B supply'],
   ['Est. daily earnings', '$1,712.80', 'of oil stock at $10M avg volume'],
   ['Received, 30 days', '$51,384', 'of oil stock'],
@@ -20,7 +20,7 @@ export default function HolderPortal() {
           >
             <p className="eyebrow mb-5">Holder Portal</p>
             <h2 className="font-serif text-4xl font-medium tracking-[-0.01em] sm:text-5xl">
-              See your XPY work for you.
+              See your XTO work for you.
             </h2>
             <p className="mt-5 max-w-md leading-relaxed text-mist-dim">
               A bank-account-style dashboard for your position: your balance,

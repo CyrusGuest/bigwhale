@@ -35,7 +35,7 @@ export default function App() {
       }
     }
     window.addEventListener('hashchange', onHash)
-    // honor a section deep link (xpy.io/#faq) on first load too
+    // honor a section deep link (xto.io/#faq) on first load too
     const initial = window.location.hash.slice(1)
     if (initial && !initial.startsWith('/')) {
       setTimeout(() => document.getElementById(initial)?.scrollIntoView(), 150)

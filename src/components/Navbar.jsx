@@ -14,7 +14,7 @@ function useTheme() {
   useEffect(() => {
     document.documentElement.classList.toggle('dark', dark)
     try {
-      localStorage.setItem('xpy-theme', dark ? 'dark' : 'light')
+      localStorage.setItem('xto-theme', dark ? 'dark' : 'light')
     } catch {}
   }, [dark])
   return [dark, () => setDark((d) => !d)]
@@ -66,7 +66,7 @@ export default function Navbar() {
             <OilMark className="h-4 w-4" strokeWidth={5} />
           </span>
           <span className="flex flex-col leading-none">
-            <span className="font-serif text-base font-semibold tracking-[0.12em]">XPY</span>
+            <span className="font-serif text-base font-semibold tracking-[0.12em]">XTO</span>
             <span className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.22em] text-mist-faint">
               American Oil Reserve
             </span>

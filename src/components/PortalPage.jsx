@@ -155,7 +155,7 @@ function Dashboard({ address, data, sample = false }) {
           <span className="text-[13px] font-medium tracking-wide text-white/55">Total balance</span>
           <span className="flex items-center gap-2 rounded-full bg-white/[0.12] px-3.5 py-1.5 text-[12px] font-semibold text-white ring-1 ring-white/[0.15] backdrop-blur">
             <OilMark className="h-3.5 w-3.5" strokeWidth={5} />
-            XPY
+            XTO
           </span>
         </div>
 
@@ -163,7 +163,7 @@ function Dashboard({ address, data, sample = false }) {
           {usd(positionUsd)}
         </div>
         <div className="relative mt-2.5 font-display text-[16px] font-medium tabular-nums tracking-[-0.01em] text-white/65">
-          {data.balance.toLocaleString('en-US')} XPY · {(data.share * 100).toFixed(4)}% of supply
+          {data.balance.toLocaleString('en-US')} XTO · {(data.share * 100).toFixed(4)}% of supply
         </div>
 
         <div className="relative mt-7 flex flex-wrap items-center gap-x-5 gap-y-2">
@@ -309,7 +309,7 @@ function Dashboard({ address, data, sample = false }) {
                 <OilMark className="h-[18px] w-[18px]" strokeWidth={5} />
               </span>
               <div className="min-w-0 flex-1">
-                <span className="block text-[15px] font-semibold text-mist">XPY Reward</span>
+                <span className="block text-[15px] font-semibold text-mist">XTO Reward</span>
                 <span className="block text-[13px] text-navy/45">Hourly payout · {t.ago}</span>
               </div>
               <div className="text-right">
@@ -369,7 +369,7 @@ export default function PortalPage() {
             Your money, working.
           </h1>
           <p className="mx-auto mt-5 max-w-lg text-lg leading-relaxed text-mist-dim">
-            Enter your Solana wallet and check your XPY position like a bank
+            Enter your Solana wallet and check your XTO position like a bank
             account: balance, every payout, and your earning pace. Pin it.
             Check it daily.
           </p>

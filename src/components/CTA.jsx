@@ -22,15 +22,15 @@ export default function CTA() {
         </h2>
         <p className="mx-auto mt-7 max-w-xl text-lg leading-relaxed text-mist-dim">
           Oil powers this country, and for too long only a few earned from
-          it. Hold XPY and get your piece: $USO, paid to you every hour,
+          it. Hold XTO and get your piece: $USO, paid to you every hour,
           without paying today’s high price for a single barrel or share.
         </p>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-          <a href="#" className="btn-primary">Join the Movement · Buy XPY</a>
+          <a href="#" className="btn-primary">Join the Movement · Buy XTO</a>
           <a href="#faq" className="btn-secondary">Read the Risks</a>
         </div>
         <p className="mx-auto mt-10 max-w-lg border-t border-navy/[0.08] pt-6 text-xs leading-relaxed text-mist-faint">
-          XPY is a speculative digital asset. Distributions vary with trading
+          XTO is a speculative digital asset. Distributions vary with trading
           volume, may be zero, and are not income guarantees. The token’s price
           can decline regardless of rewards. Nothing on this site constitutes
           financial, investment, or tax advice.

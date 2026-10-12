@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 const sources = [
   {
     title: 'Trading fees',
-    body: 'The 4% fee on completed XPY trades. This is the only inflow to the rewards pool.',
+    body: 'The 4% fee on completed XTO trades. This is the only inflow to the rewards pool.',
     included: true,
   },
 ]
@@ -12,7 +12,7 @@ const notSources = [
   { title: 'New buyers’ principal', body: 'Purchase capital is never routed to earlier holders. Rewards are funded exclusively by realized fees.' },
   { title: 'Token emissions', body: 'Supply is fixed. No new tokens are minted to simulate yield.' },
   { title: 'Lending or rehypothecation', body: 'Pooled oil stock sits in the distribution wallet until it is airdropped. It is not lent, staked, or deployed anywhere.' },
-  { title: 'Actual drilling of any kind', body: 'XPY owns no wells, rigs, or leases, and pumps no barrels. “Virtual drilling” is our name for the fee-redistribution algorithm, not a claim that anything is drilled. A project claiming to literally drill oil for you from a token is misrepresenting how it works.' },
+  { title: 'Actual drilling of any kind', body: 'XTO owns no wells, rigs, or leases, and pumps no barrels. “Virtual drilling” is our name for the fee-redistribution algorithm, not a claim that anything is drilled. A project claiming to literally drill oil for you from a token is misrepresenting how it works.' },
 ]
 
 const ledgerLinks = [

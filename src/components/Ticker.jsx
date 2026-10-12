@@ -1,7 +1,7 @@
 const metrics = [
   ['Trading fee', '4%'],
   ['Holder share', '4% of trade'],
-  ['Team', 'Holds XPY, same rules'],
+  ['Team', 'Holds XTO, same rules'],
   ['Cadence', 'Hourly'],
   ['Paid in', 'Oil stock'],
   ['Claiming required', 'None'],

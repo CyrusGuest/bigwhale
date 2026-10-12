@@ -24,7 +24,7 @@ export default function Footer() {
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gold/10 text-gold">
               <OilMark className="h-4 w-4" strokeWidth={5} />
             </span>
-            <span className="text-base font-semibold tracking-[0.08em]">XPY</span>
+            <span className="text-base font-semibold tracking-[0.08em]">XTO</span>
           </div>
           <p className="mt-5 max-w-xs text-sm leading-relaxed text-mist-dim">
             Virtual drilling on a public ledger: trading fees redistributed to
@@ -79,17 +79,17 @@ export default function Footer() {
       <div className="border-t border-navy/[0.07] px-6 py-6">
         <div className="mx-auto max-w-7xl">
           <p className="mx-auto max-w-4xl text-center text-[11px] leading-relaxed text-mist-faint">
-            XPY is a speculative digital asset, not an investment product,
+            XTO is a speculative digital asset, not an investment product,
             deposit, or income scheme. Distributions are funded solely by
             trading fees, vary with volume, and may be zero for any period.
             Past distributions do not predict future ones. The token’s market
             price can decline regardless of rewards received, and you may lose
-            your entire outlay. XPY owns no wells and drills nothing; it does
+            your entire outlay. XTO owns no wells and drills nothing; it does
             not produce, generate, or create oil. The project reserve is a treasury, not
             redemption backing. Nothing on this site is financial advice.
           </p>
           <p className="mt-5 text-center font-mono text-[10px] uppercase tracking-[0.18em] text-mist-faint">
-            © {new Date().getFullYear()} XPY
+            © {new Date().getFullYear()} XTO
           </p>
         </div>
       </div>

@@ -22,21 +22,21 @@ const BURST = Array.from({ length: 8 }, (_, i) => {
 
 const pairs = [
   {
-    name: 'XPY / oil stock',
+    name: 'XTO / oil stock',
     glyph: null, // OilMark
     status: 'Live now',
     live: true,
-    body: 'The flagship. Hold XPY and get paid oil stock every hour, backed by the $1,000,000 starting reserve. This is the pair you are looking at.',
+    body: 'The flagship. Hold XTO and get paid oil stock every hour, backed by the $1,000,000 starting reserve. This is the pair you are looking at.',
   },
   {
-    name: 'XPY / BTC',
+    name: 'XTO / BTC',
     glyph: '₿',
     status: 'In development',
     live: false,
     body: 'Passively earn Bitcoin. Same algorithm, same hourly payouts, a new pair with its own reserve behind it.',
   },
   {
-    name: 'XPY / ETH',
+    name: 'XTO / ETH',
     glyph: 'Ξ',
     status: 'Planned',
     live: false,
@@ -101,7 +101,7 @@ export default function Future() {
           transition={{ delay: 0.4, duration: 0.55, ease: EASE }}
           className="mx-auto mt-6 max-w-2xl leading-relaxed text-mist-dim lg:mx-0"
         >
-          XPY is bigger than one coin. The algorithm paying oil stock to holders
+          XTO is bigger than one coin. The algorithm paying oil stock to holders
           today is built to run on any asset. Oil stock came first because this is
           our home ecosystem. Bitcoin comes next. Every new pair is another
           way to passively earn the assets you actually want, sent to your

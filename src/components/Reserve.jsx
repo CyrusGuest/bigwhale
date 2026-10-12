@@ -175,7 +175,7 @@ export default function Reserve() {
           >
             Nobody else pairs a seven-figure oil stock treasury, sitting on the
             public ledger for anyone to audit, with an algorithm that pays
-            holders every hour. XPY does. The fees pay you. The reserve stands
+            holders every hour. XTO does. The fees pay you. The reserve stands
             behind the project: our thank-you to the oil stock ecosystem we are
             building in, and our proof of long-term commitment.
           </motion.p>

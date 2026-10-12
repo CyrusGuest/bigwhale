@@ -13,7 +13,7 @@ const FACTS = [
 ]
 
 
-// illustrative growth curves: XPY price and a holder's accumulated $USO,
+// illustrative growth curves: XTO price and a holder's accumulated $USO,
 // both plotted against holder count. Shapes only; not a forecast.
 const W = 640
 const H = 260
@@ -41,7 +41,7 @@ function GrowthChart() {
   const oilD = curve(OIL)
   const baseY = H - PAD.b
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full text-mist" role="img" aria-label="Illustration: as holders grow, XPY price and your $USO position both rise">
+    <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full text-mist" role="img" aria-label="Illustration: as holders grow, XTO price and your $USO position both rise">
       <defs>
         <linearGradient id="oilFill" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#C8961E" stopOpacity="0.28" />
@@ -85,7 +85,7 @@ function GrowthChart() {
         viewport={{ once: true }}
         transition={{ delay: 0.9, duration: 1.6, ease: 'easeInOut' }}
       />
-      {/* XPY price */}
+      {/* XTO price */}
       <motion.path
         d={priceD}
         fill="none"
@@ -142,11 +142,11 @@ export default function Powers() {
               truck and paid the heating bill.
             </motion.p>
             <motion.p {...fade(0.3)} className="mt-5 text-lg leading-relaxed text-mist-dim">
-              XPY changes that. America already pumps more oil than any nation
-              on earth. XPY pushes that lead further by opening the oil economy
+              XTO changes that. America already pumps more oil than any nation
+              on earth. XTO pushes that lead further by opening the oil economy
               to every American: hold the coin, and our distribution algorithm
               pays you real $USO, every hour. No well, no broker, no big
-              check up front. XPY is the first crypto coin ever to make this
+              check up front. XTO is the first crypto coin ever to make this
               possible.
             </motion.p>
             <motion.p {...fade(0.34)} className="mt-5 text-lg leading-relaxed text-mist-dim">
@@ -167,7 +167,7 @@ export default function Powers() {
                   Every American deserves a piece of it.
                 </p>
                 <p className="mt-1.5 text-sm leading-relaxed text-mist-dim">
-                  Hold XPY and the oil market pays you, every hour, in dollars
+                  Hold XTO and the oil market pays you, every hour, in dollars
                   you can see. Every payment is public, so anyone can check it.
                 </p>
               </div>
@@ -195,22 +195,22 @@ export default function Powers() {
           </div>
         </div>
 
-        {/* the growth loop: more holders → XPY grows → your oil position grows */}
+        {/* the growth loop: more holders → XTO grows → your oil position grows */}
         <motion.div {...fade(0.1)} className="mt-20 grid gap-10 rounded-lg border border-gold/25 bg-gold/[0.05] p-7 sm:p-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <div>
             <p className="eyebrow">Our goal</p>
             <h3 className="mt-5 font-serif text-3xl font-semibold tracking-[-0.015em] sm:text-4xl">
-              Grow XPY. Grow your oil position with it.
+              Grow XTO. Grow your oil position with it.
             </h3>
             <p className="mt-5 leading-relaxed text-mist-dim">
               Every new American who joins adds trading. Every trade pays the
               fee. And every fee buys $USO for the people already holding.
-              As the program grows, XPY is built to grow in value with it, and
+              As the program grows, XTO is built to grow in value with it, and
               your passively earned $USO climbs right alongside.
             </p>
             <ul className="mt-6 space-y-2.5 text-sm text-mist">
               <li className="flex items-center gap-3">
-                <span className="h-2.5 w-2.5 rounded-full bg-mist" /> XPY price, as holders grow
+                <span className="h-2.5 w-2.5 rounded-full bg-mist" /> XTO price, as holders grow
               </li>
               <li className="flex items-center gap-3">
                 <span className="h-2.5 w-2.5 rounded-full bg-gold" /> Your $USO, earned every hour

@@ -5,7 +5,7 @@ const codeLines = [
   { c: '', t: '' },
   { c: 'text-gold', t: "import { XRPay } from '@xrpay/sdk'" },
   { c: '', t: '' },
-  { c: 'text-mist', t: 'const xrpay = new XRPay({ apiKey: process.env.XPY_KEY })' },
+  { c: 'text-mist', t: 'const xrpay = new XRPay({ apiKey: process.env.XTO_KEY })' },
   { c: '', t: '' },
   { c: 'text-mist', t: 'const tx = await xrpay.payments.create({' },
   { c: 'text-mist-dim', t: "  from:   { currency: 'USD', amount: '2500.00' }," },

@@ -4,7 +4,7 @@ const features = [
   {
     num: '01',
     title: 'Paid in oil stock, not the token',
-    body: 'Rewards arrive as oil stock, a liquid, widely listed asset, rather than more of the token itself. Your reward is immediately spendable and its value does not depend on XPY’s own price at the moment you receive it.',
+    body: 'Rewards arrive as oil stock, a liquid, widely listed asset, rather than more of the token itself. Your reward is immediately spendable and its value does not depend on XTO’s own price at the moment you receive it.',
     spec: 'Native oil stock airdrops · No reward token · Immediately liquid',
   },
   {
@@ -54,7 +54,7 @@ export default function Features() {
           Simple enough to verify.
         </h2>
         <p className="mt-5 leading-relaxed text-mist-dim">
-          Reward mechanisms fail when they are too complex to audit. XPY’s
+          Reward mechanisms fail when they are too complex to audit. XTO’s
           is one rule applied hourly, and every one of these properties can be
           checked against the ledger.
         </p>

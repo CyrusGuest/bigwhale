@@ -14,13 +14,13 @@ const fade = (delay = 0) => ({
 const STEPS = [
   {
     num: 'I',
-    title: 'Hold XPY',
-    body: 'Buy XPY. Keep it in your wallet. That is the whole job.',
+    title: 'Hold XTO',
+    body: 'Buy XTO. Keep it in your wallet. That is the whole job.',
   },
   {
     num: 'II',
     title: 'Get paid every hour',
-    body: 'Once an hour, $USO is sent straight to your wallet. You see it as dollars: $40 one hour, $55 the next. Hold more XPY and each payout gets bigger.',
+    body: 'Once an hour, $USO is sent straight to your wallet. You see it as dollars: $40 one hour, $55 the next. Hold more XTO and each payout gets bigger.',
   },
   {
     num: 'III',
@@ -31,9 +31,9 @@ const STEPS = [
 
 // the fee loop, left to right
 const FLOW = [
-  ['Someone trades XPY', 'They pay a 4% fee'],
+  ['Someone trades XTO', 'They pay a 4% fee'],
   ['The fee buys $USO', 'All of it, every time'],
-  ['Every hour, it is split', 'Among everyone holding XPY'],
+  ['Every hour, it is split', 'Among everyone holding XTO'],
   ['It lands in your wallet', 'Automatically'],
 ]
 
@@ -66,11 +66,11 @@ export default function Explainer() {
           <motion.p {...fade(0.16)} className="mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-mist-dim">
             Oil prices are near record highs. Buying barrels, or shares in the
             companies that pump them, is out of reach for most American
-            families. XPY opens the door: hold the coin, and the oil market pays
+            families. XTO opens the door: hold the coin, and the oil market pays
             you in $USO (US Oil Fund), every hour, with no big check up front.
           </motion.p>
           <motion.p {...fade(0.22)} className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-mist-dim">
-            No broker, no minimums, no waiting. Hour by hour, XPY lets
+            No broker, no minimums, no waiting. Hour by hour, XTO lets
             everyday Americans build a portfolio of $USO easier than ever,
             and own a real piece of the industry that built this country.
           </motion.p>
@@ -116,7 +116,7 @@ export default function Explainer() {
             ))}
           </div>
           <p className="mt-6 border-t border-gold/15 pt-5 text-sm leading-relaxed text-mist-dim">
-            Being early pays. Every single trade of XPY made after you buy in
+            Being early pays. Every single trade of XTO made after you buy in
             sends $USO to your wallet. As more Americans discover the
             program and start trading, your payouts grow with it. The earlier
             you hold, the more of that growth you collect.

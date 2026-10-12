@@ -78,7 +78,7 @@ export default function Drip() {
             <span className="text-gold">while you do nothing.</span>
           </h2>
           <p className="mt-6 max-w-md leading-relaxed text-mist-dim">
-            This is what holding XPY feels like: $USO passively earned
+            This is what holding XTO feels like: $USO passively earned
             around the clock and sent to your wallet every hour by the
             algorithm, even while you sleep. Drag the slider to your position
             size and watch how fast it adds up.
