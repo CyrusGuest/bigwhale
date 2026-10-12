@@ -1200,7 +1200,7 @@ export default function Hero() {
       <motion.div
         animate={{ y: [0, -18, 0], rotate: [-6, -2, -6] }}
         transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-        className="pointer-events-none absolute -right-40 top-24"
+        className="pointer-events-none absolute -right-40 top-24 hidden md:block"
       >
         <OilMark className="h-[560px] w-[560px] text-gold opacity-[0.05]" strokeWidth={2.2} />
       </motion.div>

@@ -295,7 +295,6 @@
   animation: breatheGlow 8s ease-in-out infinite;
   /* own compositor layer: the huge blur paints once, opacity animates for free */
   will-change: opacity;
-  transform: translateZ(0);
 }
 @keyframes breatheGlow {
   0%,
@@ -344,6 +343,7 @@
   .breathe {
     animation: none;
     opacity: 0.85;
+    will-change: auto;
   }
   .eyebrow::before,
   .eyebrow::after {

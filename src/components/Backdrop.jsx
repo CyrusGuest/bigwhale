@@ -51,11 +51,16 @@ const FIELD = [
   { kind: 'derrick', left: '60%', w: 160, o: 0.065, far: false },
 ]
 
+// phones skip the per-scroll-frame parallax work: main-thread style writes on
+// every scroll event are exactly what makes mobile scrolling freeze
+const PARALLAX_OK =
+  typeof window === 'undefined' || !window.matchMedia('(max-width: 768px)').matches
+
 function FieldRow({ items, speed }) {
   const { scrollY } = useScroll()
-  const y = useTransform(scrollY, (v) => -v * speed)
+  const y = useTransform(scrollY, (v) => (PARALLAX_OK ? -v * speed : 0))
   return (
-    <motion.div className="absolute inset-x-0 bottom-0" style={{ y }}>
+    <motion.div className="absolute inset-x-0 bottom-0" style={{ y: PARALLAX_OK ? y : 0 }}>
       {items.map((f, i) => {
         const Comp = f.kind === 'pumpjack' ? Pumpjack : Derrick
         const h = f.kind === 'pumpjack' ? f.w * (80 / 120) : f.w * 2
@@ -122,21 +127,24 @@ export default function Backdrop() {
         }}
       />
 
-      {/* blue and gold washes, kept faint so text stays crisp */}
-      <div className="absolute -top-72 left-1/2 h-[720px] w-[1200px] -translate-x-1/2 rounded-full bg-blue/[0.10] blur-[170px]" />
-      <div className="absolute right-[-280px] top-[28%] h-[560px] w-[560px] rounded-full bg-gold/[0.10] blur-[150px]" />
-      <div className="absolute bottom-[-220px] left-[-220px] h-[600px] w-[600px] rounded-full bg-blue/[0.08] blur-[160px]" />
+      {/* blue and gold washes, kept faint so text stays crisp. Desktop only:
+          giant blurred layers inside a fixed backdrop crush phone GPUs */}
+      <div className="absolute -top-72 left-1/2 hidden h-[720px] w-[1200px] -translate-x-1/2 rounded-full bg-blue/[0.10] blur-[170px] md:block" />
+      <div className="absolute right-[-280px] top-[28%] hidden h-[560px] w-[560px] rounded-full bg-gold/[0.10] blur-[150px] md:block" />
+      <div className="absolute bottom-[-220px] left-[-220px] hidden h-[600px] w-[600px] rounded-full bg-blue/[0.08] blur-[160px] md:block" />
 
-      {/* a slow oil sheen drifting across the middle */}
-      <motion.div
-        animate={{ x: ['-8%', '8%', '-8%'], y: ['-3%', '4%', '-3%'] }}
-        transition={{ duration: 38, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute left-1/2 top-[48%] h-[380px] w-[900px] -translate-x-1/2 rounded-full blur-[120px]"
-        style={{
-          background:
-            'linear-gradient(90deg, rgb(var(--blue) / 0.08) 0%, rgb(var(--gold) / 0.08) 50%, rgba(179,25,66,0.05) 100%)',
-        }}
-      />
+      {/* a slow oil sheen drifting across the middle (desktop only) */}
+      {PARALLAX_OK && (
+        <motion.div
+          animate={{ x: ['-8%', '8%', '-8%'], y: ['-3%', '4%', '-3%'] }}
+          transition={{ duration: 38, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute left-1/2 top-[48%] h-[380px] w-[900px] -translate-x-1/2 rounded-full blur-[120px]"
+          style={{
+            background:
+              'linear-gradient(90deg, rgb(var(--blue) / 0.08) 0%, rgb(var(--gold) / 0.08) 50%, rgba(179,25,66,0.05) 100%)',
+          }}
+        />
+      )}
 
       {/* field lights */}
       {lights.map((l) => (
