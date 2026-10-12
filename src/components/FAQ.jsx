@@ -46,10 +46,10 @@ export default function FAQ() {
   return (
     <section id="faq" className="mx-auto max-w-4xl px-6 py-20 sm:py-28">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
+        whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
         viewport={{ once: true, margin: '-80px' }}
-        transition={{ duration: 0.7 }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className="mb-14"
       >
         <p className="eyebrow mb-5">Frequently Asked</p>
@@ -62,7 +62,13 @@ export default function FAQ() {
         {faqs.map((f, i) => {
           const isOpen = open === i
           return (
-            <div key={f.q}>
+            <motion.div
+              key={f.q}
+              initial={{ opacity: 0, y: 14, filter: 'blur(6px)' }}
+              whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.55, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
+            >
               <button
                 onClick={() => setOpen(isOpen ? -1 : i)}
                 className="flex w-full items-center justify-between gap-6 py-6 text-left"
@@ -91,7 +97,7 @@ export default function FAQ() {
                   </motion.div>
                 )}
               </AnimatePresence>
-            </div>
+            </motion.div>
           )
         })}
       </div>

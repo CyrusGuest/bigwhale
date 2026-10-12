@@ -46,10 +46,10 @@ export default function DevSection() {
       <div className="mx-auto max-w-7xl px-6 py-20 sm:py-28">
         <div className="grid gap-14 lg:grid-cols-2 lg:items-start">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
+            whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.7 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
             <p className="eyebrow mb-5">Developers</p>
             <h2 className="font-serif text-4xl font-medium tracking-[-0.01em] sm:text-5xl">
@@ -65,8 +65,8 @@ export default function DevSection() {
               {perks.map((p, i) => (
                 <motion.div
                   key={p.title}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, y: 16, filter: 'blur(8px)' }}
+                  whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: 0.15 + i * 0.1 }}
                   className="border-l border-brass/40 pl-5"
@@ -79,8 +79,8 @@ export default function DevSection() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 28, filter: 'blur(8px)' }}
+            whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             viewport={{ once: true, margin: '-80px' }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
@@ -104,8 +104,8 @@ export default function DevSection() {
             </div>
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
+              whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.6, delay: 0.15 }}
               className="panel mt-5 overflow-hidden rounded-md"

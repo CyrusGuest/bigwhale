@@ -217,7 +217,7 @@ export default function Future() {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
-        transition={{ delay: 0.6, duration: 0.6 }}
+        transition={{ delay: 0.6, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className="mt-8 font-mono text-[11px] text-mist-faint"
       >
         Roadmap, not launch dates. Each new pair ships when its reserve and

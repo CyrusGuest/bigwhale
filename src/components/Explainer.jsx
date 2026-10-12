@@ -5,10 +5,10 @@ import Stars from './Stars.jsx'
 const EASE = [0.22, 1, 0.36, 1]
 
 const fade = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
+  initial: { opacity: 0, y: 24, filter: 'blur(8px)' },
+  whileInView: { opacity: 1, y: 0, filter: 'blur(0px)' },
   viewport: { once: true, margin: '-80px' },
-  transition: { delay, duration: 0.7, ease: EASE },
+  transition: { delay, duration: 0.8, ease: EASE },
 })
 
 const STEPS = [
@@ -48,31 +48,37 @@ const FACTS = [
 export default function Explainer() {
   return (
     <section id="how" className="relative border-t border-navy/[0.07]">
-      <div className="pointer-events-none absolute left-1/2 top-0 h-[520px] w-[1000px] -translate-x-1/2 rounded-full bg-blue/[0.08] blur-[150px]" />
+      <div className="breathe pointer-events-none absolute left-1/2 top-0 h-[520px] w-[1000px] -translate-x-1/2 rounded-full bg-blue/[0.08] blur-[150px]" />
 
       <div className="relative mx-auto max-w-7xl px-6 py-28">
         {/* the claim */}
         <div className="mx-auto max-w-3xl text-center">
           <motion.p {...fade()} className="eyebrow">
-            A movement for the American people
+            Making history for the American people
           </motion.p>
           <motion.h2
             {...fade(0.08)}
             className="mt-6 font-serif text-4xl font-semibold leading-[1.1] tracking-[-0.015em] sm:text-5xl lg:text-6xl"
           >
-            The first crypto coin that pays you{' '}
-            <span className="text-shimmer">$USO</span>. Passively, all day.
+            The first coin in history that pays you{' '}
+            <span className="text-shimmer">$USO</span>. Oil investing, open to
+            every American.
           </motion.h2>
           <motion.p {...fade(0.16)} className="mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-mist-dim">
-            Oil prices are near record highs. Buying barrels, or shares in the
-            companies that pump them, is out of reach for most American
-            families. XTO opens the door: hold the coin, and the oil market pays
-            you in $USO (US Oil Fund), every hour, with no big check up front.
+            Oil is a multi-trillion dollar industry, the lifeblood of the
+            global economy, and for a century the only people collecting from
+            it were brokers, barons, and big institutions. XTO changes that
+            forever. Paired with $USO, the United States Oil Fund, XTO throws
+            the doors to oil investing open to all Americans: hold the coin,
+            and the oil market pays you in $USO, every single hour, with no
+            big check up front.
           </motion.p>
           <motion.p {...fade(0.22)} className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-mist-dim">
-            No broker, no minimums, no waiting. Hour by hour, XTO lets
-            everyday Americans build a portfolio of $USO easier than ever,
-            and own a real piece of the industry that built this country.
+            No coin has ever done this before. No broker, no minimums, no
+            waiting. Hour by hour, XTO lets everyday Americans build a real
+            position in the industry that built this country, and claim their
+            piece of a multi-trillion dollar market that was never meant to
+            include them. Until now.
           </motion.p>
           <motion.div {...fade(0.28)}>
             <Stars className="mt-10" />
@@ -91,7 +97,8 @@ export default function Explainer() {
         </div>
 
         {/* the loop */}
-        <motion.div {...fade(0.2)} className="mt-14 rounded-lg border border-gold/25 bg-gold/[0.05] p-6 sm:p-8">
+        <motion.div {...fade(0.2)} className="relative mt-14 overflow-hidden rounded-xl bg-gradient-to-br from-gold/[0.09] via-gold/[0.03] to-transparent p-6 sm:p-8">
+          <div className="breathe pointer-events-none absolute -left-24 -top-28 h-72 w-72 rounded-full bg-gold/[0.12] blur-[90px]" />
           <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-gold-deep">
             Where your payout comes from
           </p>

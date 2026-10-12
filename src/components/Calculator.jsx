@@ -137,10 +137,10 @@ export default function Calculator() {
   return (
     <section id="calculator" className="mx-auto max-w-7xl px-6 py-16 sm:py-24">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
+        whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
         viewport={{ once: true, margin: '-80px' }}
-        transition={{ duration: 0.7 }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className="mb-12 max-w-2xl"
       >
         <p className="eyebrow mb-5">Estimator</p>
@@ -155,8 +155,8 @@ export default function Calculator() {
       </motion.div>
 
       <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, y: 24, filter: 'blur(8px)' }}
+        whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
         viewport={{ once: true, margin: '-60px' }}
         transition={{ duration: 0.7, delay: 0.1 }}
         className="panel grid overflow-hidden rounded-md lg:grid-cols-[0.9fr_1.1fr]"

@@ -445,7 +445,7 @@ function ActPhone({ notifs }) {
           <motion.p
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7, duration: 0.5 }}
+            transition={{ delay: 0.7, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="mt-7 flex flex-wrap justify-center gap-x-2 font-mono text-sm uppercase tracking-[0.3em] text-gold-deep lg:justify-start"
           >
             {['Real', 'Oil', '·', 'Straight', 'to', 'your', 'wallet'].map((w, i) => (
@@ -476,7 +476,7 @@ function ActPhone({ notifs }) {
         transition={{ duration: 0.8, ease: EASE }}
         className="relative flex origin-top scale-[0.88] justify-center sm:scale-95"
       >
-        <div className="pointer-events-none absolute top-1/2 left-1/2 h-[460px] w-[460px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold-deep/[0.28] blur-[100px]" />
+        <div className="breathe pointer-events-none absolute top-1/2 left-1/2 h-[460px] w-[460px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold-deep/[0.28] blur-[100px]" />
         {/* z z z drifting off the sleeping phone */}
         {[0, 1, 2].map((i) => (
           <motion.span
@@ -577,7 +577,7 @@ function ActSleep() {
           <motion.p
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.9, duration: 0.5 }}
+            transition={{ delay: 1.9, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="mt-8 flex flex-wrap justify-center gap-x-2 font-mono text-sm uppercase tracking-[0.26em] text-gold-deep"
           >
             {['$130.73', 'of', 'oil', 'stock', 'while', 'you', 'slept'].map((w, i) => (
@@ -690,7 +690,7 @@ function ActReserve() {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 2, duration: 0.5 }}
+          transition={{ delay: 2, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="mt-6 font-mono text-[11px] uppercase tracking-[0.2em] text-mist-faint"
         >
           Held on the public ledger · Verify any time · Attestation publishes at launch
@@ -800,7 +800,7 @@ function ActPortal() {
                 fill="url(#actPortalArea)"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: drawStart + drawDur - 0.3, duration: 0.6 }}
+                transition={{ delay: drawStart + drawDur - 0.3, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
               />
               <motion.path
                 d={line}
@@ -821,7 +821,7 @@ function ActPortal() {
                   fill="#7CF5E6"
                   initial={{ opacity: 0, scale: 0 }}
                   animate={{ opacity: 1, scale: [0, 1.6, 1] }}
-                  transition={{ delay: popDelay(i), duration: 0.4 }}
+                  transition={{ delay: popDelay(i), duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 />
               ))}
             </svg>
@@ -1029,6 +1029,7 @@ function ActStory() {
 }
 
 const WALLETS = [
+  { name: 'Candles', color: 'text-[#22C55E]', bar: '#22C55E', glow: 'rgba(34,197,94,0.30)' },
   { name: 'FOMO', color: 'text-navy', bar: '#32E7D0', glow: 'rgba(50,231,208,0.25)' },
   { name: 'Phantom', color: 'text-[#AB9FF2]', bar: '#AB9FF2', glow: 'rgba(171,159,242,0.30)' },
   { name: 'Coinbase', color: 'text-[#4A80FF]', bar: '#4A80FF', glow: 'rgba(74,128,255,0.30)' },
@@ -1068,7 +1069,7 @@ function ActOutro() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.75, duration: 0.4 }}
+        transition={{ delay: 0.75, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
         className="mt-10 flex justify-center"
       >
         <motion.div
@@ -1175,8 +1176,8 @@ export default function Hero() {
   return (
     <section className="relative overflow-x-clip pt-16">
       {/* XRP-blue washes */}
-      <div className="pointer-events-none absolute -top-56 left-1/3 h-[620px] w-[980px] -translate-x-1/2 rounded-full bg-blue/[0.08] blur-[150px]" />
-      <div className="pointer-events-none absolute right-[-180px] top-1/4 h-[420px] w-[420px] rounded-full bg-gold/[0.10] blur-[120px]" />
+      <div className="breathe pointer-events-none absolute -top-56 left-1/3 h-[620px] w-[980px] -translate-x-1/2 rounded-full bg-blue/[0.08] blur-[150px]" />
+      <div className="breathe pointer-events-none absolute right-[-180px] top-1/4 h-[420px] w-[420px] rounded-full bg-gold/[0.10] blur-[120px]" />
 
       {/* giant watermark X */}
       <motion.div

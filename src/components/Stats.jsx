@@ -80,7 +80,7 @@ function Spark({ data, delay }) {
 export default function Stats() {
   return (
     <section id="stats" className="relative overflow-hidden border-y border-white/[0.06] bg-ink-850/50">
-      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[300px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold-deep/[0.14] blur-[120px]" />
+      <div className="breathe pointer-events-none absolute left-1/2 top-1/2 h-[300px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold-deep/[0.14] blur-[120px]" />
       <div className="relative mx-auto max-w-7xl px-6 py-16 sm:py-24">
         <div className="mb-12 text-center">
           <span className="inline-block rounded-full border border-brass/30 bg-brass/[0.05] px-4 py-1.5 font-mono text-[9px] uppercase tracking-[0.2em] text-brass">
@@ -91,8 +91,8 @@ export default function Stats() {
           {stats.map((s, i) => (
             <motion.div
               key={s.label}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
+              whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.6, delay: i * 0.1 }}
               className="text-center"

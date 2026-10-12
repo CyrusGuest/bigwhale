@@ -85,8 +85,8 @@ function AreaChart({ points }) {
       </defs>
       {[0.33, 0.66, 1].map((g) => (
         <g key={g}>
-          <line x1={L} x2={W - R} y1={y(max * g)} y2={y(max * g)} stroke="#ffffff" strokeOpacity="0.05" />
-          <text x={W - R + 8} y={y(max * g) + 3.5} fill="#606D89" fontSize="10" fontFamily="Inter">
+          <line x1={L} x2={W - R} y1={y(max * g)} y2={y(max * g)} stroke="#FFFFFF" strokeOpacity="0.07" />
+          <text x={W - R + 8} y={y(max * g) + 3.5} fill="#8685A8" fontSize="10" fontFamily="Inter">
             {num(max * g, max < 100 ? 1 : 0)}
           </text>
         </g>
@@ -113,9 +113,15 @@ function Countdown() {
   return <span className="tabular-nums">{mm}:{ss}</span>
 }
 
-// visionOS-style glass: translucent white over blur, hairline ring, specular top edge
+// clean fintech card: white, hairline ring, one soft shadow, no blur stack
 const glass =
-  'rounded-[28px] bg-navy/[0.055] backdrop-blur-2xl ring-1 ring-navy/[0.1] shadow-[0_18px_40px_-20px_rgba(49,39,204,0.25)]'
+  'rounded-2xl bg-white/[0.04] ring-1 ring-white/[0.08] shadow-[0_16px_40px_-28px_rgba(0,0,0,0.7)]'
+
+// the one dark surface: deep night with a quiet aqua bloom in the corner
+const night = {
+  background:
+    'linear-gradient(135deg, #1D1D3E 0%, #17172B 55%, #141430 100%)',
+}
 
 function Dashboard({ address, data, sample = false }) {
   const [range, setRange] = useState(30)
@@ -131,46 +137,39 @@ function Dashboard({ address, data, sample = false }) {
   return (
     <div className="space-y-5">
       <div className="flex justify-end">
-        <span className="rounded-full border border-brass/40 bg-brass/[0.06] px-3.5 py-1.5 font-mono text-[9px] uppercase tracking-[0.18em] text-brass">
-          {sample ? 'Sample account, enter your wallet above' : 'Illustrative preview, live data connects at launch'}
+        <span className="inline-flex items-center gap-2 rounded-full bg-white/[0.06] px-3.5 py-1.5 text-[11px] font-medium text-mist-dim">
+          <span className="h-1.5 w-1.5 rounded-full bg-[#32E7D0]" />
+          {sample ? 'Sample account — enter your wallet above' : 'Illustrative preview — live data connects at launch'}
         </span>
       </div>
 
       {/* account balance card */}
       <div
-        className="relative overflow-hidden rounded-[32px] p-7 ring-1 ring-white/[0.18] backdrop-blur-2xl shadow-[0_28px_60px_-20px_rgba(49,39,204,0.45)] sm:p-9"
-        style={{
-          background:
-            'radial-gradient(120% 160% at 10% 0%, rgba(124,245,230,0.6) 0%, rgba(49,39,204,0.96) 45%, #1B1670 100%)',
-        }}
+        className="relative overflow-hidden rounded-2xl p-6 ring-1 ring-white/[0.08] shadow-[0_24px_48px_-24px_rgba(0,0,0,0.7)] sm:p-9"
+        style={night}
       >
-        {/* card shine + watermark */}
-        <div className="pointer-events-none absolute -left-24 -top-16 h-[160%] w-40 rotate-12 bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
-        <OilMark
-          className="pointer-events-none absolute -right-10 -top-8 h-44 w-44 text-white opacity-[0.07]"
-          strokeWidth={3}
-        />
+        <div className="breathe pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-[#32E7D0]/[0.14] blur-[80px]" />
 
         <div className="relative flex items-start justify-between">
-          <span className="text-[13px] font-medium tracking-wide text-white/55">Total balance</span>
-          <span className="flex items-center gap-2 rounded-full bg-white/[0.12] px-3.5 py-1.5 text-[12px] font-semibold text-white ring-1 ring-white/[0.15] backdrop-blur">
+          <span className="text-[13px] font-medium tracking-wide text-white/50">Total balance</span>
+          <span className="flex items-center gap-2 rounded-full bg-white/[0.07] px-3.5 py-1.5 text-[12px] font-semibold text-[#7CF5E6]">
             <OilMark className="h-3.5 w-3.5" strokeWidth={5} />
             XTO
           </span>
         </div>
 
-        <div className="relative mt-3 font-display text-5xl font-semibold tabular-nums tracking-[-0.025em] text-white sm:text-7xl">
+        <div className="relative mt-3 font-display text-4xl font-semibold tabular-nums tracking-[-0.025em] text-white sm:text-6xl lg:text-7xl">
           {usd(positionUsd)}
         </div>
-        <div className="relative mt-2.5 font-display text-[16px] font-medium tabular-nums tracking-[-0.01em] text-white/65">
+        <div className="relative mt-2.5 font-display text-[15px] font-medium tabular-nums tracking-[-0.01em] text-white/55 sm:text-[16px]">
           {data.balance.toLocaleString('en-US')} XTO · {(data.share * 100).toFixed(4)}% of supply
         </div>
 
         <div className="relative mt-7 flex flex-wrap items-center gap-x-5 gap-y-2">
-          <span className="font-mono text-[12px] tracking-wide text-white/50">
+          <span className="font-mono text-[12px] tracking-wide text-[#7CF5E6]/70">
             {address.slice(0, 6)}····{address.slice(-4)}
           </span>
-          <span className="text-[12px] text-white/40">Read-only · Updates hourly</span>
+          <span className="text-[12px] text-white/35">Read-only · Updates hourly</span>
         </div>
       </div>
 
@@ -194,11 +193,11 @@ function Dashboard({ address, data, sample = false }) {
           },
         ].map((k) => (
           <div key={k.label} className={`${glass} p-6`}>
-            <span className="block text-[13px] font-medium text-navy/55">{k.label}</span>
+            <span className="block text-[13px] font-medium text-mist-faint">{k.label}</span>
             <span className="mt-1.5 block font-display text-[26px] font-semibold tabular-nums tracking-[-0.02em] text-mist">
               {k.value}
             </span>
-            <span className="mt-0.5 block text-[13px] tabular-nums text-navy/45">{k.sub}</span>
+            <span className="mt-0.5 block text-[13px] tabular-nums text-mist-faint">{k.sub}</span>
           </div>
         ))}
       </div>
@@ -209,15 +208,15 @@ function Dashboard({ address, data, sample = false }) {
           <div className="flex items-center justify-between">
             <div>
               <h3 className="font-display text-[16px] font-semibold text-mist">Earnings</h3>
-              <span className="text-[13px] text-navy/50">Cumulative $USO received</span>
+              <span className="text-[13px] text-mist-faint">Cumulative $USO received</span>
             </div>
-            <div className="flex overflow-hidden rounded-full bg-navy/[0.08] p-1 ring-1 ring-navy/[0.08]">
+            <div className="flex overflow-hidden rounded-full bg-white/[0.06] p-1 ring-1 ring-white/[0.08]">
               {[7, 30].map((r) => (
                 <button
                   key={r}
                   onClick={() => setRange(r)}
                   className={`rounded-full px-4 py-1.5 text-[12px] font-semibold transition-colors ${
-                    range === r ? 'bg-navy text-white shadow-sm' : 'text-navy/55 hover:text-mist'
+                    range === r ? 'bg-gold text-ink-950 shadow-sm' : 'text-mist-dim hover:text-mist'
                   }`}
                 >
                   {r}D
@@ -229,7 +228,7 @@ function Dashboard({ address, data, sample = false }) {
             <span className="font-display text-[32px] font-semibold tabular-nums tracking-[-0.02em] text-mist">
               {usd(rangeXrp * XRP_PRICE)}
             </span>
-            <span className="font-display text-[16px] font-medium tabular-nums text-navy/55">
+            <span className="font-display text-[16px] font-medium tabular-nums text-mist-faint">
               worth of $USO
             </span>
           </div>
@@ -240,27 +239,25 @@ function Dashboard({ address, data, sample = false }) {
 
         <div className="flex flex-col gap-5">
           <div
-            className="relative overflow-hidden rounded-[28px] p-6 ring-1 ring-white/[0.16] backdrop-blur-2xl shadow-[0_20px_50px_-20px_rgba(49,39,204,0.4)]"
-            style={{
-              background:
-                'radial-gradient(130% 140% at 85% 0%, rgba(124,245,230,0.55) 0%, rgba(49,39,204,0.95) 50%, #1B1670 100%)',
-            }}
+            className="relative overflow-hidden rounded-2xl p-6 ring-1 ring-white/[0.08] shadow-[0_20px_44px_-24px_rgba(0,0,0,0.7)]"
+            style={night}
           >
-            <span className="text-[13px] font-medium text-white/55">Next payout</span>
-            <div className="mt-2 font-display text-[40px] font-semibold tracking-[-0.02em] text-white">
+            <div className="breathe pointer-events-none absolute -right-16 -bottom-20 h-48 w-48 rounded-full bg-[#32E7D0]/[0.14] blur-[70px]" />
+            <span className="relative text-[13px] font-medium text-white/50">Next payout</span>
+            <div className="relative mt-2 font-display text-[40px] font-semibold tracking-[-0.02em] text-white">
               <Countdown />
             </div>
-            <div className="mt-1.5 font-display text-[15px] font-medium text-gold-bright">
+            <div className="relative mt-1.5 font-display text-[15px] font-medium text-[#7CF5E6]">
               est. +{usd(hourly * XRP_PRICE, 2)} of $USO to this wallet
             </div>
-            <p className="mt-3 text-[12px] leading-relaxed text-white/45">
+            <p className="relative mt-3 text-[12px] leading-relaxed text-white/40">
               Deposited automatically. Nothing to claim.
             </p>
           </div>
 
           <div className={`${glass} flex-1 p-6`}>
             <h3 className="font-display text-[16px] font-semibold text-mist">Earning pace</h3>
-            <span className="text-[13px] text-navy/50">At $10M average daily volume</span>
+            <span className="text-[13px] text-mist-faint">At $10M average daily volume</span>
             <div className="mt-4 space-y-3">
               {[
                 ['Hourly', hourly, 2],
@@ -269,14 +266,14 @@ function Dashboard({ address, data, sample = false }) {
               ].map(([label, v, d]) => (
                 <div
                   key={label}
-                  className="flex items-center justify-between border-b border-navy/[0.06] pb-3 last:border-0 last:pb-0"
+                  className="flex items-center justify-between border-b border-white/[0.08] pb-3 last:border-0 last:pb-0"
                 >
-                  <span className="text-[14px] text-navy/60">{label}</span>
+                  <span className="text-[14px] text-mist-dim">{label}</span>
                   <span className="text-right">
                     <span className="block font-display text-[16px] font-semibold tabular-nums tracking-[-0.01em] text-mist">
                       +{usd(v * XRP_PRICE, d === 2 ? 2 : 0)}
                     </span>
-                    <span className="block text-[12px] tabular-nums text-navy/45">
+                    <span className="block text-[12px] tabular-nums text-mist-faint">
                       of $USO
                     </span>
                   </span>
@@ -293,30 +290,24 @@ function Dashboard({ address, data, sample = false }) {
           <h3 className="font-display text-[16px] font-semibold text-mist">Recent payouts</h3>
           <span className="text-[13px] font-medium text-gold-deep">Hourly · Automatic</span>
         </div>
-        <div className="divide-y divide-navy/[0.05]">
+        <div className="divide-y divide-white/[0.06]">
           {data.txs.map((t) => (
             <div
               key={t.id}
-              className="flex items-center gap-4 px-6 py-4 transition-colors hover:bg-navy/[0.03] sm:px-7"
+              className="flex items-center gap-4 px-6 py-4 transition-colors hover:bg-white/[0.03] sm:px-7"
             >
-              <span
-                className="flex h-10 w-10 flex-none items-center justify-center rounded-full text-white ring-1 ring-white/[0.12]"
-                style={{
-                  background:
-                    'radial-gradient(120% 120% at 50% 0%, rgba(124,245,230,0.75) 0%, rgba(49,39,204,0.95) 60%, #1B1670 100%)',
-                }}
-              >
+              <span className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-gold/[0.1] text-[#7CF5E6] ring-1 ring-gold/[0.25]">
                 <OilMark className="h-[18px] w-[18px]" strokeWidth={5} />
               </span>
               <div className="min-w-0 flex-1">
                 <span className="block text-[15px] font-semibold text-mist">XTO Reward</span>
-                <span className="block text-[13px] text-navy/45">Hourly payout · {t.ago}</span>
+                <span className="block text-[13px] text-mist-faint">Hourly payout · {t.ago}</span>
               </div>
               <div className="text-right">
-                <span className="block font-display text-[16px] font-semibold tabular-nums tracking-[-0.01em] text-[#30D158]">
+                <span className="block font-display text-[16px] font-semibold tabular-nums tracking-[-0.01em] text-[#32E7D0]">
                   +{usd(t.xrp * XRP_PRICE, 2)}
                 </span>
-                <span className="block text-[12px] tabular-nums text-navy/45">
+                <span className="block text-[12px] tabular-nums text-mist-faint">
                   of $USO
                 </span>
               </div>
@@ -354,8 +345,8 @@ export default function PortalPage() {
   }
 
   return (
-    <div className="surface-light relative overflow-hidden bg-paper pt-16">
-      <div className="pointer-events-none absolute -top-48 left-1/2 h-[560px] w-[900px] -translate-x-1/2 rounded-full bg-gold-deep/[0.14] blur-[140px]" />
+    <div className="relative overflow-hidden bg-paper pt-16">
+      <div className="breathe pointer-events-none absolute -top-48 left-1/2 h-[560px] w-[900px] -translate-x-1/2 rounded-full bg-gold-deep/[0.14] blur-[140px]" />
 
       {/* centered wallet entry */}
       <div className="relative mx-auto max-w-2xl px-6 pb-12 pt-16 text-center sm:pt-24">
@@ -382,18 +373,18 @@ export default function PortalPage() {
           transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
           className="mx-auto mt-9 max-w-xl"
         >
-          <div className="flex overflow-hidden rounded-full border border-navy/15 bg-ink-850 shadow-xl shadow-navy/15 focus-within:border-gold/50">
+          <div className="flex flex-col gap-2 sm:flex-row sm:gap-0 sm:overflow-hidden sm:rounded-full sm:border sm:border-navy/15 sm:bg-ink-850 sm:shadow-xl sm:shadow-navy/15 sm:focus-within:border-gold/50">
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Solana wallet address"
               spellCheck="false"
-              className="w-full bg-transparent px-6 py-4 text-center font-mono text-sm text-mist placeholder:text-mist-faint focus:outline-none"
+              className="w-full rounded-full border border-navy/15 bg-ink-850 px-6 py-4 text-center font-mono text-sm text-mist placeholder:text-mist-faint focus:border-gold/50 focus:outline-none sm:rounded-none sm:border-0 sm:bg-transparent"
             />
             <button
               type="submit"
-              className="whitespace-nowrap bg-navy px-7 text-sm font-semibold text-white transition-colors hover:bg-blue"
+              className="whitespace-nowrap rounded-full bg-navy px-7 py-4 text-sm font-semibold text-white transition-colors hover:bg-blue sm:rounded-none sm:py-0"
             >
               Track Wallet
             </button>

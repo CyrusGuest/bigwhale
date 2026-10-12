@@ -78,13 +78,16 @@
   }
   html {
     @apply bg-paper text-mist antialiased;
+    /* clip, not hidden: prevents sideways touch-panning on mobile without
+       creating a horizontal scroll container (iOS ignores hidden here) */
+    overflow-x: clip;
   }
   /* anchor jumps land below the fixed navbar */
   [id] {
     scroll-margin-top: 5rem;
   }
   body {
-    @apply overflow-x-hidden font-sans text-[15px] font-[450];
+    @apply overflow-x-clip font-sans text-[15px] font-[450];
   }
   ::selection {
     @apply bg-gold text-ink-950;
@@ -97,12 +100,22 @@
 }
 
 @layer components {
+  /* unboxed flowing label: hairlines that melt into the page, no pill */
   .eyebrow {
-    @apply inline-flex items-center gap-2 rounded-sm border border-gold/40 bg-gold/[0.08] px-3.5 py-1.5 font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-gold-deep;
+    @apply inline-flex items-center gap-3 font-mono text-[10.5px] font-medium uppercase tracking-[0.3em] text-gold-deep;
+  }
+  .eyebrow::before,
+  .eyebrow::after {
+    content: '';
+    @apply h-px w-10 flex-none;
+    animation: eyebrowBreathe 5s ease-in-out infinite;
   }
   .eyebrow::before {
-    content: '';
-    @apply h-1.5 w-1.5 rounded-full bg-gold;
+    background: linear-gradient(to left, rgb(var(--gold) / 0.65), transparent);
+  }
+  .eyebrow::after {
+    background: linear-gradient(to right, rgb(var(--gold) / 0.65), transparent);
+    animation-delay: 2.5s;
   }
   .panel {
     @apply border border-navy/10 bg-paper;
@@ -263,6 +276,31 @@
   100% {
     opacity: 0;
     transform: none;
+  }
+}
+
+/* eyebrow hairlines swell and fade like a slow tide */
+@keyframes eyebrowBreathe {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* slow inhale/exhale for the big background glows, keeps sections feeling alive */
+.breathe {
+  animation: breatheGlow 8s ease-in-out infinite;
+}
+@keyframes breatheGlow {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
   }
 }
 

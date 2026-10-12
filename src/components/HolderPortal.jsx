@@ -13,10 +13,10 @@ export default function HolderPortal() {
       <div className="mx-auto max-w-7xl px-6 py-20 sm:py-28">
         <div className="grid items-center gap-14 lg:grid-cols-2">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
+            whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.7 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
             <p className="eyebrow mb-5">Holder Portal</p>
             <h2 className="font-serif text-4xl font-medium tracking-[-0.01em] sm:text-5xl">
@@ -36,8 +36,8 @@ export default function HolderPortal() {
 
           <motion.a
             href="#/portal"
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 24, filter: 'blur(8px)' }}
+            whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.7, delay: 0.1 }}
             className="group block"

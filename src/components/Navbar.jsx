@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { OilMark } from './Hero.jsx'
 
@@ -9,43 +9,8 @@ const links = [
   { label: 'FAQ', href: '#faq' },
 ]
 
-function useTheme() {
-  const [dark, setDark] = useState(() => document.documentElement.classList.contains('dark'))
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', dark)
-    try {
-      localStorage.setItem('xto-theme', dark ? 'dark' : 'light')
-    } catch {}
-  }, [dark])
-  return [dark, () => setDark((d) => !d)]
-}
-
-function ThemeToggle({ dark, onToggle, className = '' }) {
-  return (
-    <button
-      type="button"
-      onClick={onToggle}
-      aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
-      title={dark ? 'Light mode' : 'Dark mode'}
-      className={`flex h-9 w-9 items-center justify-center rounded-sm border border-navy/20 text-mist-dim transition-colors hover:border-navy/50 hover:text-mist ${className}`}
-    >
-      {dark ? (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" className="h-4 w-4" aria-hidden="true">
-          <circle cx="12" cy="12" r="4" />
-          <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" />
-        </svg>
-      ) : (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" aria-hidden="true">
-          <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" />
-        </svg>
-      )}
-    </button>
-  )
-}
-
 export default function Navbar() {
   const [open, setOpen] = useState(false)
-  const [dark, toggleTheme] = useTheme()
 
   return (
     <motion.header
@@ -54,12 +19,6 @@ export default function Navbar() {
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className="fixed inset-x-0 top-0 z-40 border-b border-gold/20 bg-paper/88 backdrop-blur-xl"
     >
-      {/* thin tricolor rule: deep indigo · white · aqua, the brand at a glance */}
-      <div className="flex h-[3px] w-full">
-        <span className="flex-1 bg-[#3127CC]" />
-        <span className="flex-1 bg-white/90" />
-        <span className="flex-1 bg-gold" />
-      </div>
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         <a href="#" className="flex items-center gap-3">
           <span className="flex h-8 w-8 items-center justify-center rounded-sm border border-gold/40 bg-gold/10 text-gold">
@@ -86,11 +45,9 @@ export default function Navbar() {
           <a href="#cta" className="btn-primary !px-5 !py-2.5 text-[13px]">
             Verify On-Ledger
           </a>
-          <ThemeToggle dark={dark} onToggle={toggleTheme} />
         </div>
 
         <div className="flex items-center gap-2 md:hidden">
-          <ThemeToggle dark={dark} onToggle={toggleTheme} />
           <button
             onClick={() => setOpen(!open)}
             className="flex h-9 w-9 flex-col items-center justify-center gap-1.5"

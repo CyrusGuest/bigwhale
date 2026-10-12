@@ -62,8 +62,8 @@ const principles = [
 export default function Reserve() {
   return (
     <section id="reserve" className="relative overflow-x-clip border-y border-white/[0.06]">
-      <div className="pointer-events-none absolute -left-64 top-0 h-[480px] w-[720px] rounded-full bg-gold-deep/[0.18] blur-[140px]" />
-      <div className="pointer-events-none absolute -right-40 bottom-0 h-[380px] w-[520px] rounded-full bg-gold/[0.06] blur-[120px]" />
+      <div className="breathe pointer-events-none absolute -left-64 top-0 h-[480px] w-[720px] rounded-full bg-gold-deep/[0.18] blur-[140px]" />
+      <div className="breathe pointer-events-none absolute -right-40 bottom-0 h-[380px] w-[520px] rounded-full bg-gold/[0.06] blur-[120px]" />
 
       <div className="relative mx-auto max-w-7xl px-6 py-20 sm:py-28">
         {/* headline: lines slam in from opposite sides */}
@@ -137,8 +137,8 @@ export default function Reserve() {
             </div>
           </Float>
           <motion.p
-            initial={{ opacity: 0, y: 18 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 18, filter: 'blur(8px)' }}
+            whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ delay: 0.6, duration: 0.5, ease: EASE }}
             className="mt-4 text-xl font-medium text-mist sm:text-2xl"
@@ -148,8 +148,8 @@ export default function Reserve() {
 
           {/* verification pill row */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
+            whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ delay: 0.8, duration: 0.5, ease: EASE }}
             className="mt-7 flex flex-wrap items-center justify-center gap-3"
@@ -183,7 +183,7 @@ export default function Reserve() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ delay: 1.2, duration: 0.5 }}
+            transition={{ delay: 1.2, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="mt-3 font-mono text-[11px] text-mist-faint"
           >
             First of its kind as far as we can find. If another project has

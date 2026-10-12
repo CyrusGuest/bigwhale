@@ -14,10 +14,10 @@ export default function Compare() {
   return (
     <section className="mx-auto max-w-7xl px-6 py-20 sm:py-28">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
+        whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
         viewport={{ once: true, margin: '-80px' }}
-        transition={{ duration: 0.7 }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className="mb-14 max-w-2xl"
       >
         <p className="eyebrow mb-5">Comparison</p>
@@ -30,8 +30,8 @@ export default function Compare() {
       </motion.div>
 
       <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, y: 24, filter: 'blur(8px)' }}
+        whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
         viewport={{ once: true, margin: '-60px' }}
         transition={{ duration: 0.7, delay: 0.1 }}
         className="overflow-x-auto rounded-md border border-white/[0.08]"

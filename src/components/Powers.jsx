@@ -72,7 +72,7 @@ function GrowthChart() {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
-        transition={{ delay: 1.2, duration: 0.8 }}
+        transition={{ delay: 1.2, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       />
       <motion.path
         d={oilD}
@@ -105,16 +105,16 @@ function GrowthChart() {
 }
 
 const fade = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
+  initial: { opacity: 0, y: 24, filter: 'blur(8px)' },
+  whileInView: { opacity: 1, y: 0, filter: 'blur(0px)' },
   viewport: { once: true, margin: '-80px' },
-  transition: { delay, duration: 0.7, ease: EASE },
+  transition: { delay, duration: 0.8, ease: EASE },
 })
 
 export default function Powers() {
   return (
     <section id="oil" className="relative border-t border-navy/[0.07]">
-      <div className="pointer-events-none absolute left-1/2 top-0 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-blue/[0.08] blur-[150px]" />
+      <div className="breathe pointer-events-none absolute left-1/2 top-0 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-blue/[0.08] blur-[150px]" />
 
       <div className="relative mx-auto max-w-7xl px-6 py-28">
         <div className="grid gap-14 lg:grid-cols-[1fr_1fr] lg:gap-20">
@@ -156,7 +156,7 @@ export default function Powers() {
 
             <motion.div
               {...fade(0.36)}
-              className="mt-9 flex items-stretch gap-4 rounded-lg border border-gold/25 bg-gold/[0.06] p-5"
+              className="relative mt-9 flex items-stretch gap-4 overflow-hidden rounded-xl bg-gradient-to-r from-gold/[0.10] to-transparent p-5"
             >
               <FlagBar className="w-1.5 flex-none flex-col" />
               <span className="flex h-10 w-10 flex-none items-center justify-center rounded-sm border border-gold/40 bg-gold/10 text-gold">

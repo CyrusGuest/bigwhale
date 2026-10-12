@@ -66,10 +66,10 @@ export default function Drip() {
     <section id="drip" className="relative mx-auto max-w-7xl px-6 py-16 sm:py-24">
       <div className="grid items-center gap-14 lg:grid-cols-2">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
+          whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.7 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
           <p className="eyebrow mb-6">Passive by Design</p>
           <h2 className="font-serif text-4xl font-semibold tracking-[-0.01em] sm:text-5xl">
@@ -90,8 +90,8 @@ export default function Drip() {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 28 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 28, filter: 'blur(8px)' }}
+          whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="panel relative overflow-hidden rounded-lg p-8 sm:p-10"

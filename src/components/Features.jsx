@@ -43,10 +43,10 @@ export default function Features() {
   return (
     <section id="features" className="relative mx-auto max-w-7xl px-6 py-20 sm:py-28">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
+        whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
         viewport={{ once: true, margin: '-80px' }}
-        transition={{ duration: 0.7 }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className="mb-16 max-w-2xl"
       >
         <p className="eyebrow mb-5">Design Principles</p>
@@ -64,8 +64,8 @@ export default function Features() {
         {features.map((f, i) => (
           <motion.div
             key={f.num}
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 24, filter: 'blur(8px)' }}
+            whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.55, delay: (i % 3) * 0.08, ease: [0.22, 1, 0.36, 1] }}
             className="group flex flex-col rounded-lg border border-white/[0.06] bg-white/[0.03] p-8 transition-colors duration-300 hover:border-gold/25 hover:bg-white/[0.05]"
