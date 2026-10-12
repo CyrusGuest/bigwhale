@@ -865,25 +865,18 @@ function ActStory() {
   const [showWallets, setShowWallets] = useState(false)
   const [wi, setWi] = useState(0)
   useEffect(() => {
-    // availability flows straight out of the HISTORY landing, no dead air
-    const t0 = setTimeout(() => setShowWallets(true), 2800)
-    let iv
-    const t1 = setTimeout(() => {
-      iv = setInterval(() => {
-        setWi((w) => {
-          if (w >= WALLETS.length - 1) {
-            clearInterval(iv)
-            return w
-          }
-          return w + 1
-        })
-      }, 1050)
-    }, 3900)
-    return () => {
-      clearTimeout(t0)
-      clearTimeout(t1)
-      if (iv) clearInterval(iv)
-    }
+    // wall-clock driven so a mid-scroll timer freeze can't desync the beat:
+    // wallets appear at 2.8s, then advance one name every 1.05s from 3.9s
+    const start = performance.now()
+    const iv = setInterval(() => {
+      const elapsed = performance.now() - start
+      if (elapsed >= 2800) setShowWallets(true)
+      const step = Math.floor((elapsed - 3900) / 1050)
+      const next = Math.max(0, Math.min(WALLETS.length - 1, step))
+      setWi(next)
+      if (next >= WALLETS.length - 1) clearInterval(iv)
+    }, 120)
+    return () => clearInterval(iv)
   }, [])
   return (
     <motion.div exit={actExit} className="w-full px-4 text-center">
@@ -1162,40 +1155,29 @@ export default function Hero() {
     return () => clearInterval(ping)
   }, [])
 
+  // the intro runs on wall-clock time, not chained timers: mobile browsers
+  // suspend timers and animation frames mid-scroll, so instead we re-derive
+  // the current act from elapsed time on every tick. Scrolling never pauses
+  // the timeline — scroll back up and the intro has progressed on schedule.
   useEffect(() => {
     if (act >= 7) return
-    const t = setTimeout(() => setAct(act + 1), ACT_DURATIONS[act])
-    return () => clearTimeout(t)
-  }, [act])
-
-  // touch devices: scrolling mid-intro freezes JS animation frames and the
-  // timeline jumps when the scroll ends. Hold the page still while the intro
-  // plays; a deliberate swipe up fast-forwards to the outro, which hands off
-  // by gliding down the page anyway.
-  useEffect(() => {
-    if (act >= 6) return
-    if (!window.matchMedia('(pointer: coarse)').matches) return
-    const root = document.documentElement
-    root.style.overflow = 'hidden'
-    root.style.touchAction = 'none'
-    document.body.style.overflow = 'hidden'
-    let startY = null
-    const onStart = (e) => {
-      startY = e.touches[0].clientY
+    const start = performance.now()
+    const offset = ACT_DURATIONS.slice(0, act).reduce((s, d) => s + d, 0)
+    const bounds = []
+    let acc = 0
+    for (const d of ACT_DURATIONS) {
+      acc += d
+      bounds.push(acc)
     }
-    const onMove = (e) => {
-      if (startY !== null && startY - e.touches[0].clientY > 60) setAct(6)
-    }
-    window.addEventListener('touchstart', onStart, { passive: true })
-    window.addEventListener('touchmove', onMove, { passive: true })
-    return () => {
-      root.style.overflow = ''
-      root.style.touchAction = ''
-      document.body.style.overflow = ''
-      window.removeEventListener('touchstart', onStart)
-      window.removeEventListener('touchmove', onMove)
-    }
-  }, [act])
+    const iv = setInterval(() => {
+      const elapsed = offset + (performance.now() - start)
+      const idx = bounds.findIndex((b) => elapsed < b)
+      setAct(idx === -1 ? 7 : idx)
+      if (idx === -1) clearInterval(iv)
+    }, 150)
+    return () => clearInterval(iv)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // during the outro, glide the page down to the live simulation
   // (only if the viewer hasn't already scrolled away on their own)
