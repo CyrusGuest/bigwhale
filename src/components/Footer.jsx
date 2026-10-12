@@ -2,23 +2,28 @@ import { OilMark } from './Hero.jsx'
 
 const columns = [
   {
-    title: 'Token',
-    links: ['Mechanism', 'Design Principles', 'Distribution History', 'Tokenomics Paper'],
-  },
-  {
-    title: 'Verify',
-    links: ['Rewards Pool Address', 'Ledger Explorer', 'Fee Collection Records', 'Supply Attestation'],
+    title: 'Site',
+    links: [
+      ['How It Works', '#how'],
+      ['Why Oil', '#oil'],
+      ['Holder Portal', '#/portal'],
+      ['FAQ', '#faq'],
+    ],
   },
   {
     title: 'Legal',
-    links: ['Risk Disclosure', 'Terms of Use', 'Privacy Policy', 'Jurisdiction Notices'],
+    links: [
+      ['Risk Disclosure', '#/legal/risk'],
+      ['Terms of Use', '#/legal/terms'],
+      ['Privacy Policy', '#/legal/privacy'],
+    ],
   },
 ]
 
 export default function Footer() {
   return (
     <footer className="border-t border-navy/[0.07] bg-ink-850">
-      <div className="mx-auto grid max-w-7xl gap-12 px-6 py-16 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="mx-auto grid max-w-7xl gap-12 px-6 py-16 sm:grid-cols-2 lg:grid-cols-4">
         <div className="lg:col-span-2">
           <div className="flex items-center gap-3">
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gold/10 text-gold">
@@ -29,27 +34,6 @@ export default function Footer() {
           <p className="mt-5 max-w-xs text-sm leading-relaxed text-mist-dim">
             Virtual drilling on a public ledger: trading fees redistributed to
             holders in $USO, split by holdings, hourly, and publicly verifiable.
-          </p>
-
-          <form
-            onSubmit={(e) => e.preventDefault()}
-            className="mt-8 flex max-w-sm overflow-hidden rounded-sm border border-navy/10 focus-within:border-navy/25"
-          >
-            <input
-              type="email"
-              required
-              placeholder="you@example.com"
-              className="w-full bg-paper px-4 py-3 text-[13px] text-mist placeholder:text-mist-faint focus:outline-none"
-            />
-            <button
-              type="submit"
-              className="whitespace-nowrap bg-navy px-5 text-[12px] font-medium text-white transition-colors hover:bg-blue"
-            >
-              Subscribe
-            </button>
-          </form>
-          <p className="mt-2 text-[11px] text-mist-faint">
-            Mechanism changes and distribution reports. Never price talk.
           </p>
 
           <div className="mt-8 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em] text-mist-faint">
@@ -64,10 +48,10 @@ export default function Footer() {
               {col.title}
             </h4>
             <ul className="space-y-3">
-              {col.links.map((l) => (
-                <li key={l}>
-                  <a href="#" className="text-sm text-mist-dim transition-colors hover:text-mist">
-                    {l}
+              {col.links.map(([label, href]) => (
+                <li key={label}>
+                  <a href={href} className="text-sm text-mist-dim transition-colors hover:text-mist">
+                    {label}
                   </a>
                 </li>
               ))}
