@@ -1,6 +1,4 @@
 import { motion } from 'framer-motion'
-import { OilMark } from './Hero.jsx'
-import { FlagBar } from './Stars.jsx'
 
 const EASE = [0.22, 1, 0.36, 1]
 
@@ -129,49 +127,18 @@ export default function Powers() {
               Oil is what powers America.
             </motion.h2>
             <motion.p {...fade(0.16)} className="mt-6 text-lg leading-relaxed text-mist-dim">
-              It moves the trucks that stock the shelves, the tractors that
-              plant the fields, and the planes that bring families home. Oil
-              runs the world economy, and for a hundred years the strongest
-              economy on earth has run on it.
+              Oil is a multi-trillion dollar industry — and for decades,
+              foreign cartels and corrupt eastern monopolies have fought to
+              corner it and set the price from overseas.
             </motion.p>
             <motion.p {...fade(0.24)} className="mt-5 text-lg leading-relaxed text-mist-dim">
-              For decades, foreign cartels have tried to corner the world’s
-              oil and set the price from overseas. And here at home, the
-              profits went to a few: the wells, the shares, the dividends, all
-              gatekept for the rich while everyday Americans filled up the
-              truck and paid the heating bill.
+              XTO is the only coin competing to bring that industry into
+              crypto. The first mover, making history: America already pumps
+              more oil than any nation on earth, and XTO puts that lead
+              on-chain — in front of China and every cartel trying to own the
+              market. Hold the coin and the algorithm pays you real $USO,
+              every hour. No other coin is even in this race.
             </motion.p>
-            <motion.p {...fade(0.3)} className="mt-5 text-lg leading-relaxed text-mist-dim">
-              XTO changes that. America already pumps more oil than any nation
-              on earth. XTO pushes that lead further by opening the oil economy
-              to every American: hold the coin, and our distribution algorithm
-              pays you real $USO, every hour. No well, no broker, no big
-              check up front. XTO is the first crypto coin ever to make this
-              possible.
-            </motion.p>
-            <motion.p {...fade(0.34)} className="mt-5 text-lg leading-relaxed text-mist-dim">
-              This is a movement: the American people, earning from the
-              American oil market, together.
-            </motion.p>
-
-            <motion.div
-              {...fade(0.36)}
-              className="relative mt-9 flex items-stretch gap-4 overflow-hidden rounded-xl bg-gradient-to-r from-gold/[0.10] to-transparent p-5"
-            >
-              <FlagBar className="w-1.5 flex-none flex-col" />
-              <span className="flex h-10 w-10 flex-none items-center justify-center rounded-sm border border-gold/40 bg-gold/10 text-gold">
-                <OilMark className="h-5 w-5" strokeWidth={4} />
-              </span>
-              <div>
-                <p className="font-serif text-xl font-semibold text-mist">
-                  Every American deserves a piece of it.
-                </p>
-                <p className="mt-1.5 text-sm leading-relaxed text-mist-dim">
-                  Hold XTO and the oil market pays you, every hour, in dollars
-                  you can see. Every payment is public, so anyone can check it.
-                </p>
-              </div>
-            </motion.div>
           </div>
 
           <div className="grid content-start gap-4 sm:grid-cols-2">
