@@ -1146,8 +1146,14 @@ const ACT_DURATIONS = [2950, 3900, 3800, 4200, 5000, 12750, 3000]
 
 export default function Hero() {
   const [notifs, setNotifs] = useState(() => Array.from({ length: 4 }, makeNotif).reverse())
-  // ?intro=0 skips straight to the end card (handy for reviewing the page)
-  const [act, setAct] = useState(() => (window.location.search.includes('intro=0') ? 7 : 0))
+  // ?intro=0 skips straight to the end card (handy for reviewing the page);
+  // section deep links (#faq etc.) also skip it so the anchor jump isn't fought
+  const [act, setAct] = useState(() => {
+    if (window.location.search.includes('intro=0')) return 7
+    const h = window.location.hash.slice(1)
+    if (h && !h.startsWith('/')) return 7
+    return 0
+  })
 
   useEffect(() => {
     const ping = setInterval(() => {
@@ -1160,6 +1166,35 @@ export default function Hero() {
     if (act >= 7) return
     const t = setTimeout(() => setAct(act + 1), ACT_DURATIONS[act])
     return () => clearTimeout(t)
+  }, [act])
+
+  // touch devices: scrolling mid-intro freezes JS animation frames and the
+  // timeline jumps when the scroll ends. Hold the page still while the intro
+  // plays; a deliberate swipe up fast-forwards to the outro, which hands off
+  // by gliding down the page anyway.
+  useEffect(() => {
+    if (act >= 6) return
+    if (!window.matchMedia('(pointer: coarse)').matches) return
+    const root = document.documentElement
+    root.style.overflow = 'hidden'
+    root.style.touchAction = 'none'
+    document.body.style.overflow = 'hidden'
+    let startY = null
+    const onStart = (e) => {
+      startY = e.touches[0].clientY
+    }
+    const onMove = (e) => {
+      if (startY !== null && startY - e.touches[0].clientY > 60) setAct(6)
+    }
+    window.addEventListener('touchstart', onStart, { passive: true })
+    window.addEventListener('touchmove', onMove, { passive: true })
+    return () => {
+      root.style.overflow = ''
+      root.style.touchAction = ''
+      document.body.style.overflow = ''
+      window.removeEventListener('touchstart', onStart)
+      window.removeEventListener('touchmove', onMove)
+    }
   }, [act])
 
   // during the outro, glide the page down to the live simulation
