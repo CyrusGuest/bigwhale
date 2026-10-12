@@ -293,6 +293,9 @@
 /* slow inhale/exhale for the big background glows, keeps sections feeling alive */
 .breathe {
   animation: breatheGlow 8s ease-in-out infinite;
+  /* own compositor layer: the huge blur paints once, opacity animates for free */
+  will-change: opacity;
+  transform: translateZ(0);
 }
 @keyframes breatheGlow {
   0%,
@@ -318,6 +321,35 @@
   animation-name: twinkle;
   animation-iteration-count: infinite;
   animation-timing-function: ease-in-out;
+}
+
+/* phones: shed the per-frame paint costs so the intro never stutters.
+   Backdrop blur, traveling-gradient text, and glow breathing are desktop
+   garnish — static versions read the same at phone size. */
+@media (max-width: 640px) {
+  .backdrop-blur,
+  .backdrop-blur-xl,
+  .backdrop-blur-2xl {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  .text-shimmer,
+  .text-luster {
+    animation: none;
+    background-position: 35% center;
+  }
+  .text-glint {
+    display: none;
+  }
+  .breathe {
+    animation: none;
+    opacity: 0.85;
+  }
+  .eyebrow::before,
+  .eyebrow::after {
+    animation: none;
+    opacity: 0.8;
+  }
 }
 
 /* thin scrollbar to match the theme */
