@@ -33,8 +33,8 @@ function GrowthChart({ position, dailyRate, days, total }) {
       <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full">
         <defs>
           <linearGradient id="calcArea" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#D4A72C" stopOpacity="0.22" />
-            <stop offset="100%" stopColor="#D4A72C" stopOpacity="0" />
+            <stop offset="0%" stopColor="#32E7D0" stopOpacity="0.22" />
+            <stop offset="100%" stopColor="#32E7D0" stopOpacity="0" />
           </linearGradient>
         </defs>
 
@@ -51,16 +51,16 @@ function GrowthChart({ position, dailyRate, days, total }) {
         ))}
 
         <path d={area} fill="url(#calcArea)" />
-        <path d={line} fill="none" stroke="#D4A72C" strokeWidth="2.5" />
+        <path d={line} fill="none" stroke="#32E7D0" strokeWidth="2.5" />
 
-        <circle cx={x(N)} cy={y(total)} r="4" fill="#D4A72C" />
-        <circle cx={x(N)} cy={y(total)} r="8" fill="#D4A72C" fillOpacity="0.25">
+        <circle cx={x(N)} cy={y(total)} r="4" fill="#32E7D0" />
+        <circle cx={x(N)} cy={y(total)} r="8" fill="#32E7D0" fillOpacity="0.25">
           <animate attributeName="r" values="6;11;6" dur="2.5s" repeatCount="indefinite" />
         </circle>
         <text
           x={x(N) + 10}
           y={y(total) + 4}
-          fill="#F2C45A"
+          fill="#7CF5E6"
           fontSize="12"
           fontFamily="IBM Plex Mono, monospace"
         >
@@ -178,7 +178,7 @@ export default function Calculator() {
                 step={s.step}
                 value={s.value}
                 onChange={(e) => s.set(Number(e.target.value))}
-                className="w-full accent-[#D4A72C]"
+                className="w-full accent-[#32E7D0]"
               />
               {s.note && <p className="mt-2 text-[11px] text-mist-faint">{s.note}</p>}
             </div>

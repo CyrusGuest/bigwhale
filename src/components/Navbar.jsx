@@ -54,11 +54,11 @@ export default function Navbar() {
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className="fixed inset-x-0 top-0 z-40 border-b border-gold/20 bg-paper/88 backdrop-blur-xl"
     >
-      {/* thin tricolor rule: navy · ivory · red, read as a flag at a glance */}
+      {/* thin tricolor rule: deep indigo · white · aqua, the brand at a glance */}
       <div className="flex h-[3px] w-full">
-        <span className="flex-1 bg-navy" />
-        <span className="flex-1 bg-mist/80" />
-        <span className="flex-1 bg-flag" />
+        <span className="flex-1 bg-[#3127CC]" />
+        <span className="flex-1 bg-white/90" />
+        <span className="flex-1 bg-gold" />
       </div>
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         <a href="#" className="flex items-center gap-3">

@@ -144,7 +144,7 @@ export default function Drip() {
               onPointerUp={commitPosition}
               onKeyUp={commitPosition}
               onBlur={commitPosition}
-              className="w-full accent-[#0A3161]"
+              className="w-full accent-[#32E7D0]"
             />
             <div className="mt-1 flex justify-between font-mono text-[10px] text-mist-faint">
               <span>$100</span>

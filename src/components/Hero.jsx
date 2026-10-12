@@ -251,7 +251,7 @@ function PhoneMock({ notifs }) {
                               {n.type === 'pay' ? (
                                 <p className="mt-[2px] text-[14px] leading-[1.32] text-white/85">
                                   You just got paid{' '}
-                                  <span className="font-semibold text-[#F2C45A]">
+                                  <span className="font-semibold text-[#7CF5E6]">
                                     ${n.usd.toFixed(2)}
                                   </span>{' '}
                                   of $USO
@@ -261,7 +261,7 @@ function PhoneMock({ notifs }) {
                                   {n.hl ? (
                                     <>
                                       {n.body.split(n.hl)[0]}
-                                      <span className="font-semibold text-[#F2C45A]">{n.hl}</span>
+                                      <span className="font-semibold text-[#7CF5E6]">{n.hl}</span>
                                       {n.body.split(n.hl)[1]}
                                     </>
                                   ) : (
@@ -453,7 +453,7 @@ function ActPhone({ notifs }) {
                 key={i}
                 animate={{
                   scale: [1, w === '·' ? 1 : w === 'Real' || w === 'Oil' ? 1.38 : 1.22, 1],
-                  color: ['#F2C45A', '#FFFFFF', '#F2C45A'],
+                  color: ['#7CF5E6', '#FFFFFF', '#7CF5E6'],
                 }}
                 transition={{
                   delay: 1.5 + i * 0.14,
@@ -566,7 +566,7 @@ function ActSleep() {
                 </div>
                 <p className="mt-[2px] text-[14px] leading-[1.32] text-white/85">
                   You just got paid{' '}
-                  <span className="font-semibold text-[#F2C45A]">${d.amt.toFixed(2)}</span> of $USO
+                  <span className="font-semibold text-[#7CF5E6]">${d.amt.toFixed(2)}</span> of $USO
                 </p>
               </div>
             </motion.div>
@@ -585,7 +585,7 @@ function ActSleep() {
                 key={i}
                 animate={{
                   scale: [1, i < 2 ? 1.35 : 1.18, 1],
-                  color: ['#F2C45A', '#FFFFFF', '#F2C45A'],
+                  color: ['#7CF5E6', '#FFFFFF', '#7CF5E6'],
                 }}
                 transition={{
                   delay: 2.3 + i * 0.14,
@@ -791,8 +791,8 @@ function ActPortal() {
             <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full">
               <defs>
                 <linearGradient id="actPortalArea" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#D4A72C" stopOpacity="0.32" />
-                  <stop offset="100%" stopColor="#D4A72C" stopOpacity="0" />
+                  <stop offset="0%" stopColor="#32E7D0" stopOpacity="0.32" />
+                  <stop offset="100%" stopColor="#32E7D0" stopOpacity="0" />
                 </linearGradient>
               </defs>
               <motion.path
@@ -805,7 +805,7 @@ function ActPortal() {
               <motion.path
                 d={line}
                 fill="none"
-                stroke="#D4A72C"
+                stroke="#32E7D0"
                 strokeWidth="3"
                 strokeLinecap="round"
                 initial={{ pathLength: 0 }}
@@ -818,7 +818,7 @@ function ActPortal() {
                   cx={px(i)}
                   cy={py(PORTAL_PTS[i])}
                   r="5"
-                  fill="#F2C45A"
+                  fill="#7CF5E6"
                   initial={{ opacity: 0, scale: 0 }}
                   animate={{ opacity: 1, scale: [0, 1.6, 1] }}
                   transition={{ delay: popDelay(i), duration: 0.4 }}
@@ -1029,7 +1029,7 @@ function ActStory() {
 }
 
 const WALLETS = [
-  { name: 'FOMO', color: 'text-navy', bar: '#0A3161', glow: 'rgba(10,49,97,0.22)' },
+  { name: 'FOMO', color: 'text-navy', bar: '#32E7D0', glow: 'rgba(50,231,208,0.25)' },
   { name: 'Phantom', color: 'text-[#AB9FF2]', bar: '#AB9FF2', glow: 'rgba(171,159,242,0.30)' },
   { name: 'Coinbase', color: 'text-[#4A80FF]', bar: '#4A80FF', glow: 'rgba(74,128,255,0.30)' },
   { name: 'Robinhood', color: 'text-[#00C805]', bar: '#00C805', glow: 'rgba(0,200,5,0.28)' },

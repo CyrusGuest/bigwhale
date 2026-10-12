@@ -79,8 +79,8 @@ function AreaChart({ points }) {
     <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full">
       <defs>
         <linearGradient id="pArea" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#D4A72C" stopOpacity="0.28" />
-          <stop offset="100%" stopColor="#D4A72C" stopOpacity="0" />
+          <stop offset="0%" stopColor="#32E7D0" stopOpacity="0.28" />
+          <stop offset="100%" stopColor="#32E7D0" stopOpacity="0" />
         </linearGradient>
       </defs>
       {[0.33, 0.66, 1].map((g) => (
@@ -92,9 +92,9 @@ function AreaChart({ points }) {
         </g>
       ))}
       <path d={area} fill="url(#pArea)" />
-      <path d={line} fill="none" stroke="#D4A72C" strokeWidth="2.5" strokeLinecap="round" />
-      <circle cx={x(points.length - 1)} cy={y(points[points.length - 1])} r="4" fill="#D4A72C" />
-      <circle cx={x(points.length - 1)} cy={y(points[points.length - 1])} r="8" fill="#D4A72C" fillOpacity="0.25">
+      <path d={line} fill="none" stroke="#32E7D0" strokeWidth="2.5" strokeLinecap="round" />
+      <circle cx={x(points.length - 1)} cy={y(points[points.length - 1])} r="4" fill="#32E7D0" />
+      <circle cx={x(points.length - 1)} cy={y(points[points.length - 1])} r="8" fill="#32E7D0" fillOpacity="0.25">
         <animate attributeName="r" values="6;11;6" dur="2.5s" repeatCount="indefinite" />
       </circle>
     </svg>
@@ -115,7 +115,7 @@ function Countdown() {
 
 // visionOS-style glass: translucent white over blur, hairline ring, specular top edge
 const glass =
-  'rounded-[28px] bg-navy/[0.055] backdrop-blur-2xl ring-1 ring-navy/[0.1] shadow-[0_18px_40px_-20px_rgba(10,49,97,0.25)]'
+  'rounded-[28px] bg-navy/[0.055] backdrop-blur-2xl ring-1 ring-navy/[0.1] shadow-[0_18px_40px_-20px_rgba(49,39,204,0.25)]'
 
 function Dashboard({ address, data, sample = false }) {
   const [range, setRange] = useState(30)
@@ -138,10 +138,10 @@ function Dashboard({ address, data, sample = false }) {
 
       {/* account balance card */}
       <div
-        className="relative overflow-hidden rounded-[32px] p-7 ring-1 ring-white/[0.18] backdrop-blur-2xl shadow-[0_28px_60px_-20px_rgba(10,49,97,0.45)] sm:p-9"
+        className="relative overflow-hidden rounded-[32px] p-7 ring-1 ring-white/[0.18] backdrop-blur-2xl shadow-[0_28px_60px_-20px_rgba(49,39,204,0.45)] sm:p-9"
         style={{
           background:
-            'radial-gradient(120% 160% at 10% 0%, rgba(59,130,246,0.6) 0%, rgba(10,49,97,0.96) 45%, #06203F 100%)',
+            'radial-gradient(120% 160% at 10% 0%, rgba(124,245,230,0.6) 0%, rgba(49,39,204,0.96) 45%, #1B1670 100%)',
         }}
       >
         {/* card shine + watermark */}
@@ -240,10 +240,10 @@ function Dashboard({ address, data, sample = false }) {
 
         <div className="flex flex-col gap-5">
           <div
-            className="relative overflow-hidden rounded-[28px] p-6 ring-1 ring-white/[0.16] backdrop-blur-2xl shadow-[0_20px_50px_-20px_rgba(10,49,97,0.4)]"
+            className="relative overflow-hidden rounded-[28px] p-6 ring-1 ring-white/[0.16] backdrop-blur-2xl shadow-[0_20px_50px_-20px_rgba(49,39,204,0.4)]"
             style={{
               background:
-                'radial-gradient(130% 140% at 85% 0%, rgba(59,130,246,0.55) 0%, rgba(10,49,97,0.95) 50%, #06203F 100%)',
+                'radial-gradient(130% 140% at 85% 0%, rgba(124,245,230,0.55) 0%, rgba(49,39,204,0.95) 50%, #1B1670 100%)',
             }}
           >
             <span className="text-[13px] font-medium text-white/55">Next payout</span>
@@ -303,7 +303,7 @@ function Dashboard({ address, data, sample = false }) {
                 className="flex h-10 w-10 flex-none items-center justify-center rounded-full text-white ring-1 ring-white/[0.12]"
                 style={{
                   background:
-                    'radial-gradient(120% 120% at 50% 0%, rgba(59,130,246,0.75) 0%, rgba(10,49,97,0.95) 60%, #06203F 100%)',
+                    'radial-gradient(120% 120% at 50% 0%, rgba(124,245,230,0.75) 0%, rgba(49,39,204,0.95) 60%, #1B1670 100%)',
                 }}
               >
                 <OilMark className="h-[18px] w-[18px]" strokeWidth={5} />
@@ -354,7 +354,7 @@ export default function PortalPage() {
   }
 
   return (
-    <div className="relative overflow-hidden pt-16">
+    <div className="surface-light relative overflow-hidden bg-paper pt-16">
       <div className="pointer-events-none absolute -top-48 left-1/2 h-[560px] w-[900px] -translate-x-1/2 rounded-full bg-gold-deep/[0.14] blur-[140px]" />
 
       {/* centered wallet entry */}

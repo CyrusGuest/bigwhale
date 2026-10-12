@@ -3,46 +3,78 @@
 @tailwind utilities;
 
 @layer base {
-  /* light: white paper, navy ink, gold accents */
+  /* brand: electric indigo paper, white ink, aqua accents */
   :root {
-    --paper: 255 255 255;
-    --ink-950: 255 255 255;
-    --ink-900: 255 255 255;
-    --ink-850: 245 248 252;
-    --ink-800: 234 240 248;
-    --ink-700: 217 226 238;
-    --mist: 11 31 58;
-    --mist-dim: 75 91 116;
-    --mist-faint: 124 135 152;
-    --gold: 200 150 30;
-    --gold-bright: 217 168 47;
-    --gold-deep: 138 106 20;
-    --navy: 10 49 97;
-    --navy-deep: 6 32 63;
-    --blue: 30 91 216;
-    --blue-bright: 59 130 246;
-    --blue-soft: 232 240 253;
+    --paper: 73 63 250; /* #493FFA */
+    --ink-950: 49 39 204; /* #3127CC deep indigo */
+    --ink-900: 55 45 218;
+    --ink-850: 64 54 235;
+    --ink-800: 89 80 251;
+    --ink-700: 110 102 252;
+    --mist: 255 255 255;
+    --mist-dim: 219 218 255;
+    --mist-faint: 178 176 243;
+    --gold: 50 231 208; /* aqua #32E7D0 */
+    --gold-bright: 124 245 230;
+    --gold-deep: 165 247 236; /* light aqua: small-caps text on indigo */
+    --navy: 255 255 255; /* borders/dividers read as white lines on indigo */
+    --navy-deep: 49 39 204;
+    --blue: 50 231 208;
+    --blue-bright: 124 245 230;
+    --blue-soft: 139 131 253;
   }
-  /* dark: deep navy-black paper, ivory ink, brighter gold */
+  /* dark: near-black indigo paper, white ink, same aqua */
   .dark {
-    --paper: 15 19 28;
-    --ink-950: 7 10 16;
-    --ink-900: 11 14 21;
-    --ink-850: 17 22 32;
-    --ink-800: 24 30 43;
-    --ink-700: 36 44 60;
-    --mist: 242 238 230;
-    --mist-dim: 181 174 162;
-    --mist-faint: 128 134 148;
-    --gold: 212 167 44;
-    --gold-bright: 242 196 90;
-    --gold-deep: 224 179 64;
-    --navy: 96 150 240;
-    --navy-deep: 10 49 97;
-    --blue: 96 150 240;
-    --blue-bright: 125 170 255;
-    --blue-soft: 21 33 58;
+    --paper: 23 23 43; /* #17172B */
+    --ink-950: 13 13 26;
+    --ink-900: 18 18 34;
+    --ink-850: 27 27 50;
+    --ink-800: 35 34 64;
+    --ink-700: 47 45 84;
+    --mist: 245 245 255;
+    --mist-dim: 189 188 220;
+    --mist-faint: 134 133 168;
+    --gold: 50 231 208;
+    --gold-bright: 124 245 230;
+    --gold-deep: 124 245 230;
+    --navy: 142 134 255;
+    --navy-deep: 49 39 204;
+    --blue: 50 231 208;
+    --blue-bright: 124 245 230;
+    --blue-soft: 40 38 86;
     color-scheme: dark;
+  }
+  /* white surfaces: cards and panels carry dark ink and deeper accents */
+  .card,
+  .panel,
+  .surface-light {
+    --paper: 255 255 255;
+    --mist: 23 23 43; /* #17172B */
+    --mist-dim: 74 74 104;
+    --mist-faint: 122 122 150;
+    --navy: 23 23 43;
+    --navy-deep: 49 39 204;
+    --gold-deep: 11 142 125; /* dark teal: aqua-family text on white */
+    --blue: 73 63 250;
+    --blue-bright: 49 39 204;
+    --blue-soft: 245 245 255; /* #F5F5FF */
+    color: rgb(var(--mist));
+  }
+  .surface-light {
+    --paper: 245 245 255;
+  }
+  /* in dark mode, cards become raised indigo-night panels instead of white */
+  .dark .card,
+  .dark .panel {
+    --paper: 30 29 58;
+    --mist: 245 245 255;
+    --mist-dim: 189 188 220;
+    --mist-faint: 134 133 168;
+    --navy: 142 134 255;
+    --gold-deep: 124 245 230;
+    --blue: 50 231 208;
+    --blue-bright: 124 245 230;
+    --blue-soft: 40 38 86;
   }
   html {
     @apply bg-paper text-mist antialiased;
@@ -55,7 +87,7 @@
     @apply overflow-x-hidden font-sans text-[15px] font-[450];
   }
   ::selection {
-    @apply bg-blue-soft text-navy;
+    @apply bg-gold text-ink-950;
   }
   /* section headings carry the engraved serif of a prospectus */
   h1,
@@ -79,19 +111,19 @@
     @apply transition-colors duration-300 hover:border-blue/40 hover:bg-blue-soft/40;
   }
   .card {
-    @apply rounded-lg border border-navy/10 bg-paper shadow-[0_10px_30px_-18px_rgba(10,49,97,0.25)];
+    @apply rounded-lg border border-navy/10 bg-paper shadow-[0_10px_30px_-18px_rgba(23,23,43,0.45)];
   }
   .btn-primary {
-    @apply inline-block rounded-sm bg-navy px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.08em] text-white transition-all hover:bg-blue dark:text-ink-950 dark:hover:bg-blue-bright hover:shadow-[0_12px_28px_-10px_rgba(30,91,216,0.55)];
+    @apply inline-block rounded-sm bg-gold px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.08em] text-[#17172B] transition-all hover:bg-gold-bright hover:shadow-[0_12px_28px_-10px_rgba(50,231,208,0.6)];
   }
   .btn-secondary {
-    @apply inline-block rounded-sm border border-navy/25 bg-paper px-7 py-3.5 text-sm font-medium uppercase tracking-[0.08em] text-navy transition-colors hover:border-navy hover:bg-blue-soft;
+    @apply inline-block rounded-sm border border-navy/30 bg-paper px-7 py-3.5 text-sm font-medium uppercase tracking-[0.08em] text-navy transition-colors hover:border-navy hover:bg-white/10;
   }
 }
 
 /* gold-leaf gradient text for headline emphasis */
 .text-shimmer {
-  background: linear-gradient(90deg, #b07f12 0%, #e0b340 25%, #b07f12 50%, #e0b340 75%, #b07f12 100%);
+  background: linear-gradient(90deg, #2bd4be 0%, #8cf7ea 25%, #2bd4be 50%, #8cf7ea 75%, #2bd4be 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
@@ -108,11 +140,11 @@
 /* soft lift that makes display text read as solid print on paper */
 .text-3d {
   text-shadow:
-    0 1px 0 #c9d4e3,
-    0 2px 0 #bcc9db,
-    0 3px 0 #afbed3,
-    0 8px 18px rgba(10, 49, 97, 0.18),
-    0 18px 40px rgba(200, 150, 30, 0.12);
+    0 1px 0 #3a30e0,
+    0 2px 0 #332ac4,
+    0 3px 0 #2c24a8,
+    0 8px 18px rgba(23, 23, 43, 0.35),
+    0 18px 40px rgba(50, 231, 208, 0.14);
 }
 
 /* bright specular glint that sweeps through the glyphs, then rests */
@@ -144,20 +176,20 @@
 }
 .text-retro {
   text-shadow:
-    -1.5px -1.5px 0 #0b0a08,
-    1.5px -1.5px 0 #0b0a08,
-    -1.5px 1.5px 0 #0b0a08,
-    3px 3px 0 #0b0a08,
-    5px 5px 0 #5b4610,
-    8px 8px 0 rgba(212, 167, 44, 0.28),
-    0 0 42px rgba(212, 167, 44, 0.35);
+    -1.5px -1.5px 0 #141233,
+    1.5px -1.5px 0 #141233,
+    -1.5px 1.5px 0 #141233,
+    3px 3px 0 #141233,
+    5px 5px 0 #231c8f,
+    8px 8px 0 rgba(50, 231, 208, 0.28),
+    0 0 42px rgba(50, 231, 208, 0.35);
 }
 /* fine engraved hatching clipped inside the glyphs */
 .text-scan {
   color: transparent;
   background: repeating-linear-gradient(
     0deg,
-    rgba(255, 248, 225, 0.2) 0 1.5px,
+    rgba(240, 253, 251, 0.2) 0 1.5px,
     transparent 1.5px 5px
   );
   -webkit-background-clip: text;
@@ -169,19 +201,19 @@
 .text-game {
   letter-spacing: -0.02em;
   text-shadow:
-    2px 2px 0 #0b0a08,
-    -2px 2px 0 #0b0a08,
-    2px -2px 0 #0b0a08,
-    -2px -2px 0 #0b0a08,
-    0 4px 0 #5b4610,
-    0 6px 0 #2e2308,
-    0 10px 24px rgba(0, 0, 0, 0.6),
-    0 0 44px rgba(212, 167, 44, 0.35);
+    2px 2px 0 #141233,
+    -2px 2px 0 #141233,
+    2px -2px 0 #141233,
+    -2px -2px 0 #141233,
+    0 4px 0 #231c8f,
+    0 6px 0 #17115f,
+    0 10px 24px rgba(10, 9, 30, 0.6),
+    0 0 44px rgba(50, 231, 208, 0.35);
 }
 
-/* navy text with a slow traveling blue luster */
+/* white text with a slow traveling aqua luster */
 .text-luster {
-  background: linear-gradient(100deg, #0a3161 35%, #3b82f6 50%, #0a3161 65%);
+  background: linear-gradient(100deg, #ffffff 35%, #32e7d0 50%, #ffffff 65%);
   background-size: 220% auto;
   -webkit-background-clip: text;
   background-clip: text;
@@ -206,12 +238,12 @@
   background: none;
 }
 .glitch::before {
-  color: #b31942;
+  color: #32e7d0;
   clip-path: inset(0 0 52% 0);
   animation: glitchLayer 0.45s steps(3) both;
 }
 .glitch::after {
-  color: #1e5bd8;
+  color: #17172b;
   clip-path: inset(46% 0 0 0);
   animation: glitchLayer 0.45s steps(3) reverse both;
 }
@@ -255,37 +287,37 @@
   width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #f5f8fc;
+  background: #3b31e8;
 }
 ::-webkit-scrollbar-thumb {
-  background: #d9e2ee;
+  background: #6d65fc;
   border-radius: 8px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #0a3161;
+  background: #32e7d0;
 }
 
 /* dark-mode retunes for the effects above */
 .dark .text-3d {
   text-shadow:
-    0 1px 0 #6a5214,
-    0 2px 0 #5b4610,
-    0 3px 0 #4c3a0d,
+    0 1px 0 #2c24a8,
+    0 2px 0 #241d8c,
+    0 3px 0 #1c1670,
     0 8px 18px rgba(0, 0, 0, 0.55),
-    0 18px 40px rgba(212, 167, 44, 0.22);
+    0 18px 40px rgba(50, 231, 208, 0.22);
 }
 .dark .text-luster {
-  background-image: linear-gradient(100deg, #f7f3ea 35%, #8fb8ff 50%, #f7f3ea 65%);
+  background-image: linear-gradient(100deg, #f5f5ff 35%, #32e7d0 50%, #f5f5ff 65%);
 }
 .dark .text-shimmer {
-  background-image: linear-gradient(90deg, #d4a72c 0%, #f6dc8e 25%, #d4a72c 50%, #f6dc8e 75%, #d4a72c 100%);
+  background-image: linear-gradient(90deg, #2bd4be 0%, #8cf7ea 25%, #2bd4be 50%, #8cf7ea 75%, #2bd4be 100%);
 }
 .dark ::-webkit-scrollbar-track {
-  background: #0b0e15;
+  background: #12121f;
 }
 .dark ::-webkit-scrollbar-thumb {
-  background: #242c3c;
+  background: #2e2c54;
 }
 .dark ::-webkit-scrollbar-thumb:hover {
-  background: #6096f0;
+  background: #32e7d0;
 }
