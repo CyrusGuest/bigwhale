@@ -1142,7 +1142,7 @@ function ActEnd() {
 /* ---------------------------------- hero ----------------------------------- */
 
 // title → phone → sleep → reserve → portal → story → outro (scrolls down) → end card
-const ACT_DURATIONS = [2950, 3900, 3800, 4200, 5000, 11700, 3000]
+const ACT_DURATIONS = [2950, 3900, 3800, 4200, 5000, 12750, 3000]
 
 export default function Hero() {
   const [notifs, setNotifs] = useState(() => Array.from({ length: 4 }, makeNotif).reverse())
