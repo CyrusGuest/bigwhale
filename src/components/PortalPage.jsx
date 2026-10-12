@@ -178,19 +178,19 @@ function Dashboard({ address, data, sample = false }) {
       <div className="grid gap-4 sm:grid-cols-3">
         {[
           {
-            label: 'Oil stock earned, all time',
+            label: '$USO earned, all time',
             value: usd(data.allTimeXrp * XRP_PRICE),
-            sub: 'worth of oil stock, paid to this wallet',
+            sub: 'worth of $USO, paid to this wallet',
           },
           {
             label: 'Last 30 days',
             value: usd(data.totalXrp * XRP_PRICE),
-            sub: 'worth of oil stock',
+            sub: 'worth of $USO',
           },
           {
             label: 'Estimated daily pace',
             value: `${usd(data.estDailyUsd)} / day`,
-            sub: 'worth of oil stock, at current volume',
+            sub: 'worth of $USO, at current volume',
           },
         ].map((k) => (
           <div key={k.label} className={`${glass} p-6`}>
@@ -209,7 +209,7 @@ function Dashboard({ address, data, sample = false }) {
           <div className="flex items-center justify-between">
             <div>
               <h3 className="font-display text-[16px] font-semibold text-mist">Earnings</h3>
-              <span className="text-[13px] text-navy/50">Cumulative oil stock received</span>
+              <span className="text-[13px] text-navy/50">Cumulative $USO received</span>
             </div>
             <div className="flex overflow-hidden rounded-full bg-navy/[0.08] p-1 ring-1 ring-navy/[0.08]">
               {[7, 30].map((r) => (
@@ -230,7 +230,7 @@ function Dashboard({ address, data, sample = false }) {
               {usd(rangeXrp * XRP_PRICE)}
             </span>
             <span className="font-display text-[16px] font-medium tabular-nums text-navy/55">
-              worth of oil stock
+              worth of $USO
             </span>
           </div>
           <div className="mt-2">
@@ -251,7 +251,7 @@ function Dashboard({ address, data, sample = false }) {
               <Countdown />
             </div>
             <div className="mt-1.5 font-display text-[15px] font-medium text-gold-bright">
-              est. +{usd(hourly * XRP_PRICE, 2)} of oil stock to this wallet
+              est. +{usd(hourly * XRP_PRICE, 2)} of $USO to this wallet
             </div>
             <p className="mt-3 text-[12px] leading-relaxed text-white/45">
               Deposited automatically. Nothing to claim.
@@ -277,7 +277,7 @@ function Dashboard({ address, data, sample = false }) {
                       +{usd(v * XRP_PRICE, d === 2 ? 2 : 0)}
                     </span>
                     <span className="block text-[12px] tabular-nums text-navy/45">
-                      of oil stock
+                      of $USO
                     </span>
                   </span>
                 </div>
@@ -317,7 +317,7 @@ function Dashboard({ address, data, sample = false }) {
                   +{usd(t.xrp * XRP_PRICE, 2)}
                 </span>
                 <span className="block text-[12px] tabular-nums text-navy/45">
-                  of oil stock
+                  of $USO
                 </span>
               </div>
             </div>

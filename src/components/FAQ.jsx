@@ -4,27 +4,27 @@ import { motion, AnimatePresence } from 'framer-motion'
 const faqs = [
   {
     q: 'What is XPY, in one sentence?',
-    a: 'XPY is the first crypto coin that pays you oil stock just for holding it. Every hour, a slice of every trade is turned into oil stock and sent to every holder, split by how much each person holds. It is the simplest way an American has ever had to build a position in oil.',
+    a: 'XPY is the first crypto coin that pays you $USO (US Oil Fund) just for holding it. Every hour, a slice of every trade is turned into $USO and sent to every holder, split by how much each person holds. It is the simplest way an American has ever had to build a position in oil.',
   },
   {
     q: 'What do I actually get paid?',
-    a: 'Oil stock, shown to you in plain dollars. A $40 payout is $40 worth of oil stock, sitting in your wallet. Keep it and let it grow, or sell it whenever you like. It is yours the moment it lands.',
+    a: '$USO, the US Oil Fund, shown to you in plain dollars. A $40 payout is $40 worth of $USO, sitting in your wallet. Keep it and let it grow, or sell it whenever you like. It is yours the moment it lands.',
   },
   {
     q: 'Where does the money come from?',
-    a: 'From trading. Every buy or sell of XPY pays a 4% fee, and 100% of that fee is turned into oil stock and paid out to holders every hour. The team holds XPY too, and earns exactly the way you do: same rules, same hourly payouts, no special cut. Nothing is printed, and nothing comes from new buyers’ money. Real trading, real oil stock.',
+    a: 'From trading. Every buy or sell of XPY pays a 4% fee, and 100% of that fee is turned into $USO and paid out to holders every hour. The team holds XPY too, and earns exactly the way you do: same rules, same hourly payouts, no special cut. Nothing is printed, and nothing comes from new buyers’ money. Real trading, real $USO.',
   },
   {
     q: 'Why is it good to get in early?',
-    a: 'Because every trade made after you buy in pays you. The earlier you hold, the more trades you collect from. As more Americans discover XPY and start trading, the fee pool grows, your hourly payouts grow with it, and so does the oil stock position you are building.',
+    a: 'Because every trade made after you buy in pays you. The earlier you hold, the more trades you collect from. As more Americans discover XPY and start trading, the fee pool grows, your hourly payouts grow with it, and so does the $USO position you are building.',
   },
   {
     q: 'Do I have to do anything?',
-    a: 'No. Buy XPY, keep it in your own wallet, and the payouts arrive on their own, around the clock. Nothing to stake, nothing to lock, nothing to claim. If you ever sell, the payouts stop, and you keep every dollar of oil stock you already earned.',
+    a: 'No. Buy XPY, keep it in your own wallet, and the payouts arrive on their own, around the clock. Nothing to stake, nothing to lock, nothing to claim. If you ever sell, the payouts stop, and you keep every dollar of $USO you already earned.',
   },
   {
     q: 'What makes XPY different from every other coin?',
-    a: 'Other coins pay you in more of themselves. XPY pays you in something real: oil stock, the industry that powers America and the world economy. No other crypto coin has ever done this. Our distribution algorithm, what we call virtual drilling, turns every trade into oil stock for holders, automatically, every hour.',
+    a: 'Other coins pay you in more of themselves. XPY pays you in something real: $USO, the US Oil Fund, a stake in the industry that powers America and the world economy. No other crypto coin has ever done this. Our distribution algorithm, what we call virtual drilling, turns every trade into $USO for holders, automatically, every hour.',
   },
   {
     q: 'Is anything actually being drilled?',
@@ -36,7 +36,7 @@ const faqs = [
   },
   {
     q: 'What are the risks?',
-    a: 'XPY is a crypto coin, not a security. It is purely a coin running on an algorithm that pays its holders back in oil stock, which is what sets it apart from most other coins. But it is still crypto, and crypto comes with the same ground rules as every other coin: there are no promises from the team, there is no roadmap, and prices are extremely volatile compared to a regular stock. The price can fall, trading can slow, and payouts can shrink with it. Put in what you are comfortable holding through the swings. XPY is not a security.',
+    a: 'XPY is a crypto coin, not a security. It is purely a coin running on an algorithm that pays its holders back in $USO, which is what sets it apart from most other coins. But it is still crypto, and crypto comes with the same ground rules as every other coin: there are no promises from the team, there is no roadmap, and prices are extremely volatile compared to a regular stock. The price can fall, trading can slow, and payouts can shrink with it. Put in what you are comfortable holding through the swings. XPY is not a security.',
   },
 ]
 

@@ -28,7 +28,7 @@ export default function Footer() {
           </div>
           <p className="mt-5 max-w-xs text-sm leading-relaxed text-mist-dim">
             Virtual drilling on a public ledger: trading fees redistributed to
-            holders in oil stock, split by holdings, hourly, and publicly verifiable.
+            holders in $USO, split by holdings, hourly, and publicly verifiable.
           </p>
 
           <form

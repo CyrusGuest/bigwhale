@@ -78,7 +78,7 @@ export default function Drip() {
             <span className="text-gold">while you do nothing.</span>
           </h2>
           <p className="mt-6 max-w-md leading-relaxed text-mist-dim">
-            This is what holding XPY feels like: oil stock passively earned
+            This is what holding XPY feels like: $USO passively earned
             around the clock and sent to your wallet every hour by the
             algorithm, even while you sleep. Drag the slider to your position
             size and watch how fast it adds up.
@@ -114,7 +114,7 @@ export default function Drip() {
           <div className="relative mt-7">
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
               <span className="text-sm font-medium text-mist sm:text-[15px]">
-                Oil stock earned since you opened this page
+                $USO earned since you opened this page
               </span>
               <span className="rounded-full border border-gold/30 bg-gold/[0.08] px-2.5 py-0.5 font-mono text-[11px] tabular-nums text-gold-deep">
                 {mins > 0 ? `${mins}m ` : ''}
@@ -123,7 +123,7 @@ export default function Drip() {
             </div>
             <div className="mt-2 text-4xl font-semibold tabular-nums tracking-tight text-mist sm:text-6xl">
               ${(accrued * XRP_PRICE).toFixed(4)}
-              <span className="ml-3 text-xl font-medium text-gold">of oil stock</span>
+              <span className="ml-3 text-xl font-medium text-gold">of $USO</span>
             </div>
           </div>
 
@@ -168,7 +168,7 @@ export default function Drip() {
                   >
                     +{fmtUsd(v * XRP_PRICE)}
                   </span>
-                  <span className="text-sm text-mist-dim">of oil stock</span>
+                  <span className="text-sm text-mist-dim">of $USO</span>
                 </span>
               </div>
             ))}

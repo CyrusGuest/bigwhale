@@ -20,29 +20,29 @@ const STEPS = [
   {
     num: 'II',
     title: 'Get paid every hour',
-    body: 'Once an hour, oil stock is sent straight to your wallet. You see it as dollars: $40 one hour, $55 the next. Hold more XPY and each payout gets bigger.',
+    body: 'Once an hour, $USO is sent straight to your wallet. You see it as dollars: $40 one hour, $55 the next. Hold more XPY and each payout gets bigger.',
   },
   {
     num: 'III',
     title: 'Watch it add up',
-    body: 'Every payout is more oil stock in your name. Hold longer, and you build a real stake in the industry that powers America, without buying a single share yourself.',
+    body: 'Every payout is more $USO in your name. Hold longer, and you build a real stake in the industry that powers America, without buying a single share yourself.',
   },
 ]
 
 // the fee loop, left to right
 const FLOW = [
   ['Someone trades XPY', 'They pay a 4% fee'],
-  ['The fee buys oil stock', 'All of it, every time'],
+  ['The fee buys $USO', 'All of it, every time'],
   ['Every hour, it is split', 'Among everyone holding XPY'],
   ['It lands in your wallet', 'Automatically'],
 ]
 
 const FACTS = [
-  ['You get paid in', 'Oil stock'],
+  ['You get paid in', '$USO'],
   ['How often', 'Every hour'],
   ['Your share', '4% of every trade'],
   ['What you do', 'Nothing. Just hold.'],
-  ['Backed by', '$1,000,000 in oil stock, held in reserve'],
+  ['Backed by', '$1,000,000 in $USO, held in reserve'],
 ]
 
 export default function Explainer() {
@@ -61,17 +61,17 @@ export default function Explainer() {
             className="mt-6 font-serif text-4xl font-semibold leading-[1.1] tracking-[-0.015em] sm:text-5xl lg:text-6xl"
           >
             The first crypto coin that pays you{' '}
-            <span className="text-shimmer">oil stock</span>. Passively, all day.
+            <span className="text-shimmer">$USO</span>. Passively, all day.
           </motion.h2>
           <motion.p {...fade(0.16)} className="mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-mist-dim">
             Oil prices are near record highs. Buying barrels, or shares in the
             companies that pump them, is out of reach for most American
             families. XPY opens the door: hold the coin, and the oil market pays
-            you in oil stock, every hour, with no big check up front.
+            you in $USO (US Oil Fund), every hour, with no big check up front.
           </motion.p>
           <motion.p {...fade(0.22)} className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-mist-dim">
             No broker, no minimums, no waiting. Hour by hour, XPY lets
-            everyday Americans build a portfolio of oil stock easier than ever,
+            everyday Americans build a portfolio of $USO easier than ever,
             and own a real piece of the industry that built this country.
           </motion.p>
           <motion.div {...fade(0.28)}>
@@ -117,7 +117,7 @@ export default function Explainer() {
           </div>
           <p className="mt-6 border-t border-gold/15 pt-5 text-sm leading-relaxed text-mist-dim">
             Being early pays. Every single trade of XPY made after you buy in
-            sends oil stock to your wallet. As more Americans discover the
+            sends $USO to your wallet. As more Americans discover the
             program and start trading, your payouts grow with it. The earlier
             you hold, the more of that growth you collect.
           </p>

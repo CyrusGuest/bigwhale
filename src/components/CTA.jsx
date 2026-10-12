@@ -22,7 +22,7 @@ export default function CTA() {
         </h2>
         <p className="mx-auto mt-7 max-w-xl text-lg leading-relaxed text-mist-dim">
           Oil powers this country, and for too long only a few earned from
-          it. Hold XPY and get your piece: oil stock, paid to you every hour,
+          it. Hold XPY and get your piece: $USO, paid to you every hour,
           without paying today’s high price for a single barrel or share.
         </p>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">

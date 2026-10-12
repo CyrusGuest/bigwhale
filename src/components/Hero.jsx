@@ -36,13 +36,13 @@ const OTHER_NOTIFS = [
   {
     app: 'X',
     icon: 'x',
-    body: '@XPYOFFICIAL: The $1,000,000 oil stock reserve is funded. Attestation publishes this week.',
-    hl: '$1,000,000 oil stock reserve',
+    body: '@XPYOFFICIAL: The $1,000,000 $USO reserve is funded. Attestation publishes this week.',
+    hl: '$1,000,000 $USO reserve',
   },
   {
     app: 'Stocks',
     icon: 'stocks',
-    body: 'WTI Crude $78.40 (+1.8%) · Oil stock +5.2% · XPY +3.1%',
+    body: 'WTI Crude $78.40 (+1.8%) · $USO +5.2% · XPY +3.1%',
   },
   {
     app: 'News',
@@ -254,7 +254,7 @@ function PhoneMock({ notifs }) {
                                   <span className="font-semibold text-[#F2C45A]">
                                     ${n.usd.toFixed(2)}
                                   </span>{' '}
-                                  of oil stock
+                                  of $USO
                                 </p>
                               ) : (
                                 <p className="mt-[2px] text-[14px] leading-[1.32] text-white/85">
@@ -399,7 +399,7 @@ function ActTitle() {
             transition={{ delay: 0.8, type: 'spring', stiffness: 210, damping: 13 }}
             className="text-3d origin-bottom text-6xl font-bold leading-[1.1] tracking-[-0.03em] sm:text-8xl lg:text-9xl"
           >
-            EARN <span className="text-shimmer">OIL STOCK</span>.
+            EARN <span className="text-shimmer">$USO</span>.
           </motion.h1>
         </div>
 
@@ -566,7 +566,7 @@ function ActSleep() {
                 </div>
                 <p className="mt-[2px] text-[14px] leading-[1.32] text-white/85">
                   You just got paid{' '}
-                  <span className="font-semibold text-[#F2C45A]">${d.amt.toFixed(2)}</span> of oil stock
+                  <span className="font-semibold text-[#F2C45A]">${d.amt.toFixed(2)}</span> of $USO
                 </p>
               </div>
             </motion.div>
@@ -683,7 +683,7 @@ function ActReserve() {
           transition={{ delay: 1.3, duration: 0.5, ease: EASE }}
           className="mt-5 text-2xl font-medium text-mist sm:text-3xl"
         >
-          of <span className="text-shimmer">oil stock</span> in our starting reserve
+          of <span className="text-shimmer">$USO</span> in our starting reserve
         </motion.p>
       </Float>
       <Float delay={0.9} amt={4} dur={6}>
@@ -768,13 +768,13 @@ function ActPortal() {
           <div className="flex items-end justify-between gap-4">
             <div>
               <span className="block font-mono text-[9px] uppercase tracking-[0.18em] text-mist-faint">
-                Oil stock earned, all time
+                $USO earned, all time
               </span>
               <span className="mt-1 block font-mono text-3xl font-semibold tabular-nums text-mist sm:text-4xl">
                 <RollUp target={51384} prefix="$" dur={1.9} delay={1.1} />
               </span>
               <span className="mt-0.5 block font-mono text-sm tabular-nums text-gold-deep">
-                worth of oil stock, paid to one wallet
+                worth of $USO, paid to one wallet
               </span>
             </div>
             <div className="pb-1 text-right">
@@ -1107,12 +1107,12 @@ function ActEnd() {
         <h1 className="font-serif text-5xl font-semibold leading-[1.05] tracking-[-0.015em] sm:text-7xl">
           Buy XPY.
           <br />
-          Get paid in <span className="text-shimmer">oil stock</span>.
+          Get paid in <span className="text-shimmer">$USO</span>.
         </h1>
       </Float>
       <Float delay={0.4} amt={5} dur={6}>
         <p className="mt-6 font-mono text-sm uppercase tracking-[0.28em] text-gold-deep">
-          Every hour · Automatically · Open to every American
+          US Oil Fund · Every hour · Open to every American
         </p>
       </Float>
       <Float delay={0.7} amt={6} dur={5.5}>

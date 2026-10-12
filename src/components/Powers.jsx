@@ -13,7 +13,7 @@ const FACTS = [
 ]
 
 
-// illustrative growth curves: XPY price and a holder's accumulated oil stock,
+// illustrative growth curves: XPY price and a holder's accumulated $USO,
 // both plotted against holder count. Shapes only; not a forecast.
 const W = 640
 const H = 260
@@ -41,7 +41,7 @@ function GrowthChart() {
   const oilD = curve(OIL)
   const baseY = H - PAD.b
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full text-mist" role="img" aria-label="Illustration: as holders grow, XPY price and your oil stock position both rise">
+    <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full text-mist" role="img" aria-label="Illustration: as holders grow, XPY price and your $USO position both rise">
       <defs>
         <linearGradient id="oilFill" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#C8961E" stopOpacity="0.28" />
@@ -65,7 +65,7 @@ function GrowthChart() {
           </g>
         )
       })}
-      {/* your oil stock: filled area */}
+      {/* your $USO: filled area */}
       <motion.path
         d={`${oilD} L ${W - PAD.r} ${baseY} L ${PAD.l} ${baseY} Z`}
         fill="url(#oilFill)"
@@ -145,7 +145,7 @@ export default function Powers() {
               XPY changes that. America already pumps more oil than any nation
               on earth. XPY pushes that lead further by opening the oil economy
               to every American: hold the coin, and our distribution algorithm
-              pays you real oil stock, every hour. No well, no broker, no big
+              pays you real $USO, every hour. No well, no broker, no big
               check up front. XPY is the first crypto coin ever to make this
               possible.
             </motion.p>
@@ -204,16 +204,16 @@ export default function Powers() {
             </h3>
             <p className="mt-5 leading-relaxed text-mist-dim">
               Every new American who joins adds trading. Every trade pays the
-              fee. And every fee buys oil stock for the people already holding.
+              fee. And every fee buys $USO for the people already holding.
               As the program grows, XPY is built to grow in value with it, and
-              your passively earned oil stock climbs right alongside.
+              your passively earned $USO climbs right alongside.
             </p>
             <ul className="mt-6 space-y-2.5 text-sm text-mist">
               <li className="flex items-center gap-3">
                 <span className="h-2.5 w-2.5 rounded-full bg-mist" /> XPY price, as holders grow
               </li>
               <li className="flex items-center gap-3">
-                <span className="h-2.5 w-2.5 rounded-full bg-gold" /> Your oil stock, earned every hour
+                <span className="h-2.5 w-2.5 rounded-full bg-gold" /> Your $USO, earned every hour
               </li>
             </ul>
           </div>
