@@ -184,9 +184,9 @@ function PhoneMock({ notifs }) {
                     </svg>
                     Do Not Disturb
                   </div>
-                  <div className="mt-2 text-[15px] font-medium text-white/70">Tuesday, 3:30 AM</div>
+                  <div className="mt-2 text-[15px] font-medium text-white/70">Tuesday, 3:47 AM</div>
                   <div className="bg-gradient-to-b from-white to-white/70 bg-clip-text text-[68px] font-semibold leading-[1.05] tracking-tight text-transparent">
-                    3:30
+                    3:47
                   </div>
                 </div>
 
@@ -300,7 +300,7 @@ function PhoneMock({ notifs }) {
       </motion.div>
 
       <p className="relative mt-6 font-mono text-[10px] uppercase tracking-[0.2em] text-mist-faint">
-        Simulated preview · Payouts land hourly, even at 3:30 AM
+        Simulated preview · Payouts land hourly, even at 3:47 AM
       </p>
     </div>
   )
