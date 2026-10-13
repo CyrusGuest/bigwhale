@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Star } from './Stars.jsx'
+import { REVEAL } from '../motionPrefs.js'
 
 // Oil mark: a single crude drop, outlined in the current color with a faint
 // fill and a specular highlight, so it reads at favicon size and at 560px
@@ -369,8 +370,8 @@ function ActTitle() {
       <Float amt={8} dur={5} delay={1.8}>
         {/* line 1: BUY + XTO. slam in from opposite sides and collide */}
         <div className="relative flex flex-wrap items-center justify-center gap-x-5">
-          <ImpactPulse delay={0.55} />
-          <Burst delay={0.55} />
+          {REVEAL && <ImpactPulse delay={0.55} />}
+          {REVEAL && <Burst delay={0.55} />}
           <motion.span
             initial={{ x: '-70vw', rotate: -14, opacity: 0 }}
             animate={{ x: 0, rotate: 0, opacity: 1 }}
@@ -391,8 +392,8 @@ function ActTitle() {
 
         {/* line 2: drops from above and bounces on landing */}
         <div className="relative">
-          <ImpactPulse delay={1.25} />
-          <Burst delay={1.25} />
+          {REVEAL && <ImpactPulse delay={1.25} />}
+          {REVEAL && <Burst delay={1.25} />}
           <motion.h1
             initial={{ y: '-58vh', opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -1142,6 +1143,12 @@ function ActEnd() {
 const ACT_DURATIONS = [2950, 3900, 3800, 4200, 5000, 12750, 3000]
 // wall-clock offset of the story act, for keeping its inner beats on schedule
 const STORY_OFFSET = ACT_DURATIONS.slice(0, 5).reduce((s, d) => s + d, 0)
+// a single clock tick never credits more than this: a stalled main thread
+// (first paint, font swap, GC) must not count as watched time, or one long
+// stall at page-open skips the title act before it ever paints
+const MAX_TICK_MS = 250
+// how long to hold the intro for the web fonts before starting without them
+const FONT_WAIT_MS = 2000
 
 export default function Hero() {
   const [notifs, setNotifs] = useState(() => Array.from({ length: 4 }, makeNotif).reverse())
@@ -1182,12 +1189,42 @@ export default function Hero() {
     return () => clearInterval(ping)
   }, [heroVisible])
 
+  // the intro doesn't start until the hero has painted a frame and the web
+  // fonts are in (bounded wait). On phones the first commit plus the font
+  // swap can stall the thread for seconds; starting the clock before that
+  // meant the title act ran, or was skipped, with nothing on screen.
+  const [started, setStarted] = useState(false)
+  useEffect(() => {
+    let cancelled = false
+    let raf = 0
+    const timeout = new Promise((r) => setTimeout(r, FONT_WAIT_MS))
+    const cssReady = window.__fontsCss ?? Promise.resolve()
+    const afterPaint = () =>
+      new Promise((r) => {
+        raf = requestAnimationFrame(() => {
+          raf = requestAnimationFrame(r)
+        })
+      })
+    const ready = cssReady
+      // a painted frame kicks off the font loads, so only then is fonts.ready meaningful
+      .then(afterPaint)
+      .then(() => document.fonts?.ready ?? null)
+      .then(afterPaint)
+    Promise.race([ready, timeout]).then(() => {
+      if (!cancelled) setStarted(true)
+    })
+    return () => {
+      cancelled = true
+      cancelAnimationFrame(raf)
+    }
+  }, [])
+
   // the intro runs on accumulated play-time, not chained timers: mobile
   // browsers suspend timers mid-scroll, so each tick re-derives the current
   // act from how long the hero has actually been watched. While the hero is
   // off screen the clock pauses with it.
   useEffect(() => {
-    if (act >= 7 || !heroVisible) return
+    if (act >= 7 || !heroVisible || !started) return
     const bounds = []
     let acc = 0
     for (const d of ACT_DURATIONS) {
@@ -1197,14 +1234,14 @@ export default function Hero() {
     let last = performance.now()
     const iv = setInterval(() => {
       const now = performance.now()
-      playedRef.current += now - last
+      playedRef.current += Math.min(now - last, MAX_TICK_MS)
       last = now
       const idx = bounds.findIndex((b) => playedRef.current < b)
       setAct(idx === -1 ? 7 : idx)
       if (idx === -1) clearInterval(iv)
     }, 150)
     return () => clearInterval(iv)
-  }, [act, heroVisible])
+  }, [act, heroVisible, started])
 
   // during the outro, glide the page down to the live simulation
   // (only if the viewer hasn't already scrolled away on their own)
@@ -1217,6 +1254,7 @@ export default function Hero() {
     return () => clearTimeout(t)
   }, [act])
 
+  const show = started && heroVisible
   return (
     <section ref={sectionRef} className="relative overflow-x-clip pt-16">
       {/* XRP-blue washes */}
@@ -1235,15 +1273,15 @@ export default function Hero() {
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center py-12">
           <AnimatePresence mode="wait">
-            {heroVisible && act === 0 && <ActTitle key="act-title" />}
-            {heroVisible && act === 1 && <ActPhone key="act-phone" notifs={notifs} />}
-            {heroVisible && act === 2 && <ActSleep key="act-sleep" />}
-            {heroVisible && act === 3 && <ActReserve key="act-reserve" />}
-            {heroVisible && act === 4 && <ActPortal key="act-portal" />}
-            {heroVisible && act === 5 && (
+            {show && act === 0 && <ActTitle key="act-title" />}
+            {show && act === 1 && <ActPhone key="act-phone" notifs={notifs} />}
+            {show && act === 2 && <ActSleep key="act-sleep" />}
+            {show && act === 3 && <ActReserve key="act-reserve" />}
+            {show && act === 4 && <ActPortal key="act-portal" />}
+            {show && act === 5 && (
               <ActStory key="act-story" played={playedRef} />
             )}
-            {heroVisible && act === 6 && <ActOutro key="act-outro" />}
+            {show && act === 6 && <ActOutro key="act-outro" />}
             {act === 7 && (
               <motion.div
                 key="act-end"
