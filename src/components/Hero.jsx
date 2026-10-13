@@ -861,16 +861,15 @@ function ActPortal() {
 }
 
 // Act 6: making history, then availability pops in beneath it
-function ActStory({ start }) {
+function ActStory({ played }) {
   const [showWallets, setShowWallets] = useState(false)
   const [wi, setWi] = useState(0)
   useEffect(() => {
-    // wall-clock driven from the shared intro origin, so a remount (after the
-    // hero scrolls back into view) lands exactly on the beat it should be on:
-    // wallets appear at 2.8s into the act, names advance every 1.05s from 3.9s
-    const origin = start ?? performance.now()
+    // driven by the intro's play-time, so a remount (after the hero scrolls
+    // back into view) lands exactly on the beat it paused on: wallets appear
+    // at 2.8s into the act, names advance every 1.05s from 3.9s
     const tick = () => {
-      const elapsed = performance.now() - origin
+      const elapsed = (played?.current ?? 0) - STORY_OFFSET
       if (elapsed >= 2800) setShowWallets(true)
       const step = Math.floor((elapsed - 3900) / 1050)
       const next = Math.max(0, Math.min(WALLETS.length - 1, step))
@@ -882,7 +881,7 @@ function ActStory({ start }) {
       if (tick()) clearInterval(iv)
     }, 120)
     return () => clearInterval(iv)
-  }, [start])
+  }, [played])
   return (
     <motion.div exit={actExit} className="w-full px-4 text-center">
       <motion.div layout transition={{ layout: { duration: 0.55, ease: EASE } }}>
@@ -1155,9 +1154,10 @@ export default function Hero() {
     return 0
   })
 
-  // intro wall-clock origin: acts and in-act beats all derive from this, so
-  // nothing drifts no matter how often rendering pauses or remounts
-  const introStart = useRef(performance.now()).current
+  // ms of intro actually PLAYED: advances only while the hero is on screen,
+  // so a mid-page reload or a scroll-away never skips the opening acts — the
+  // intro pauses and resumes exactly where it left off
+  const playedRef = useRef(0)
 
   // while the hero is scrolled out of view, the timeline keeps running but we
   // stop RENDERING the acts: off-screen framer animations are main-thread
@@ -1182,27 +1182,29 @@ export default function Hero() {
     return () => clearInterval(ping)
   }, [heroVisible])
 
-  // the intro runs on wall-clock time, not chained timers: mobile browsers
-  // suspend timers and animation frames mid-scroll, so instead we re-derive
-  // the current act from elapsed time on every tick. Scrolling never pauses
-  // the timeline — scroll back up and the intro has progressed on schedule.
+  // the intro runs on accumulated play-time, not chained timers: mobile
+  // browsers suspend timers mid-scroll, so each tick re-derives the current
+  // act from how long the hero has actually been watched. While the hero is
+  // off screen the clock pauses with it.
   useEffect(() => {
-    if (act >= 7) return
+    if (act >= 7 || !heroVisible) return
     const bounds = []
     let acc = 0
     for (const d of ACT_DURATIONS) {
       acc += d
       bounds.push(acc)
     }
+    let last = performance.now()
     const iv = setInterval(() => {
-      const elapsed = performance.now() - introStart
-      const idx = bounds.findIndex((b) => elapsed < b)
+      const now = performance.now()
+      playedRef.current += now - last
+      last = now
+      const idx = bounds.findIndex((b) => playedRef.current < b)
       setAct(idx === -1 ? 7 : idx)
       if (idx === -1) clearInterval(iv)
     }, 150)
     return () => clearInterval(iv)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [act, heroVisible])
 
   // during the outro, glide the page down to the live simulation
   // (only if the viewer hasn't already scrolled away on their own)
@@ -1239,7 +1241,7 @@ export default function Hero() {
             {heroVisible && act === 3 && <ActReserve key="act-reserve" />}
             {heroVisible && act === 4 && <ActPortal key="act-portal" />}
             {heroVisible && act === 5 && (
-              <ActStory key="act-story" start={introStart + STORY_OFFSET} />
+              <ActStory key="act-story" played={playedRef} />
             )}
             {heroVisible && act === 6 && <ActOutro key="act-outro" />}
             {act === 7 && (
