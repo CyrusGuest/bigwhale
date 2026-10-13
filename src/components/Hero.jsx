@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Star } from './Stars.jsx'
 
@@ -861,23 +861,28 @@ function ActPortal() {
 }
 
 // Act 6: making history, then availability pops in beneath it
-function ActStory() {
+function ActStory({ start }) {
   const [showWallets, setShowWallets] = useState(false)
   const [wi, setWi] = useState(0)
   useEffect(() => {
-    // wall-clock driven so a mid-scroll timer freeze can't desync the beat:
-    // wallets appear at 2.8s, then advance one name every 1.05s from 3.9s
-    const start = performance.now()
-    const iv = setInterval(() => {
-      const elapsed = performance.now() - start
+    // wall-clock driven from the shared intro origin, so a remount (after the
+    // hero scrolls back into view) lands exactly on the beat it should be on:
+    // wallets appear at 2.8s into the act, names advance every 1.05s from 3.9s
+    const origin = start ?? performance.now()
+    const tick = () => {
+      const elapsed = performance.now() - origin
       if (elapsed >= 2800) setShowWallets(true)
       const step = Math.floor((elapsed - 3900) / 1050)
       const next = Math.max(0, Math.min(WALLETS.length - 1, step))
       setWi(next)
-      if (next >= WALLETS.length - 1) clearInterval(iv)
+      return next >= WALLETS.length - 1
+    }
+    if (tick()) return
+    const iv = setInterval(() => {
+      if (tick()) clearInterval(iv)
     }, 120)
     return () => clearInterval(iv)
-  }, [])
+  }, [start])
   return (
     <motion.div exit={actExit} className="w-full px-4 text-center">
       <motion.div layout transition={{ layout: { duration: 0.55, ease: EASE } }}>
@@ -1136,6 +1141,8 @@ function ActEnd() {
 
 // title → phone → sleep → reserve → portal → story → outro (scrolls down) → end card
 const ACT_DURATIONS = [2950, 3900, 3800, 4200, 5000, 12750, 3000]
+// wall-clock offset of the story act, for keeping its inner beats on schedule
+const STORY_OFFSET = ACT_DURATIONS.slice(0, 5).reduce((s, d) => s + d, 0)
 
 export default function Hero() {
   const [notifs, setNotifs] = useState(() => Array.from({ length: 4 }, makeNotif).reverse())
@@ -1148,12 +1155,32 @@ export default function Hero() {
     return 0
   })
 
+  // intro wall-clock origin: acts and in-act beats all derive from this, so
+  // nothing drifts no matter how often rendering pauses or remounts
+  const introStart = useRef(performance.now()).current
+
+  // while the hero is scrolled out of view, the timeline keeps running but we
+  // stop RENDERING the acts: off-screen framer animations are main-thread
+  // work on every frame and are what freezes mobile scrolling
+  const sectionRef = useRef(null)
+  const [heroVisible, setHeroVisible] = useState(true)
   useEffect(() => {
+    const el = sectionRef.current
+    if (!el || typeof IntersectionObserver === 'undefined') return
+    const io = new IntersectionObserver(([e]) => setHeroVisible(e.isIntersecting), {
+      threshold: 0.05,
+    })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
+  useEffect(() => {
+    if (!heroVisible) return
     const ping = setInterval(() => {
       setNotifs((prev) => [makeNotif(), ...prev].slice(0, 5))
     }, 3200)
     return () => clearInterval(ping)
-  }, [])
+  }, [heroVisible])
 
   // the intro runs on wall-clock time, not chained timers: mobile browsers
   // suspend timers and animation frames mid-scroll, so instead we re-derive
@@ -1161,8 +1188,6 @@ export default function Hero() {
   // the timeline — scroll back up and the intro has progressed on schedule.
   useEffect(() => {
     if (act >= 7) return
-    const start = performance.now()
-    const offset = ACT_DURATIONS.slice(0, act).reduce((s, d) => s + d, 0)
     const bounds = []
     let acc = 0
     for (const d of ACT_DURATIONS) {
@@ -1170,7 +1195,7 @@ export default function Hero() {
       bounds.push(acc)
     }
     const iv = setInterval(() => {
-      const elapsed = offset + (performance.now() - start)
+      const elapsed = performance.now() - introStart
       const idx = bounds.findIndex((b) => elapsed < b)
       setAct(idx === -1 ? 7 : idx)
       if (idx === -1) clearInterval(iv)
@@ -1191,7 +1216,7 @@ export default function Hero() {
   }, [act])
 
   return (
-    <section className="relative overflow-x-clip pt-16">
+    <section ref={sectionRef} className="relative overflow-x-clip pt-16">
       {/* XRP-blue washes */}
       <div className="breathe pointer-events-none absolute -top-56 left-1/3 h-[620px] w-[980px] -translate-x-1/2 rounded-full bg-blue/[0.08] blur-[150px]" />
       <div className="breathe pointer-events-none absolute right-[-180px] top-1/4 h-[420px] w-[420px] rounded-full bg-gold/[0.10] blur-[120px]" />
@@ -1208,13 +1233,15 @@ export default function Hero() {
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center py-12">
           <AnimatePresence mode="wait">
-            {act === 0 && <ActTitle key="act-title" />}
-            {act === 1 && <ActPhone key="act-phone" notifs={notifs} />}
-            {act === 2 && <ActSleep key="act-sleep" />}
-            {act === 3 && <ActReserve key="act-reserve" />}
-            {act === 4 && <ActPortal key="act-portal" />}
-            {act === 5 && <ActStory key="act-story" />}
-            {act === 6 && <ActOutro key="act-outro" />}
+            {heroVisible && act === 0 && <ActTitle key="act-title" />}
+            {heroVisible && act === 1 && <ActPhone key="act-phone" notifs={notifs} />}
+            {heroVisible && act === 2 && <ActSleep key="act-sleep" />}
+            {heroVisible && act === 3 && <ActReserve key="act-reserve" />}
+            {heroVisible && act === 4 && <ActPortal key="act-portal" />}
+            {heroVisible && act === 5 && (
+              <ActStory key="act-story" start={introStart + STORY_OFFSET} />
+            )}
+            {heroVisible && act === 6 && <ActOutro key="act-outro" />}
             {act === 7 && (
               <motion.div
                 key="act-end"
