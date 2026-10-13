@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import Stars from './Stars.jsx'
+import { REVEAL } from '../motionPrefs.js'
 
 export default function CTA() {
   return (
@@ -7,7 +8,7 @@ export default function CTA() {
       <div className="breathe pointer-events-none absolute left-1/2 top-1/2 h-[420px] w-[760px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue/[0.08] blur-[140px]" />
 
       <motion.div
-        initial={{ opacity: 0, y: 24, filter: 'blur(8px)' }}
+        initial={REVEAL ? { opacity: 0, y: 24, filter: 'blur(8px)' } : false}
         whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
         viewport={{ once: true, margin: '-80px' }}
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}

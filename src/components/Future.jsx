@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { OilMark } from './Hero.jsx'
+import { REVEAL } from '../motionPrefs.js'
 
 const EASE = [0.22, 1, 0.36, 1]
 
@@ -57,7 +58,7 @@ export default function Future() {
       {/* header: lines slam in from opposite sides */}
       <div className="mb-14 text-center lg:text-left">
         <motion.p
-          initial={{ opacity: 0, scale: 0 }}
+          initial={REVEAL ? { opacity: 0, scale: 0 } : false}
           whileInView={{ opacity: 1, scale: [0, 1.15, 1] }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
@@ -67,7 +68,7 @@ export default function Future() {
         </motion.p>
         <Float amt={6} dur={5.5}>
           <motion.h2
-            initial={{ opacity: 0, x: -220 }}
+            initial={REVEAL ? { opacity: 0, x: -220 } : false}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-80px' }}
             transition={{ duration: 0.55, ease: EASE }}
@@ -78,7 +79,7 @@ export default function Future() {
         </Float>
         <Float delay={0.4} amt={7} dur={5}>
           <motion.h2
-            initial={{ opacity: 0, x: 220 }}
+            initial={REVEAL ? { opacity: 0, x: 220 } : false}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-80px' }}
             transition={{ delay: 0.15, duration: 0.55, ease: EASE }}
@@ -95,7 +96,7 @@ export default function Future() {
           </motion.h2>
         </Float>
         <motion.p
-          initial={{ opacity: 0, y: 24, filter: 'blur(6px)' }}
+          initial={REVEAL ? { opacity: 0, y: 24, filter: 'blur(6px)' } : false}
           whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ delay: 0.4, duration: 0.55, ease: EASE }}
@@ -124,7 +125,7 @@ export default function Future() {
           {pairs.map((p, i) => (
             <Float key={p.name} delay={0.6 + i * 0.45} amt={5} dur={4.6 + i * 0.5}>
               <motion.div
-                initial={{ opacity: 0, x: i % 2 ? 280 : -280, rotate: i % 2 ? 5 : -5 }}
+                initial={REVEAL ? { opacity: 0, x: i % 2 ? 280 : -280, rotate: i % 2 ? 5 : -5 } : false}
                 whileInView={{ opacity: 1, x: 0, rotate: 0 }}
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ delay: i * 0.13, type: 'spring', stiffness: 190, damping: 21 }}
@@ -153,7 +154,7 @@ export default function Future() {
                       {BURST.map((b, j) => (
                         <motion.span
                           key={j}
-                          initial={{ opacity: 0, x: 0, y: 0, scale: 0.3 }}
+                          initial={REVEAL ? { opacity: 0, x: 0, y: 0, scale: 0.3 } : false}
                           whileInView={{ opacity: [0, 1, 0], x: b.x, y: b.y, rotate: b.r }}
                           viewport={{ once: true, margin: '-60px' }}
                           transition={{ delay: 0.45, duration: 0.7, ease: 'easeOut' }}
@@ -214,7 +215,7 @@ export default function Future() {
       </div>
 
       <motion.p
-        initial={{ opacity: 0 }}
+        initial={REVEAL ? { opacity: 0 } : false}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ delay: 0.6, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}

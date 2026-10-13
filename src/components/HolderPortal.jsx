@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { REVEAL } from '../motionPrefs.js'
 
 const previewStats = [
   ['XTO balance', '4,281,904', 'tokens'],
@@ -13,7 +14,7 @@ export default function HolderPortal() {
       <div className="mx-auto max-w-7xl px-6 py-20 sm:py-28">
         <div className="grid items-center gap-14 lg:grid-cols-2">
           <motion.div
-            initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
+            initial={REVEAL ? { opacity: 0, y: 20, filter: 'blur(8px)' } : false}
             whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             viewport={{ once: true, margin: '-80px' }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
@@ -36,7 +37,7 @@ export default function HolderPortal() {
 
           <motion.a
             href="#/portal"
-            initial={{ opacity: 0, y: 24, filter: 'blur(8px)' }}
+            initial={REVEAL ? { opacity: 0, y: 24, filter: 'blur(8px)' } : false}
             whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.7, delay: 0.1 }}

@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { REVEAL } from '../motionPrefs.js'
 
 const EASE = [0.22, 1, 0.36, 1]
 
@@ -67,7 +68,7 @@ function GrowthChart() {
       <motion.path
         d={`${oilD} L ${W - PAD.r} ${baseY} L ${PAD.l} ${baseY} Z`}
         fill="url(#oilFill)"
-        initial={{ opacity: 0 }}
+        initial={REVEAL ? { opacity: 0 } : false}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ delay: 1.2, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
@@ -78,7 +79,7 @@ function GrowthChart() {
         stroke="#2BD4BE"
         strokeWidth="2.5"
         strokeLinecap="round"
-        initial={{ pathLength: 0 }}
+        initial={REVEAL ? { pathLength: 0 } : false}
         whileInView={{ pathLength: 1 }}
         viewport={{ once: true }}
         transition={{ delay: 0.9, duration: 1.6, ease: 'easeInOut' }}
@@ -90,20 +91,20 @@ function GrowthChart() {
         stroke="currentColor"
         strokeWidth="2.5"
         strokeLinecap="round"
-        initial={{ pathLength: 0 }}
+        initial={REVEAL ? { pathLength: 0 } : false}
         whileInView={{ pathLength: 1 }}
         viewport={{ once: true }}
         transition={{ delay: 0.3, duration: 1.6, ease: 'easeInOut' }}
       />
       {/* end markers */}
-      <motion.circle cx={W - PAD.r} cy={baseY - 0.96 * (H - PAD.t - PAD.b)} r="4.5" fill="currentColor" initial={{ scale: 0, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true }} transition={{ delay: 1.9, duration: 0.3 }} style={{ transformOrigin: `${W - PAD.r}px ${baseY - 0.96 * (H - PAD.t - PAD.b)}px` }} />
-      <motion.circle cx={W - PAD.r} cy={baseY - 0.9 * (H - PAD.t - PAD.b)} r="4.5" fill="#2BD4BE" initial={{ scale: 0, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true }} transition={{ delay: 2.5, duration: 0.3 }} style={{ transformOrigin: `${W - PAD.r}px ${baseY - 0.9 * (H - PAD.t - PAD.b)}px` }} />
+      <motion.circle cx={W - PAD.r} cy={baseY - 0.96 * (H - PAD.t - PAD.b)} r="4.5" fill="currentColor" initial={REVEAL ? { scale: 0, opacity: 0 } : false} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true }} transition={{ delay: 1.9, duration: 0.3 }} style={{ transformOrigin: `${W - PAD.r}px ${baseY - 0.96 * (H - PAD.t - PAD.b)}px` }} />
+      <motion.circle cx={W - PAD.r} cy={baseY - 0.9 * (H - PAD.t - PAD.b)} r="4.5" fill="#2BD4BE" initial={REVEAL ? { scale: 0, opacity: 0 } : false} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true }} transition={{ delay: 2.5, duration: 0.3 }} style={{ transformOrigin: `${W - PAD.r}px ${baseY - 0.9 * (H - PAD.t - PAD.b)}px` }} />
     </svg>
   )
 }
 
 const fade = (delay = 0) => ({
-  initial: { opacity: 0, y: 24, filter: 'blur(8px)' },
+  initial: REVEAL ? { opacity: 0, y: 24, filter: 'blur(8px)' } : false,
   whileInView: { opacity: 1, y: 0, filter: 'blur(0px)' },
   viewport: { once: true, margin: '-80px' },
   transition: { delay, duration: 0.8, ease: EASE },

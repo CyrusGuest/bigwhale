@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { REVEAL } from '../motionPrefs.js'
 
 const faqs = [
   {
@@ -46,7 +47,7 @@ export default function FAQ() {
   return (
     <section id="faq" className="mx-auto max-w-4xl px-6 py-20 sm:py-28">
       <motion.div
-        initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
+        initial={REVEAL ? { opacity: 0, y: 20, filter: 'blur(8px)' } : false}
         whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
         viewport={{ once: true, margin: '-80px' }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
@@ -64,7 +65,7 @@ export default function FAQ() {
           return (
             <motion.div
               key={f.q}
-              initial={{ opacity: 0, y: 14, filter: 'blur(6px)' }}
+              initial={REVEAL ? { opacity: 0, y: 14, filter: 'blur(6px)' } : false}
               whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.55, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}

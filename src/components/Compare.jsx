@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { REVEAL } from '../motionPrefs.js'
 
 const rows = [
   { label: 'Settlement time', xrpay: '3–5 seconds', swift: '1–5 business days', cards: 'Instant auth, T+2 payout' },
@@ -14,7 +15,7 @@ export default function Compare() {
   return (
     <section className="mx-auto max-w-7xl px-6 py-20 sm:py-28">
       <motion.div
-        initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
+        initial={REVEAL ? { opacity: 0, y: 20, filter: 'blur(8px)' } : false}
         whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
         viewport={{ once: true, margin: '-80px' }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
@@ -30,7 +31,7 @@ export default function Compare() {
       </motion.div>
 
       <motion.div
-        initial={{ opacity: 0, y: 24, filter: 'blur(8px)' }}
+        initial={REVEAL ? { opacity: 0, y: 24, filter: 'blur(8px)' } : false}
         whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
         viewport={{ once: true, margin: '-60px' }}
         transition={{ duration: 0.7, delay: 0.1 }}

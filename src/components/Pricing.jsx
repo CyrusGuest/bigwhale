@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { REVEAL } from '../motionPrefs.js'
 
 const tiers = [
   {
@@ -54,7 +55,7 @@ export default function Pricing() {
   return (
     <section id="pricing" className="mx-auto max-w-7xl px-6 py-20 sm:py-28">
       <motion.div
-        initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
+        initial={REVEAL ? { opacity: 0, y: 20, filter: 'blur(8px)' } : false}
         whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
         viewport={{ once: true, margin: '-80px' }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
@@ -75,7 +76,7 @@ export default function Pricing() {
         {tiers.map((t, i) => (
           <motion.div
             key={t.name}
-            initial={{ opacity: 0, y: 24, filter: 'blur(8px)' }}
+            initial={REVEAL ? { opacity: 0, y: 24, filter: 'blur(8px)' } : false}
             whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.6, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}

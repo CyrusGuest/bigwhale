@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
+import { REVEAL } from '../motionPrefs.js'
 
 function CountUp({ target, decimals = 0, prefix = '', suffix = '', duration = 1.8 }) {
   const ref = useRef(null)
@@ -65,7 +66,7 @@ function Spark({ data, delay }) {
       {data.map((v, i) => (
         <motion.span
           key={i}
-          initial={{ scaleY: 0 }}
+          initial={REVEAL ? { scaleY: 0 } : false}
           whileInView={{ scaleY: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: delay + i * 0.04, ease: [0.22, 1, 0.36, 1] }}
@@ -91,7 +92,7 @@ export default function Stats() {
           {stats.map((s, i) => (
             <motion.div
               key={s.label}
-              initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
+              initial={REVEAL ? { opacity: 0, y: 20, filter: 'blur(8px)' } : false}
               whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.6, delay: i * 0.1 }}

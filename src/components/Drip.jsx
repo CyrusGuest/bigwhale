@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { OilMark } from './Hero.jsx'
+import { REVEAL } from '../motionPrefs.js'
 
 const XRP_PRICE = 1.34
 const DAILY_RATE = 0.08 // $10M avg volume × 4% fee (100% to holders) ÷ $5M mcap
@@ -66,7 +67,7 @@ export default function Drip() {
     <section id="drip" className="relative mx-auto max-w-7xl px-6 py-16 sm:py-24">
       <div className="grid items-center gap-14 lg:grid-cols-2">
         <motion.div
-          initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
+          initial={REVEAL ? { opacity: 0, y: 20, filter: 'blur(8px)' } : false}
           whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
@@ -90,7 +91,7 @@ export default function Drip() {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 28, filter: 'blur(8px)' }}
+          initial={REVEAL ? { opacity: 0, y: 28, filter: 'blur(8px)' } : false}
           whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}

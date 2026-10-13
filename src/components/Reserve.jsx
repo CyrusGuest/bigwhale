@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { OilMark } from './Hero.jsx'
+import { REVEAL } from '../motionPrefs.js'
 
 const EASE = [0.22, 1, 0.36, 1]
 const XRP_PRICE = 1.34
@@ -69,7 +70,7 @@ export default function Reserve() {
         {/* headline: lines slam in from opposite sides */}
         <div className="text-center">
           <motion.p
-            initial={{ opacity: 0, scale: 0 }}
+            initial={REVEAL ? { opacity: 0, scale: 0 } : false}
             whileInView={{ opacity: 1, scale: [0, 1.15, 1] }}
             viewport={{ once: true, margin: '-80px' }}
             transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
@@ -79,7 +80,7 @@ export default function Reserve() {
           </motion.p>
           <Float amt={6} dur={5.5}>
             <motion.h2
-              initial={{ opacity: 0, x: -240 }}
+              initial={REVEAL ? { opacity: 0, x: -240 } : false}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: '-80px' }}
               transition={{ duration: 0.55, ease: EASE }}
@@ -90,7 +91,7 @@ export default function Reserve() {
           </Float>
           <Float delay={0.4} amt={7} dur={5}>
             <motion.h2
-              initial={{ opacity: 0, x: 240 }}
+              initial={REVEAL ? { opacity: 0, x: 240 } : false}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: '-80px' }}
               transition={{ delay: 0.15, duration: 0.55, ease: EASE }}
@@ -120,7 +121,7 @@ export default function Reserve() {
                 />
               ))}
               <motion.div
-                initial={{ opacity: 0, scale: 1.3, filter: 'blur(10px)' }}
+                initial={REVEAL ? { opacity: 0, scale: 1.3, filter: 'blur(10px)' } : false}
                 whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
                 viewport={{ once: true, margin: '-80px' }}
                 transition={{ delay: 0.35, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
@@ -137,7 +138,7 @@ export default function Reserve() {
             </div>
           </Float>
           <motion.p
-            initial={{ opacity: 0, y: 18, filter: 'blur(8px)' }}
+            initial={REVEAL ? { opacity: 0, y: 18, filter: 'blur(8px)' } : false}
             whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ delay: 0.6, duration: 0.5, ease: EASE }}
@@ -148,7 +149,7 @@ export default function Reserve() {
 
           {/* verification pill row */}
           <motion.div
-            initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
+            initial={REVEAL ? { opacity: 0, y: 20, filter: 'blur(8px)' } : false}
             whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ delay: 0.8, duration: 0.5, ease: EASE }}
@@ -167,7 +168,7 @@ export default function Reserve() {
           </motion.div>
 
           <motion.p
-            initial={{ opacity: 0, y: 20, filter: 'blur(5px)' }}
+            initial={REVEAL ? { opacity: 0, y: 20, filter: 'blur(5px)' } : false}
             whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ delay: 0.95, duration: 0.55, ease: EASE }}
@@ -180,7 +181,7 @@ export default function Reserve() {
             building in, and our proof of long-term commitment.
           </motion.p>
           <motion.p
-            initial={{ opacity: 0 }}
+            initial={REVEAL ? { opacity: 0 } : false}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 1.2, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
@@ -196,7 +197,7 @@ export default function Reserve() {
           {principles.map((p, i) => (
             <Float key={p.title} delay={0.5 + i * 0.5} amt={5} dur={4.8 + i * 0.5}>
               <motion.div
-                initial={{ opacity: 0, x: i % 2 ? 260 : -260, rotate: i % 2 ? 4 : -4 }}
+                initial={REVEAL ? { opacity: 0, x: i % 2 ? 260 : -260, rotate: i % 2 ? 4 : -4 } : false}
                 whileInView={{ opacity: 1, x: 0, rotate: 0 }}
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ delay: i * 0.12, type: 'spring', stiffness: 190, damping: 21 }}

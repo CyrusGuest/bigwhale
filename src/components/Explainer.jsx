@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion'
 import { OilMark } from './Hero.jsx'
 import Stars from './Stars.jsx'
+import { REVEAL } from '../motionPrefs.js'
 
 const EASE = [0.22, 1, 0.36, 1]
 
 const fade = (delay = 0) => ({
-  initial: { opacity: 0, y: 24, filter: 'blur(8px)' },
+  initial: REVEAL ? { opacity: 0, y: 24, filter: 'blur(8px)' } : false,
   whileInView: { opacity: 1, y: 0, filter: 'blur(0px)' },
   viewport: { once: true, margin: '-80px' },
   transition: { delay, duration: 0.8, ease: EASE },

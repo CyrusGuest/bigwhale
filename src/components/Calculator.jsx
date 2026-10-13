@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { REVEAL } from '../motionPrefs.js'
 
 const HOLDER_SHARE = 0.04 // 4% of trade volume flows to holders
 const HORIZONS = [30, 90, 180, 365]
@@ -137,7 +138,7 @@ export default function Calculator() {
   return (
     <section id="calculator" className="mx-auto max-w-7xl px-6 py-16 sm:py-24">
       <motion.div
-        initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
+        initial={REVEAL ? { opacity: 0, y: 20, filter: 'blur(8px)' } : false}
         whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
         viewport={{ once: true, margin: '-80px' }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
@@ -155,7 +156,7 @@ export default function Calculator() {
       </motion.div>
 
       <motion.div
-        initial={{ opacity: 0, y: 24, filter: 'blur(8px)' }}
+        initial={REVEAL ? { opacity: 0, y: 24, filter: 'blur(8px)' } : false}
         whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
         viewport={{ once: true, margin: '-60px' }}
         transition={{ duration: 0.7, delay: 0.1 }}
