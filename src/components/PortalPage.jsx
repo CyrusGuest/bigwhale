@@ -378,13 +378,15 @@ export default function PortalPage() {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Solana wallet address"
+              placeholder="Solana wallet address — opens next week"
+              disabled
               spellCheck="false"
               className="w-full rounded-full border border-navy/15 bg-ink-850 px-6 py-4 text-center font-mono text-sm text-mist placeholder:text-mist-faint focus:border-gold/50 focus:outline-none sm:rounded-none sm:border-0 sm:bg-transparent"
             />
             <button
               type="submit"
-              className="whitespace-nowrap rounded-full bg-navy px-7 py-4 text-sm font-semibold text-white transition-colors hover:bg-blue sm:rounded-none sm:py-0"
+              disabled
+              className="cursor-not-allowed whitespace-nowrap rounded-full bg-navy/60 px-7 py-4 text-sm font-semibold text-white/70 sm:rounded-none sm:py-0"
             >
               Track Wallet
             </button>
@@ -396,7 +398,7 @@ export default function PortalPage() {
         </motion.form>
       </div>
 
-      {/* dashboard */}
+      {/* dashboard — blurred behind the launch notice until the portal opens */}
       <div className="relative mx-auto max-w-6xl px-6 pb-24">
         <AnimatePresence mode="wait">
           <motion.div
@@ -406,11 +408,26 @@ export default function PortalPage() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
-            <Dashboard
-              address={address || SAMPLE_ADDRESS}
-              data={data || sampleData}
-              sample={!address}
-            />
+            <div aria-hidden className="pointer-events-none select-none opacity-70 blur-[7px]">
+              <Dashboard
+                address={address || SAMPLE_ADDRESS}
+                data={data || sampleData}
+                sample={!address}
+              />
+            </div>
+            <div className="absolute inset-0 z-10 flex items-center justify-center px-6">
+              <div className="rounded-2xl bg-[#17172B]/95 px-8 py-7 text-center ring-1 ring-gold/30 shadow-[0_24px_60px_-20px_rgba(0,0,0,0.8)]">
+                <p className="eyebrow justify-center">Launching</p>
+                <p className="mt-3 font-serif text-3xl font-semibold text-white sm:text-4xl">
+                  Coming in the next week
+                </p>
+                <p className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-mist-dim">
+                  The holder portal goes live with launch: your balance, every
+                  hourly payout, and your earning pace — read-only, no wallet
+                  connection ever.
+                </p>
+              </div>
+            </div>
           </motion.div>
         </AnimatePresence>
       </div>

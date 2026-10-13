@@ -350,6 +350,14 @@
     animation: none;
     opacity: 0.8;
   }
+  /* defer painting of below-fold sections at page-open so the intro's first
+     scene gets every frame; the browser renders them natively the moment
+     they scroll into view, so content still appears instantly */
+  main > section:not(:first-of-type),
+  footer {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 900px;
+  }
 }
 
 /* thin scrollbar to match the theme */
