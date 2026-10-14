@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { OilMark } from './Hero.jsx'
+import AirdropCountdown from './AirdropCountdown.jsx'
 
 const links = [
   { label: 'How It Works', href: '#how' },
@@ -33,6 +34,7 @@ export default function Navbar() {
         </a>
 
         <div className="hidden items-center gap-9 md:flex">
+          <AirdropCountdown />
           {links.map((l) => (
             <a
               key={l.label}
@@ -47,7 +49,8 @@ export default function Navbar() {
           </a>
         </div>
 
-        <div className="flex items-center gap-2 md:hidden">
+        <div className="flex items-center gap-3 md:hidden">
+          <AirdropCountdown label="Airdrop" />
           <button
             onClick={() => setOpen(!open)}
             className="flex h-9 w-9 flex-col items-center justify-center gap-1.5"

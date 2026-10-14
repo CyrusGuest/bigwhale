@@ -1,5 +1,6 @@
 import { OilMark } from './Hero.jsx'
 import ContractAddress from './ContractAddress.jsx'
+import AirdropCountdown from './AirdropCountdown.jsx'
 
 const columns = [
   {
@@ -38,9 +39,11 @@ export default function Footer() {
           </p>
           <ContractAddress className="mt-6" />
 
-          <div className="mt-8 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em] text-mist-faint">
-            <span className="h-1.5 w-1.5 animate-pulseSoft rounded-full bg-gold" />
-            Distributions operating normally
+          <div className="mt-8 flex flex-col gap-2">
+            <AirdropCountdown />
+            <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-mist-faint">
+              Airdrops send at :26 past every hour
+            </span>
           </div>
         </div>
 

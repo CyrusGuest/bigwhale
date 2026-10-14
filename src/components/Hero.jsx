@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Star } from './Stars.jsx'
 import { REVEAL } from '../motionPrefs.js'
 import ContractAddress, { BUY_URL } from './ContractAddress.jsx'
+import AirdropCountdown, { useNextAirdrop, formatCountdown } from './AirdropCountdown.jsx'
 
 // Oil mark: a single crude drop, outlined in the current color with a faint
 // fill and a specular highlight, so it reads at favicon size and at 560px
@@ -717,15 +718,8 @@ const PORTAL_POPS = [
 ]
 
 function ActPortal() {
-  // countdown starts at a random point so every viewing looks live
-  const [payoutIn, setPayoutIn] = useState(() => 240 + Math.floor(Math.random() * 3120))
-  useEffect(() => {
-    const iv = setInterval(() => setPayoutIn((s) => (s > 0 ? s - 1 : 3600)), 1000)
-    return () => clearInterval(iv)
-  }, [])
-  const payoutLabel = `${String(Math.floor(payoutIn / 60)).padStart(2, '0')}:${String(
-    payoutIn % 60,
-  ).padStart(2, '0')}`
+  // the real clock: airdrops send at :26 past every hour
+  const payoutLabel = formatCountdown(useNextAirdrop())
 
   const W = 460
   const H = 170
@@ -1120,6 +1114,9 @@ function ActEnd() {
         <p className="mt-6 font-mono text-sm uppercase tracking-[0.28em] text-gold-deep">
           US Oil Fund · Every hour · Open to every American
         </p>
+        <div className="mt-4 flex justify-center">
+          <AirdropCountdown className="!text-xs" />
+        </div>
       </Float>
       <Float delay={0.7} amt={6} dur={5.5}>
         <motion.div

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { OilMark } from './Hero.jsx'
 import { REVEAL } from '../motionPrefs.js'
+import AirdropCountdown from './AirdropCountdown.jsx'
 
 const XRP_PRICE = 1.34
 const DAILY_RATE = 0.08 // $10M avg volume × 4% fee (100% to holders) ÷ $5M mcap
@@ -113,6 +114,9 @@ export default function Drip() {
               <span className="h-1.5 w-1.5 animate-pulseSoft rounded-full bg-gold" />
               Live sim
             </span>
+          </div>
+          <div className="mt-4">
+            <AirdropCountdown />
           </div>
 
           <div className="relative mt-7">

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useNextAirdrop, formatCountdown } from './AirdropCountdown.jsx'
 import { motion, AnimatePresence } from 'framer-motion'
 import { OilMark } from './Hero.jsx'
 
@@ -102,15 +103,8 @@ function AreaChart({ points }) {
 }
 
 function Countdown() {
-  // start from a random point in the hour so every visit looks live
-  const [next, setNext] = useState(() => 180 + Math.floor(Math.random() * 3240))
-  useEffect(() => {
-    const iv = setInterval(() => setNext((s) => (s > 0 ? s - 1 : 3600)), 1000)
-    return () => clearInterval(iv)
-  }, [])
-  const mm = String(Math.floor(next / 60)).padStart(2, '0')
-  const ss = String(next % 60).padStart(2, '0')
-  return <span className="tabular-nums">{mm}:{ss}</span>
+  // the real clock: airdrops send at :26 past every hour
+  return <span className="tabular-nums">{formatCountdown(useNextAirdrop())}</span>
 }
 
 // clean fintech card: white, hairline ring, one soft shadow, no blur stack
