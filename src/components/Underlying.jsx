@@ -57,8 +57,8 @@ export default function Underlying() {
 
       <div className="relative mx-auto max-w-7xl px-6 py-24 sm:py-28">
         <div className="grid items-start gap-14 lg:grid-cols-[0.9fr_1.1fr]">
-          {/* the explanation */}
-          <div>
+          {/* the explanation; min-w-0 so the unbreakable mint address below cannot widen the column */}
+          <div className="min-w-0">
             <motion.p {...fade()} className="eyebrow">
               The underlying
             </motion.p>
@@ -97,10 +97,10 @@ export default function Underlying() {
               href={`https://solscan.io/token/${USOON_MINT}`}
               target="_blank"
               rel="noreferrer"
-              className="mt-8 inline-flex max-w-full items-center gap-3 rounded-sm border border-navy/10 bg-paper px-4 py-2.5 font-mono text-[11px] text-mist-dim transition-colors hover:border-gold/40 hover:text-mist"
+              className="mt-8 flex w-fit max-w-full items-center gap-3 rounded-sm border border-navy/10 bg-paper px-4 py-2.5 font-mono text-[11px] text-mist-dim transition-colors hover:border-gold/40 hover:text-mist"
             >
-              <span className="text-gold-deep">USOon</span>
-              <span className="truncate">{USOON_MINT}</span>
+              <span className="flex-none text-gold-deep">USOon</span>
+              <span className="min-w-0 truncate">{USOON_MINT}</span>
               <span className="flex-none text-mist-faint">Solscan ↗</span>
             </motion.a>
           </div>
