@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 import { OilMark } from './Hero.jsx'
 import { REVEAL } from '../motionPrefs.js'
 
@@ -33,16 +33,19 @@ export default function Drip() {
   tRef.current = t
   const startRef = useRef(null)
 
+  // the counter only needs to move a few times a second, and only while it
+  // can be seen: a per-frame setState here re-rendered this whole section 60
+  // times a second from page open, through the hero intro, while off screen
+  const sectionRef = useRef(null)
+  const inView = useInView(sectionRef, { amount: 0.1 })
   useEffect(() => {
-    startRef.current = performance.now()
-    let raf
-    const tick = (now) => {
-      if (startRef.current !== null) setElapsed((now - startRef.current) / 1000)
-      raf = requestAnimationFrame(tick)
-    }
-    raf = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(raf)
-  }, [])
+    if (startRef.current === null) startRef.current = performance.now()
+    if (!inView) return
+    const tick = () => setElapsed((performance.now() - startRef.current) / 1000)
+    tick()
+    const iv = setInterval(tick, 250)
+    return () => clearInterval(iv)
+  }, [inView])
 
   const commitPosition = () => {
     const next = posFromT(tRef.current)
@@ -64,7 +67,7 @@ export default function Drip() {
   const daily = (position * DAILY_RATE) / XRP_PRICE
 
   return (
-    <section id="drip" className="relative mx-auto max-w-7xl px-6 py-16 sm:py-24">
+    <section id="drip" ref={sectionRef} className="relative mx-auto max-w-7xl px-6 py-16 sm:py-24">
       <div className="grid items-center gap-14 lg:grid-cols-2">
         <motion.div
           initial={REVEAL ? { opacity: 0, y: 20, filter: 'blur(8px)' } : false}

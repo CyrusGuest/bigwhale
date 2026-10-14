@@ -317,6 +317,9 @@ function Float({ children, delay = 0, amt = 8, dur = 5, className = '' }) {
     <motion.div
       animate={{ y: [0, -amt, 0] }}
       transition={{ duration: dur, repeat: Infinity, ease: 'easeInOut', delay }}
+      // own compositor layer: shadowed display text rasterises once and moves
+      // on the GPU instead of repainting every frame
+      style={{ willChange: 'transform' }}
       className={className}
     >
       {children}
@@ -376,6 +379,7 @@ function ActTitle() {
             initial={{ x: '-70vw', rotate: -14, opacity: 0 }}
             animate={{ x: 0, rotate: 0, opacity: 1 }}
             transition={{ delay: 0.12, type: 'spring', stiffness: 230, damping: 16 }}
+            style={{ willChange: 'transform' }}
             className="text-3d inline-block text-6xl font-bold tracking-[-0.03em] sm:text-8xl lg:text-9xl"
           >
             BUY
@@ -384,6 +388,7 @@ function ActTitle() {
             initial={{ x: '70vw', rotate: 14, opacity: 0 }}
             animate={{ x: 0, rotate: 0, opacity: 1 }}
             transition={{ delay: 0.26, type: 'spring', stiffness: 230, damping: 16 }}
+            style={{ willChange: 'transform' }}
             className="text-3d inline-block text-6xl font-bold tracking-[-0.03em] sm:text-8xl lg:text-9xl"
           >
             XTO.
@@ -398,6 +403,7 @@ function ActTitle() {
             initial={{ y: '-58vh', opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.8, type: 'spring', stiffness: 210, damping: 13 }}
+            style={{ willChange: 'transform' }}
             className="text-3d origin-bottom text-6xl font-bold leading-[1.1] tracking-[-0.03em] sm:text-8xl lg:text-9xl"
           >
             EARN <span className="text-shimmer">$USO</span>.
@@ -1143,10 +1149,11 @@ function ActEnd() {
 const ACT_DURATIONS = [2950, 3900, 3800, 4200, 5000, 12750, 3000]
 // wall-clock offset of the story act, for keeping its inner beats on schedule
 const STORY_OFFSET = ACT_DURATIONS.slice(0, 5).reduce((s, d) => s + d, 0)
-// a single clock tick never credits more than this: a stalled main thread
-// (first paint, font swap, GC) must not count as watched time, or one long
-// stall at page-open skips the title act before it ever paints
-const MAX_TICK_MS = 250
+// a single clock tick never credits more than this: a long main-thread stall
+// (first paint, font swap, GC) must not count as watched time, or it skips the
+// title act before it ever paints. Ordinary slow frames still count in full,
+// so a janky phone never stretches the timeline.
+const MAX_TICK_MS = 1000
 // how long to hold the intro for the web fonts before starting without them
 const FONT_WAIT_MS = 2000
 

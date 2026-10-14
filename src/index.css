@@ -360,6 +360,23 @@
   }
 }
 
+/* phones and small tablets: no blur filters at all. Each 100-150px blur on
+   a ~1000px glow is rasterised in software on WebKit (no compositor layer on
+   phones), at 3x DPR, and again on every repaint of anything overlapping it:
+   the first paint plus the font swaps alone froze phones for many seconds.
+   A radial mask on the same colour reads the same at phone size and costs
+   nothing. */
+@media (max-width: 768px) {
+  .breathe,
+  [class*='blur-['],
+  .blur-3xl,
+  .blur-2xl {
+    filter: none !important;
+    -webkit-mask-image: radial-gradient(closest-side, #000 0%, transparent 100%);
+    mask-image: radial-gradient(closest-side, #000 0%, transparent 100%);
+  }
+}
+
 /* thin scrollbar to match the theme */
 ::-webkit-scrollbar {
   width: 10px;
