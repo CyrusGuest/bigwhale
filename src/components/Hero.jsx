@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Star } from './Stars.jsx'
 import { REVEAL } from '../motionPrefs.js'
+import ContractAddress from './ContractAddress.jsx'
 
 // Oil mark: a single crude drop, outlined in the current color with a faint
 // fill and a specular highlight, so it reads at favicon size and at 560px
@@ -1137,6 +1138,14 @@ function ActEnd() {
             Buy XTO
           </motion.a>
           <a href="#how" className="btn-secondary">How It Works</a>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7, duration: 0.6, ease: EASE }}
+          className="mt-7 flex justify-center"
+        >
+          <ContractAddress />
         </motion.div>
       </Float>
     </div>

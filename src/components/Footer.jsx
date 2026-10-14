@@ -1,4 +1,5 @@
 import { OilMark } from './Hero.jsx'
+import ContractAddress from './ContractAddress.jsx'
 
 const columns = [
   {
@@ -35,6 +36,7 @@ export default function Footer() {
             Virtual drilling on a public ledger: trading fees redistributed to
             holders in $USO, split by holdings, hourly, and publicly verifiable.
           </p>
+          <ContractAddress className="mt-6" />
 
           <div className="mt-8 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em] text-mist-faint">
             <span className="h-1.5 w-1.5 animate-pulseSoft rounded-full bg-gold" />

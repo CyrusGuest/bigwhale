@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import Stars from './Stars.jsx'
 import { REVEAL } from '../motionPrefs.js'
+import ContractAddress from './ContractAddress.jsx'
 
 export default function CTA() {
   return (
@@ -29,6 +30,9 @@ export default function CTA() {
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <a href="#" className="btn-primary">Join the Movement · Buy XTO</a>
           <a href="#faq" className="btn-secondary">Read the Risks</a>
+        </div>
+        <div className="mt-6 flex justify-center">
+          <ContractAddress />
         </div>
         <p className="mx-auto mt-10 max-w-lg border-t border-navy/[0.08] pt-6 text-xs leading-relaxed text-mist-faint">
           XTO is a speculative digital asset. Distributions vary with trading
