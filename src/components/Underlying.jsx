@@ -52,7 +52,7 @@ const FACTS = [
 
 export default function Underlying() {
   return (
-    <section id="uso" className="relative border-t border-navy/[0.07] bg-ink-850/40">
+    <section id="uso" className="relative overflow-x-clip border-t border-navy/[0.07] bg-ink-850/40">
       <div className="breathe pointer-events-none absolute right-[-200px] top-10 hidden h-[520px] w-[520px] rounded-full bg-gold/[0.10] blur-[150px] md:block" />
 
       <div className="relative mx-auto max-w-7xl px-6 py-24 sm:py-28">

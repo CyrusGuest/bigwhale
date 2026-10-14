@@ -113,7 +113,7 @@ const fade = (delay = 0) => ({
 
 export default function Powers() {
   return (
-    <section id="oil" className="relative border-t border-navy/[0.07]">
+    <section id="oil" className="relative overflow-x-clip border-t border-navy/[0.07]">
       <div className="breathe pointer-events-none absolute left-1/2 top-0 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-blue/[0.08] blur-[150px]" />
 
       <div className="relative mx-auto max-w-7xl px-6 py-28">

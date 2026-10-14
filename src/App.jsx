@@ -75,8 +75,10 @@ export default function App() {
     return () => window.removeEventListener('hashchange', onHash)
   }, [])
 
+  // overflow-x-clip here, not only on html/body: iOS lets the page pan sideways to
+  // decorative blobs that poke past the viewport unless an element clips them
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen overflow-x-clip">
       <Backdrop />
       <Navbar />
       <div className="relative z-10">
