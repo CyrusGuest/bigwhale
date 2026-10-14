@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { UsoLink } from './Uso.jsx'
 import Stars from './Stars.jsx'
 import { REVEAL } from '../motionPrefs.js'
 import ContractAddress, { BUY_URL } from './ContractAddress.jsx'
@@ -24,7 +25,7 @@ export default function CTA() {
         </h2>
         <p className="mx-auto mt-7 max-w-xl text-lg leading-relaxed text-mist-dim">
           Oil powers this country, and for too long only a few earned from
-          it. Hold XTO and get your piece: $USO, paid to you every hour,
+          it. Hold XTO and get your piece: <UsoLink />, paid to you every hour,
           without paying today’s high price for a single barrel or share.
         </p>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">

@@ -5,7 +5,7 @@ import AirdropCountdown from './AirdropCountdown.jsx'
 const links = [
   { label: 'How It Works', href: '#how' },
   { label: 'Why Oil', href: '#oil' },
-  { label: 'Holder Portal', href: '#/portal' },
+  { label: 'Verify On-Ledger', href: '#cta' },
   { label: 'FAQ', href: '#faq' },
 ]
 
@@ -38,8 +38,8 @@ export default function Navbar() {
               {l.label}
             </a>
           ))}
-          <a href="#cta" className="btn-primary !px-5 !py-2.5 text-[13px]">
-            Verify On-Ledger
+          <a href="#/portal" className="btn-primary !px-5 !py-2.5 text-[13px]">
+            Holder Portal
           </a>
         </div>
 
@@ -75,8 +75,8 @@ export default function Navbar() {
                   {l.label}
                 </a>
               ))}
-              <a href="#cta" onClick={() => setOpen(false)} className="btn-primary w-fit !px-5 !py-2.5 text-[13px]">
-                Verify On-Ledger
+              <a href="#/portal" onClick={() => setOpen(false)} className="btn-primary w-fit !px-5 !py-2.5 text-[13px]">
+                Holder Portal
               </a>
             </div>
           </motion.div>

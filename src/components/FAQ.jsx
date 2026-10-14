@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { REVEAL } from '../motionPrefs.js'
+import { uso } from './Uso.jsx'
 
 const faqs = [
   {
@@ -94,7 +95,7 @@ export default function FAQ() {
                     transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                     className="overflow-hidden"
                   >
-                    <p className="max-w-3xl pb-7 text-sm leading-relaxed text-mist-dim">{f.a}</p>
+                    <p className="max-w-3xl pb-7 text-sm leading-relaxed text-mist-dim">{uso(f.a)}</p>
                   </motion.div>
                 )}
               </AnimatePresence>

@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { OilMark } from './Hero.jsx'
 import Stars from './Stars.jsx'
+import { UsoLink, uso } from './Uso.jsx'
 import { REVEAL } from '../motionPrefs.js'
 
 const EASE = [0.22, 1, 0.36, 1]
@@ -43,7 +44,7 @@ const FACTS = [
   ['How often', 'Every hour'],
   ['Your share', '4% of every trade'],
   ['What you do', 'Nothing. Just hold.'],
-  ['Backed by', '$1,000,000 in $USO, held in reserve'],
+  ['Bought with', 'Fees only, on-chain, every hour'],
 ]
 
 export default function Explainer() {
@@ -62,16 +63,16 @@ export default function Explainer() {
             className="mt-6 font-serif text-4xl font-semibold leading-[1.1] tracking-[-0.015em] sm:text-5xl lg:text-6xl"
           >
             The first coin in history that pays you{' '}
-            <span className="text-shimmer">$USO</span>. Oil investing, open to
+            <UsoLink className="text-shimmer" />. Oil investing, open to
             every American.
           </motion.h2>
           <motion.p {...fade(0.16)} className="mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-mist-dim">
             Oil is a multi-trillion dollar industry, the lifeblood of the
             global economy, and for a century the only people collecting from
             it were brokers, barons, and big institutions. XTO changes that
-            forever. Paired with $USO, the United States Oil Fund, XTO throws
+            forever. Paired with <UsoLink />, the United States Oil Fund, XTO throws
             the doors to oil investing open to all Americans: hold the coin,
-            and the oil market pays you in $USO, every single hour, with no
+            and the oil market pays you in <UsoLink />, every single hour, with no
             big check up front.
           </motion.p>
           <motion.p {...fade(0.22)} className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-mist-dim">
@@ -92,7 +93,7 @@ export default function Explainer() {
             <motion.div key={s.num} {...fade(0.1 + i * 0.1)} className="card p-8">
               <span className="font-serif text-3xl text-gold">{s.num}</span>
               <h3 className="mt-5 font-serif text-2xl font-semibold text-mist">{s.title}</h3>
-              <p className="mt-3 leading-relaxed text-mist-dim">{s.body}</p>
+              <p className="mt-3 leading-relaxed text-mist-dim">{uso(s.body)}</p>
             </motion.div>
           ))}
         </div>
@@ -118,14 +119,14 @@ export default function Explainer() {
                     <span className="hidden h-px flex-1 bg-gradient-to-r from-gold/40 to-gold/10 sm:block" />
                   )}
                 </div>
-                <p className="mt-4 text-[15px] font-medium text-mist">{k}</p>
-                <p className="mt-1 text-sm text-mist-dim">{v}</p>
+                <p className="mt-4 text-[15px] font-medium text-mist">{uso(k)}</p>
+                <p className="mt-1 text-sm text-mist-dim">{uso(v)}</p>
               </div>
             ))}
           </div>
           <p className="mt-6 border-t border-gold/15 pt-5 text-sm leading-relaxed text-mist-dim">
             Being early pays. Every single trade of XTO made after you buy in
-            sends $USO to your wallet. As more Americans discover the
+            sends <UsoLink /> to your wallet. As more Americans discover the
             program and start trading, your payouts grow with it. The earlier
             you hold, the more of that growth you collect.
           </p>

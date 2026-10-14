@@ -4,6 +4,8 @@ import { Star } from './Stars.jsx'
 import { REVEAL } from '../motionPrefs.js'
 import ContractAddress, { BUY_URL } from './ContractAddress.jsx'
 import AirdropCountdown, { useNextAirdrop, formatCountdown } from './AirdropCountdown.jsx'
+import { UsoLink } from './Uso.jsx'
+import { useSummary } from '../portalData.js'
 
 // Oil mark: a single crude drop, outlined in the current color with a faint
 // fill and a specular highlight, so it reads at favicon size and at 560px
@@ -39,8 +41,8 @@ const OTHER_NOTIFS = [
   {
     app: 'X',
     icon: 'x',
-    body: '@XTOOFFICIAL: The $1,000,000 $USO reserve is funded. Attestation publishes this week.',
-    hl: '$1,000,000 $USO reserve',
+    body: '@XTOOFFICIAL: This hour’s fees bought 7.07 USOon on-chain and paid 923 wallets. Next round at :26.',
+    hl: '7.07 USOon',
   },
   {
     app: 'Stocks',
@@ -401,7 +403,7 @@ function ActTitle() {
             style={{ willChange: 'transform' }}
             className="text-3d origin-bottom text-6xl font-bold leading-[1.1] tracking-[-0.03em] sm:text-8xl lg:text-9xl"
           >
-            EARN <span className="text-shimmer">$USO</span>.
+            EARN <UsoLink className="text-shimmer" />.
           </motion.h1>
         </div>
 
@@ -623,8 +625,10 @@ function RollUp({ target, prefix = '', dur = 1.6, delay = 0 }) {
   )
 }
 
-// Act 4: the million-dollar reserve, rolling up
-function ActReserve() {
+// Act 4: fees bought $USO and paid it out, rolling up to the live ledger total
+function ActFees() {
+  const { summary } = useSummary(60_000)
+  const paid = Math.round(summary?.totals?.usd_distributed || 68270)
   return (
     <motion.div exit={actExit} className="w-full px-4 text-center">
       <Float amt={5} dur={5.5}>
@@ -634,7 +638,7 @@ function ActReserve() {
           transition={{ delay: 0.1, duration: 0.7, ease: EASE }}
           className="font-mono text-sm uppercase text-gold-deep"
         >
-          Standing behind XTO
+          Fees, not promises
         </motion.p>
       </Float>
       <Float delay={0.3} amt={9} dur={4.8}>
@@ -666,7 +670,7 @@ function ActReserve() {
               transition={{ delay: 2.5, duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
               className="inline-block"
             >
-              <RollUp target={1000000} prefix="$" dur={1.8} delay={0.5} />
+              <RollUp target={paid} prefix="$" dur={1.8} delay={0.5} />
             </motion.span>
           </motion.h2>
         </div>
@@ -678,7 +682,7 @@ function ActReserve() {
           transition={{ delay: 1.3, duration: 0.5, ease: EASE }}
           className="mt-5 text-2xl font-medium text-mist sm:text-3xl"
         >
-          of <span className="text-shimmer">$USO</span> in our starting reserve
+          of <UsoLink className="text-shimmer" /> bought with trading fees and paid to holders
         </motion.p>
       </Float>
       <Float delay={0.9} amt={4} dur={6}>
@@ -688,7 +692,7 @@ function ActReserve() {
           transition={{ delay: 2, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="mt-6 font-mono text-[11px] uppercase tracking-[0.2em] text-mist-faint"
         >
-          Held on the public ledger · Verify any time · Attestation publishes at launch
+          Every trade pays 4% · The fee buys USOon on-chain · Sent to every wallet hourly
         </motion.p>
       </Float>
     </motion.div>
@@ -757,13 +761,13 @@ function ActPortal() {
           <div className="flex items-end justify-between gap-4">
             <div>
               <span className="block font-mono text-[9px] uppercase tracking-[0.18em] text-mist-faint">
-                $USO earned, all time
+                <UsoLink /> earned, all time
               </span>
               <span className="mt-1 block font-mono text-3xl font-semibold tabular-nums text-mist sm:text-4xl">
                 <RollUp target={51384} prefix="$" dur={1.9} delay={1.1} />
               </span>
               <span className="mt-0.5 block font-mono text-sm tabular-nums text-gold-deep">
-                worth of $USO, paid to one wallet
+                worth of <UsoLink />, paid to one wallet
               </span>
             </div>
             <div className="pb-1 text-right">
@@ -1094,7 +1098,7 @@ function ActEnd() {
         <h1 className="font-serif text-5xl font-semibold leading-[1.05] tracking-[-0.015em] sm:text-7xl">
           Buy XTO.
           <br />
-          Get paid in <span className="text-shimmer">$USO</span>.
+          Get paid in <UsoLink className="text-shimmer" />.
         </h1>
       </Float>
       <Float delay={0.4} amt={5} dur={6}>
@@ -1140,7 +1144,7 @@ function ActEnd() {
 
 /* ---------------------------------- hero ----------------------------------- */
 
-// title → phone → sleep → reserve → portal → story → outro (scrolls down) → end card
+// title → phone → sleep → fees → portal → story → outro (scrolls down) → end card
 const ACT_DURATIONS = [2950, 3900, 3800, 4200, 5000, 12750, 3000]
 // wall-clock offset of the story act, for keeping its inner beats on schedule
 const STORY_OFFSET = ACT_DURATIONS.slice(0, 5).reduce((s, d) => s + d, 0)
@@ -1278,7 +1282,7 @@ export default function Hero() {
             {show && act === 0 && <ActTitle key="act-title" />}
             {show && act === 1 && <ActPhone key="act-phone" notifs={notifs} />}
             {show && act === 2 && <ActSleep key="act-sleep" />}
-            {show && act === 3 && <ActReserve key="act-reserve" />}
+            {show && act === 3 && <ActFees key="act-fees" />}
             {show && act === 4 && <ActPortal key="act-portal" />}
             {show && act === 5 && (
               <ActStory key="act-story" played={playedRef} />

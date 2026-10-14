@@ -1,58 +1,50 @@
-import { useEffect, useState } from 'react'
-import { nextPayout, useSummary } from '../portalData.js'
+import { PHASE_SHORT, nextPayout, useLive, useNow, useSummary } from '../portalData.js'
 
-// Each epoch runs one hour from the moment it opens, then the runner claims, buys and pays,
-// which takes a few minutes; the next epoch opens after that. So the payout clock is read
-// from the published summary (current_epoch.closes_at), not from a fixed minute. Until the
-// summary has loaded, the previous hour-grid guess (:26) stands in.
-export const AIRDROP_MINUTE = 26
-
-function gridGuess(now = Date.now()) {
-  const d = new Date(now)
-  const target = new Date(d)
-  target.setMinutes(AIRDROP_MINUTE, 0, 0)
-  if (target <= d) target.setHours(target.getHours() + 1)
-  return target.getTime()
-}
+// Each round runs one hour from the moment it opens; when the hour is up the runner claims the
+// fees, buys $USOon, snapshots the holders and pays, which takes a few minutes, and the next
+// round opens after that. So the clock is read from what the runner publishes (live.json every
+// minute, summary.json after every round), never from a fixed minute of the hour: each round
+// starts a little later than the last.
 
 export function formatCountdown(s) {
-  const mm = String(Math.floor(s / 60)).padStart(2, '0')
+  const h = Math.floor(s / 3600)
+  const mm = String(Math.floor((s % 3600) / 60)).padStart(2, '0')
   const ss = String(s % 60).padStart(2, '0')
-  return `${mm}:${ss}`
+  return h > 0 ? `${h}:${mm}:${ss}` : `${mm}:${ss}`
 }
 
-// { seconds, sending }: seconds until the next payout is due, ticking once a second;
-// `sending` while the hour is up and the payouts are going out
+// { seconds, sending, phase, label, loaded, round }: seconds until the round is due to close,
+// ticking once a second; `sending` from the moment the hour is up until the next round has
+// opened, with `phase` saying which step the runner is on and `label` a short name for it
 export function useNextAirdrop() {
   const { summary } = useSummary(60_000)
-  const [now, setNow] = useState(() => Date.now())
-  useEffect(() => {
-    const iv = setInterval(() => setNow(Date.now()), 1000)
-    return () => clearInterval(iv)
-  }, [])
-  const { at, paying } = nextPayout(summary)
-  const target = at ?? (summary ? null : gridGuess(now))
-  if (paying || target === null) return { seconds: 0, sending: true }
-  return { seconds: Math.max(0, Math.ceil((target - now) / 1000)), sending: false }
+  const { live } = useLive(15_000)
+  const now = useNow(1000)
+  const { at, phase, paying, round } = nextPayout(summary, live, now)
+  const loaded = Boolean(summary || live)
+  if (!loaded) return { seconds: 0, sending: false, phase: null, label: 'Next airdrop', loaded, round: null }
+  if (paying || at === null) return { seconds: 0, sending: true, phase, label: PHASE_SHORT[phase] || 'Airdrop sending', loaded, round }
+  return { seconds: Math.max(0, Math.ceil((at - now) / 1000)), sending: false, phase: 'accruing', label: 'Next airdrop', loaded, round }
 }
 
-// "Next airdrop 12:34" pill; shows "Airdrop sending" while the hour's payouts go out
+// "Next airdrop 12:34" pill, linking to the airdrop page; names the step while a round closes
 export default function AirdropCountdown({ label = 'Next airdrop', className = '' }) {
-  const { seconds, sending } = useNextAirdrop()
+  const { seconds, sending, label: phaseLabel, loaded } = useNextAirdrop()
   return (
-    <span
-      className={`inline-flex items-center gap-2.5 whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.2em] text-mist-faint ${className}`}
-      title="Payouts go out once an hour, a few minutes after each epoch closes"
+    <a
+      href="#/airdrop"
+      className={`inline-flex items-center gap-2.5 whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.2em] text-mist-faint transition-colors hover:text-mist ${className}`}
+      title="Payouts go out once an hour, a few minutes after each round closes. Tap for the next airdrop."
     >
       <span className={`h-1.5 w-1.5 rounded-full bg-gold ${sending ? 'animate-ping' : 'animate-pulseSoft'}`} />
       {sending ? (
-        <span className="text-gold-deep">Airdrop sending</span>
+        <span className="text-gold-deep">{phaseLabel}</span>
       ) : (
         <>
           {label}
-          <span className="tabular-nums tracking-[0.08em] text-mist">{formatCountdown(seconds)}</span>
+          <span className="tabular-nums tracking-[0.08em] text-mist">{loaded ? formatCountdown(seconds) : '--:--'}</span>
         </>
       )}
-    </span>
+    </a>
   )
 }

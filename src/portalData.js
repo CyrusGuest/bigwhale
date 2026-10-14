@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 
-// Static JSON published by the rewards runner after every epoch (see xstock-rewards,
-// src/portal/export.ts): summary.json for the launch, wallets/<address>.json per holder.
+// Static JSON published by the rewards runner (see xstock-rewards, src/portal/export.ts and
+// src/portal/live.ts): summary.json for the launch and its rounds, wallets/<address>.json per
+// holder, and live.json for the round in progress (refreshed every runner pass, about once a
+// minute, and after every step while a round is closing).
 export const DATA_URL = (import.meta.env.VITE_PORTAL_DATA_URL || 'https://d24y7a3g5u04xu.cloudfront.net').replace(/\/$/, '')
 
 // Public Solana RPC, read-only, used for one thing: the wallet's live token balance.
@@ -9,46 +11,75 @@ export const RPC_URL = import.meta.env.VITE_SOLANA_RPC_URL || 'https://api.mainn
 
 export const SOL_ADDRESS = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/
 
-const SUMMARY_TTL_MS = 30_000
-let summaryCache = { at: 0, promise: null }
-
-export function fetchSummary(force = false) {
-  const now = Date.now()
-  if (!force && summaryCache.promise && now - summaryCache.at < SUMMARY_TTL_MS) return summaryCache.promise
-  const promise = fetch(`${DATA_URL}/summary.json`, { cache: 'no-cache' }).then((r) => {
-    if (!r.ok) throw new Error(`summary ${r.status}`)
-    return r.json()
-  })
-  summaryCache = { at: now, promise }
-  promise.catch(() => {
-    summaryCache = { at: 0, promise: null }
-  })
-  return promise
+// one in-flight/recent promise per file, so every component on the page shares a fetch
+function cachedFetcher(path, ttlMs) {
+  let cache = { at: 0, promise: null }
+  return (force = false) => {
+    const now = Date.now()
+    if (!force && cache.promise && now - cache.at < ttlMs) return cache.promise
+    const promise = fetch(`${DATA_URL}/${path}`, { cache: 'no-cache' }).then((r) => {
+      if (!r.ok) throw new Error(`${path} ${r.status}`)
+      return r.json()
+    })
+    cache = { at: now, promise }
+    promise.catch(() => {
+      cache = { at: 0, promise: null }
+    })
+    return promise
+  }
 }
 
-// The launch summary, refreshed every `everyMs` while mounted. `null` until the first load,
-// `undefined` never: an error leaves the last good value in place.
-export function useSummary(everyMs = 60_000) {
-  const [summary, setSummary] = useState(null)
+export const fetchSummary = cachedFetcher('summary.json', 30_000)
+export const fetchLive = cachedFetcher('live.json', 8_000)
+
+// poll `fetcher` every `everyMs` while mounted. `null` until the first load; an error leaves
+// the last good value in place and is reported separately.
+function usePolled(fetcher, everyMs) {
+  const [value, setValue] = useState(null)
   const [error, setError] = useState(null)
   useEffect(() => {
     let alive = true
     const load = () =>
-      fetchSummary()
-        .then((s) => {
+      fetcher()
+        .then((v) => {
           if (!alive) return
-          setSummary(s)
+          setValue(v)
           setError(null)
         })
         .catch((e) => alive && setError(e))
     load()
     const iv = setInterval(load, everyMs)
+    const onVisible = () => document.visibilityState === 'visible' && load()
+    document.addEventListener('visibilitychange', onVisible)
     return () => {
       alive = false
       clearInterval(iv)
+      document.removeEventListener('visibilitychange', onVisible)
     }
+  }, [fetcher, everyMs])
+  return { value, error }
+}
+
+// The launch summary (rounds, totals), refreshed every `everyMs` while mounted.
+export function useSummary(everyMs = 60_000) {
+  const { value, error } = usePolled(fetchSummary, everyMs)
+  return { summary: value, error }
+}
+
+// The round in progress: phase, due time, the pot, the fees unclaimed in the pool right now.
+export function useLive(everyMs = 15_000) {
+  const { value, error } = usePolled(fetchLive, everyMs)
+  return { live: value, error }
+}
+
+// the wall clock, re-rendered once a second
+export function useNow(everyMs = 1000) {
+  const [now, setNow] = useState(() => Date.now())
+  useEffect(() => {
+    const iv = setInterval(() => setNow(Date.now()), everyMs)
+    return () => clearInterval(iv)
   }, [everyMs])
-  return { summary, error }
+  return now
 }
 
 // One wallet's published record, or `null` when the wallet has never held the token at a
@@ -78,21 +109,57 @@ export async function fetchLiveBalance(owner, mint) {
   return body.result.value.reduce((sum, a) => sum + (a.account.data.parsed.info.tokenAmount.uiAmount || 0), 0)
 }
 
-// When the next payout is expected, from the current epoch's timing. `paying` is true from
-// the moment the hour is up until the payouts have gone out.
-export function nextPayout(summary) {
+// The runner's picture is considered stale when it has not been refreshed for this long: the
+// run loop normally rewrites live.json every minute.
+export const LIVE_STALE_MS = 10 * 60_000
+
+// What each phase of a closing round means, in order. `accruing` is the hour itself.
+export const PHASES = [
+  { key: 'claiming', label: 'Claiming fees', short: 'Claiming fees', body: 'The USDC swap fees earned this round are claimed from the XTO pool.' },
+  { key: 'buying', label: 'Buying $USO', short: 'Buying $USO', body: 'The claimed USDC buys $USOon at the best of two prices: the market maker or the team pool, never more than a small premium over the reference price.' },
+  { key: 'snapshotting', label: 'Snapshot', short: 'Snapshot', body: 'Every holder is counted. A wallet is credited with the lower of its balance at the start and at the end of the round.' },
+  { key: 'distributing', label: 'Sending payouts', short: 'Airdrop sending', body: '$USOon is sent to every eligible wallet, pro-rata, in batches. Nothing to claim.' },
+]
+
+export const PHASE_SHORT = {
+  accruing: 'Next airdrop',
+  waiting: 'Waiting for fees',
+  claiming: 'Claiming fees',
+  buying: 'Buying $USO',
+  snapshotting: 'Snapshot',
+  distributing: 'Airdrop sending',
+  opening: 'Opening round',
+}
+
+// Where the next payout stands, from live.json when it is fresh and from summary.json
+// otherwise. `at` is when the round is due to close (ms); `phase` is 'accruing' while the hour
+// runs, then the closing steps; `paying` is true from the moment the hour is up until the next
+// round has opened.
+export function nextPayout(summary, live, now = Date.now()) {
+  const fresh = live?.round && now - Date.parse(live.generated_at) < LIVE_STALE_MS
+  if (fresh) {
+    const r = live.round
+    const at = Date.parse(r.due_at)
+    const phase = r.phase === 'accruing' && at <= now ? 'claiming' : r.phase
+    return { at, phase, paying: phase !== 'accruing', round: r.id, stale: false }
+  }
   const cur = summary?.current_epoch
-  if (!cur) return { at: null, paying: false }
-  if (cur.paying) return { at: null, paying: true }
-  if (!cur.closes_at) return { at: null, paying: false }
+  if (!cur) return { at: null, phase: null, paying: false, round: null, stale: Boolean(live) }
+  if (cur.paying) return { at: null, phase: 'distributing', paying: true, round: cur.id, stale: Boolean(live) }
+  if (!cur.closes_at) return { at: null, phase: 'opening', paying: true, round: cur.id, stale: Boolean(live) }
   const at = Date.parse(cur.closes_at)
-  return { at, paying: at <= Date.now() }
+  const due = at <= now
+  return { at, phase: due ? 'claiming' : 'accruing', paying: due, round: cur.id, stale: Boolean(live) }
 }
 
 export const fmtUsd = (n, d = 2) =>
   (n ?? 0).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: d, maximumFractionDigits: d })
 export const fmtNum = (n, d = 2) =>
   (n ?? 0).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d })
+
+export const fmtTime = (iso) => new Date(iso).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
+export const fmtDateTime = (iso) =>
+  new Date(iso).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
 
 export function timeAgo(iso, now = Date.now()) {
   const s = Math.max(0, Math.round((now - Date.parse(iso)) / 1000))

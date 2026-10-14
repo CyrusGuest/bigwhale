@@ -1,12 +1,15 @@
 import ContractAddress from './ContractAddress.jsx'
 import AirdropCountdown from './AirdropCountdown.jsx'
+import { UsoLink } from './Uso.jsx'
 
 const columns = [
   {
     title: 'Site',
     links: [
       ['How It Works', '#how'],
+      ['The Underlying', '#uso'],
       ['Why Oil', '#oil'],
+      ['Next Airdrop', '#/airdrop'],
       ['Holder Portal', '#/portal'],
       ['FAQ', '#faq'],
     ],
@@ -29,7 +32,7 @@ export default function Footer() {
           <img src="/logo-xto.png" alt="XTO" width={1000} height={380} className="h-7 w-auto" />
           <p className="mt-5 max-w-xs text-sm leading-relaxed text-mist-dim">
             Virtual drilling on a public ledger: trading fees redistributed to
-            holders in $USO, split by holdings, hourly, and publicly verifiable.
+            holders in <UsoLink />, split by holdings, hourly, and publicly verifiable.
           </p>
           <ContractAddress className="mt-6" />
 
@@ -68,8 +71,7 @@ export default function Footer() {
             Past distributions do not predict future ones. The token’s market
             price can decline regardless of rewards received, and you may lose
             your entire outlay. XTO owns no wells and drills nothing; it does
-            not produce, generate, or create oil. The project reserve is a treasury, not
-            redemption backing. Nothing on this site is financial advice.
+            not produce, generate, or create oil. Nothing on this site is financial advice.
           </p>
           <p className="mt-5 text-center font-mono text-[10px] uppercase tracking-[0.18em] text-mist-faint">
             © {new Date().getFullYear()} XTO

@@ -4,6 +4,7 @@ import Navbar from './components/Navbar.jsx'
 import Hero from './components/Hero.jsx'
 import Explainer from './components/Explainer.jsx'
 import Powers from './components/Powers.jsx'
+import Underlying from './components/Underlying.jsx'
 import Drip from './components/Drip.jsx'
 import FAQ from './components/FAQ.jsx'
 import CTA from './components/CTA.jsx'
@@ -11,10 +12,12 @@ import Footer from './components/Footer.jsx'
 
 // subpages ship as their own chunks: the home route never needs their code
 const PortalPage = lazy(() => import('./components/PortalPage.jsx'))
+const AirdropPage = lazy(() => import('./components/AirdropPage.jsx'))
 const LegalPage = lazy(() => import('./components/LegalPage.jsx'))
 
 function currentRoute() {
   if (window.location.hash.startsWith('#/portal')) return 'portal'
+  if (window.location.hash.startsWith('#/airdrop')) return 'airdrop'
   if (window.location.hash.startsWith('#/legal')) {
     return 'legal:' + (window.location.hash.split('/')[2] || 'risk')
   }
@@ -83,6 +86,12 @@ export default function App() {
               <PortalPage />
             </Suspense>
           </main>
+        ) : route === 'airdrop' ? (
+          <main>
+            <Suspense fallback={null}>
+              <AirdropPage />
+            </Suspense>
+          </main>
         ) : route.startsWith('legal:') ? (
           <main>
             <Suspense fallback={null}>
@@ -96,6 +105,7 @@ export default function App() {
               <>
                 <Drip />
                 <Explainer />
+                <Underlying />
                 <Powers />
                 <FAQ />
                 <CTA />

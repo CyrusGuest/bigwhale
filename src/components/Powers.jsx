@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { REVEAL } from '../motionPrefs.js'
+import { UsoLink } from './Uso.jsx'
 
 const EASE = [0.22, 1, 0.36, 1]
 
@@ -137,7 +138,7 @@ export default function Powers() {
               crypto. The first mover, making history: America already pumps
               more oil than any nation on earth, and XTO puts that lead
               on-chain — in front of China and every cartel trying to own the
-              market. Hold the coin and the algorithm pays you real $USO,
+              market. Hold the coin and the algorithm pays you real <UsoLink />,
               every hour. No other coin is even in this race.
             </motion.p>
           </div>
@@ -172,16 +173,16 @@ export default function Powers() {
             </h3>
             <p className="mt-5 leading-relaxed text-mist-dim">
               Every new American who joins adds trading. Every trade pays the
-              fee. And every fee buys $USO for the people already holding.
+              fee. And every fee buys <UsoLink /> for the people already holding.
               As the program grows, XTO is built to grow in value with it, and
-              your passively earned $USO climbs right alongside.
+              your passively earned <UsoLink /> climbs right alongside.
             </p>
             <ul className="mt-6 space-y-2.5 text-sm text-mist">
               <li className="flex items-center gap-3">
                 <span className="h-2.5 w-2.5 rounded-full bg-mist" /> XTO price, as holders grow
               </li>
               <li className="flex items-center gap-3">
-                <span className="h-2.5 w-2.5 rounded-full bg-gold" /> Your $USO, earned every hour
+                <span className="h-2.5 w-2.5 rounded-full bg-gold" /> Your <UsoLink />, earned every hour
               </li>
             </ul>
           </div>

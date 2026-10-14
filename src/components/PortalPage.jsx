@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useNextAirdrop, formatCountdown } from './AirdropCountdown.jsx'
 import { OilMark } from './Hero.jsx'
 import { SOL_ADDRESS, fetchLiveBalance, fetchWallet, fmtNum, fmtUsd, timeAgo, useSummary } from '../portalData.js'
+import { uso } from './Uso.jsx'
 
 // Everything shown here comes from two public sources: the JSON the rewards runner publishes
 // after every epoch (balances at each snapshot, every payout and its signature, the price each
@@ -93,18 +94,13 @@ function AreaChart({ points }) {
 
 function Countdown() {
   const { seconds, sending } = useNextAirdrop()
-  if (sending) return <span className="text-[#7CF5E6]">Sending</span>
+  if (sending) return <span className="text-gold">Sending</span>
   return <span className="tabular-nums">{formatCountdown(seconds)}</span>
 }
 
 // clean fintech card: white, ink hairline ring, one soft shadow
 const glass =
   'rounded-2xl bg-white ring-1 ring-navy/[0.08] shadow-[0_16px_40px_-28px_rgba(23,23,43,0.28)]'
-
-// the one deep surface: brand indigo night with a quiet aqua bloom in the corner
-const night = {
-  background: 'linear-gradient(135deg, #3B32E6 0%, #3127CC 55%, #2A22B8 100%)',
-}
 
 // why this wallet was or was not paid in the last completed epoch
 function statusCopy(last, minHoldingUsd) {
@@ -153,32 +149,30 @@ function Dashboard({ address, wallet, liveBalance, summary }) {
       </div>
 
       {/* account balance card */}
-      <div
-        className="relative overflow-hidden rounded-2xl p-6 ring-1 ring-white/[0.08] shadow-[0_24px_48px_-24px_rgba(0,0,0,0.7)] sm:p-9"
-        style={night}
-      >
-        <div className="breathe pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-[#32E7D0]/[0.14] blur-[80px]" />
+      <div className={`${glass} relative overflow-hidden p-6 sm:p-9`}>
+        <div className="breathe pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-gold/[0.18] blur-[80px]" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-gold via-gold-bright to-gold-deep" />
 
         <div className="relative flex items-start justify-between">
-          <span className="text-[13px] font-medium tracking-wide text-white/50">Total balance</span>
-          <span className="flex items-center gap-2 rounded-full bg-white/[0.07] px-3.5 py-1.5 text-[12px] font-semibold text-[#7CF5E6]">
+          <span className="text-[13px] font-medium tracking-wide text-mist-faint">Total balance</span>
+          <span className="flex items-center gap-2 rounded-full bg-gold/[0.12] px-3.5 py-1.5 text-[12px] font-semibold text-gold ring-1 ring-gold/30">
             <OilMark className="h-3.5 w-3.5" strokeWidth={5} />
             XTO
           </span>
         </div>
 
-        <div className="relative mt-3 font-display text-4xl font-semibold tabular-nums tracking-[-0.025em] text-white sm:text-6xl lg:text-7xl">
+        <div className="relative mt-3 font-display text-4xl font-semibold tabular-nums tracking-[-0.025em] text-mist sm:text-6xl lg:text-7xl">
           {fmtUsd(positionUsd, positionUsd < 100 ? 2 : 0)}
         </div>
-        <div className="relative mt-2.5 font-display text-[15px] font-medium tabular-nums tracking-[-0.01em] text-white/55 sm:text-[16px]">
+        <div className="relative mt-2.5 font-display text-[15px] font-medium tabular-nums tracking-[-0.01em] text-mist-dim sm:text-[16px]">
           {fmtNum(balance, balance < 1000 ? 2 : 0)} XTO · {(share * 100).toFixed(4)}% of supply
         </div>
 
         <div className="relative mt-7 flex flex-wrap items-center gap-x-5 gap-y-2">
-          <span className="font-mono text-[12px] tracking-wide text-[#7CF5E6]/70">
+          <span className="font-mono text-[12px] tracking-wide text-gold-deep">
             {address.slice(0, 6)}····{address.slice(-4)}
           </span>
-          <span className="text-[12px] text-white/35">
+          <span className="text-[12px] text-mist-faint">
             Read-only · {liveBalance === null ? 'balance as of the last snapshot' : 'balance live'} · payouts update hourly
           </span>
         </div>
@@ -204,11 +198,11 @@ function Dashboard({ address, wallet, liveBalance, summary }) {
           },
         ].map((k) => (
           <div key={k.label} className={`${glass} p-6`}>
-            <span className="block text-[13px] font-medium text-mist-faint">{k.label}</span>
+            <span className="block text-[13px] font-medium text-mist-faint">{uso(k.label)}</span>
             <span className="mt-1.5 block font-display text-[26px] font-semibold tabular-nums tracking-[-0.02em] text-mist">
               {k.value}
             </span>
-            <span className="mt-0.5 block text-[13px] tabular-nums text-mist-faint">{k.sub}</span>
+            <span className="mt-0.5 block text-[13px] tabular-nums text-mist-faint">{uso(k.sub)}</span>
           </div>
         ))}
       </div>
@@ -219,7 +213,7 @@ function Dashboard({ address, wallet, liveBalance, summary }) {
           <div className="flex items-center justify-between">
             <div>
               <h3 className="font-display text-[16px] font-semibold text-mist">Earnings</h3>
-              <span className="text-[13px] text-mist-faint">Cumulative ${symbol} received, valued at the price each payout was bought at</span>
+              <span className="text-[13px] text-mist-faint">{uso(`Cumulative $${symbol} received, valued at the price each payout was bought at`)}</span>
             </div>
             <div className="flex overflow-hidden rounded-full bg-navy/[0.05] p-1 ring-1 ring-navy/[0.08]">
               {[7, 30].map((r) => (
@@ -239,7 +233,7 @@ function Dashboard({ address, wallet, liveBalance, summary }) {
             <span className="font-display text-[32px] font-semibold tabular-nums tracking-[-0.02em] text-mist">
               {fmtUsd(rangeUsd)}
             </span>
-            <span className="font-display text-[16px] font-medium tabular-nums text-mist-faint">worth of ${symbol}</span>
+            <span className="font-display text-[16px] font-medium tabular-nums text-mist-faint">{uso(`worth of $${symbol}`)}</span>
           </div>
           <div className="mt-2">
             <AreaChart points={series} />
@@ -247,19 +241,16 @@ function Dashboard({ address, wallet, liveBalance, summary }) {
         </div>
 
         <div className="flex flex-col gap-5">
-          <div
-            className="relative overflow-hidden rounded-2xl p-6 ring-1 ring-white/[0.08] shadow-[0_20px_44px_-24px_rgba(0,0,0,0.7)]"
-            style={night}
-          >
-            <div className="breathe pointer-events-none absolute -right-16 -bottom-20 h-48 w-48 rounded-full bg-[#32E7D0]/[0.14] blur-[70px]" />
-            <span className="relative text-[13px] font-medium text-white/50">Next payout</span>
-            <div className="relative mt-2 font-display text-[40px] font-semibold tracking-[-0.02em] text-white">
+          <div className={`${glass} relative overflow-hidden p-6`}>
+            <div className="breathe pointer-events-none absolute -right-16 -bottom-20 h-48 w-48 rounded-full bg-gold/[0.18] blur-[70px]" />
+            <span className="relative text-[13px] font-medium text-mist-faint">Next payout</span>
+            <div className="relative mt-2 font-display text-[40px] font-semibold tracking-[-0.02em] text-mist">
               <Countdown />
             </div>
-            <div className="relative mt-1.5 font-display text-[15px] font-medium text-[#7CF5E6]">
-              {hourlyUsd > 0 ? `est. +${fmtUsd(hourlyUsd, 2)} of $${symbol} to this wallet` : `$${symbol}, deposited to eligible wallets`}
+            <div className="relative mt-1.5 font-display text-[15px] font-medium text-gold">
+              {uso(hourlyUsd > 0 ? `est. +${fmtUsd(hourlyUsd, 2)} of $${symbol} to this wallet` : `$${symbol}, deposited to eligible wallets`)}
             </div>
-            <p className="relative mt-3 text-[12px] leading-relaxed text-white/40">Deposited automatically. Nothing to claim.</p>
+            <p className="relative mt-3 text-[12px] leading-relaxed text-mist-faint">Deposited automatically. Nothing to claim.</p>
           </div>
 
           <div className={`${glass} flex-1 p-6`}>
@@ -355,7 +346,7 @@ function LaunchStats({ summary }) {
       {items.map(([label, value]) => (
         <div key={label} className={`${glass} p-5 text-center`}>
           <span className="block font-display text-[24px] font-semibold tabular-nums tracking-[-0.02em] text-mist">{value}</span>
-          <span className="mt-1 block text-[12px] text-mist-faint">{label}</span>
+          <span className="mt-1 block text-[12px] text-mist-faint">{uso(label)}</span>
         </div>
       ))}
     </div>

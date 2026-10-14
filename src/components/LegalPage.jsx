@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { uso } from './Uso.jsx'
 
 const EASE = [0.22, 1, 0.36, 1]
 
@@ -9,7 +10,7 @@ const DOCS = {
     sections: [
       [
         'What XTO is',
-        'XTO is a speculative digital asset on the Solana blockchain. It is not an investment product, a security, a deposit, a share, a bond, or an income scheme. Holding XTO gives you no claim on any company, well, barrel of oil, or revenue stream. The project reserve is a treasury, not redemption backing, and nothing on this site creates an obligation to buy XTO back at any price.',
+        'XTO is a speculative digital asset on the Solana blockchain. It is not an investment product, a security, a deposit, a share, a bond, or an income scheme. Holding XTO gives you no claim on any company, well, barrel of oil, or revenue stream. Payouts are funded only by converting trading fees into $USO, and nothing on this site creates an obligation to buy XTO back at any price.',
       ],
       [
         'Distributions are not guaranteed',
@@ -146,7 +147,7 @@ export default function LegalPage({ doc = 'risk' }) {
             {d.sections.map(([h, body]) => (
               <section key={h}>
                 <h2 className="font-serif text-xl font-semibold text-mist">{h}</h2>
-                <p className="mt-2.5 leading-relaxed text-mist-dim">{body}</p>
+                <p className="mt-2.5 leading-relaxed text-mist-dim">{uso(body)}</p>
               </section>
             ))}
           </div>

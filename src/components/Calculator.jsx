@@ -46,8 +46,8 @@ function GrowthChart({ position, dailyRate, days, total }) {
             x2={W - R}
             y1={y(max * g)}
             y2={y(max * g)}
-            stroke="#ffffff"
-            strokeOpacity="0.05"
+            stroke="#17172B"
+            strokeOpacity="0.06"
           />
         ))}
 
@@ -92,7 +92,7 @@ function GrowthChart({ position, dailyRate, days, total }) {
 export default function Calculator() {
   const [position, setPosition] = useState(1000)
   const [mcap, setMcap] = useState(5000000)
-  const [volume, setVolume] = useState(10000000)
+  const [volume, setVolume] = useState(1000000)
   const [days, setDays] = useState(30)
 
   const dailyRate = mcap > 0 ? (volume * HOLDER_SHARE) / mcap : 0
@@ -128,10 +128,10 @@ export default function Calculator() {
       value: volume,
       set: setVolume,
       min: 0,
-      max: 20000000,
+      max: 10000000,
       step: 50000,
       display: fmtShort(volume),
-      note: 'Default = recent average. Historical, not a promise.',
+      note: 'Default = $1M a day. Volume is historical, not a promise.',
     },
   ]
 
