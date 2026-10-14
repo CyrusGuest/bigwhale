@@ -718,8 +718,9 @@ const PORTAL_POPS = [
 ]
 
 function ActPortal() {
-  // the real clock: airdrops send at :26 past every hour
-  const payoutLabel = formatCountdown(useNextAirdrop())
+  // the real clock: read from the runner's published epoch timing
+  const nextDrop = useNextAirdrop()
+  const payoutLabel = nextDrop.sending ? 'sending' : formatCountdown(nextDrop.seconds)
 
   const W = 460
   const H = 170

@@ -1,67 +1,55 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useNextAirdrop, formatCountdown } from './AirdropCountdown.jsx'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useNextAirdrop, formatCountdown } from './AirdropCountdown.jsx'
 import { OilMark } from './Hero.jsx'
+import { SOL_ADDRESS, fetchLiveBalance, fetchWallet, fmtNum, fmtUsd, timeAgo, useSummary } from '../portalData.js'
 
-const TOTAL_SUPPLY = 1_000_000_000
-const HOLDER_SHARE = 0.04
-const AVG_DAILY_VOLUME = 10_000_000
-const XRP_PRICE = 1.34
-const TOKEN_PRICE = 0.005 // $5M mcap / 1B supply
+// Everything shown here comes from two public sources: the JSON the rewards runner publishes
+// after every epoch (balances at each snapshot, every payout and its signature, the price each
+// payout was bought at) and a read-only RPC call for the wallet's live balance. No wallet
+// connection, no signing, nothing stored anywhere but this browser.
 
-const SOL_ADDRESS = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/
-const SAMPLE_ADDRESS = '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU'
+const LAST_ADDRESS_KEY = 'xto-portal-address'
+const SOLSCAN = 'https://solscan.io/tx/'
 
-// Deterministic sample data per address until the live Solana + distribution
-// APIs are wired in: replace fetchHolderData with real RPC + indexer calls.
-function seedFrom(str) {
-  let h = 2166136261
-  for (const c of str) {
-    h ^= c.charCodeAt(0)
-    h = Math.imul(h, 16777619)
-  }
-  return h >>> 0
+function addressFromHash() {
+  const parts = window.location.hash.split('/')
+  const candidate = parts[2] ? decodeURIComponent(parts[2]) : ''
+  return SOL_ADDRESS.test(candidate) ? candidate : ''
 }
-function mulberry32(a) {
-  return function () {
-    a |= 0
-    a = (a + 0x6d2b79f5) | 0
-    let t = Math.imul(a ^ (a >>> 15), 1 | a)
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+
+function rememberedAddress() {
+  try {
+    const v = localStorage.getItem(LAST_ADDRESS_KEY) || ''
+    return SOL_ADDRESS.test(v) ? v : ''
+  } catch {
+    return ''
   }
 }
 
-function fetchHolderData(address) {
-  const rng = mulberry32(seedFrom(address))
-  const balance = Math.round(200_000 + rng() * 19_800_000)
-  const share = balance / TOTAL_SUPPLY
-
-  let vol = AVG_DAILY_VOLUME * (0.7 + rng() * 0.6)
-  const days = Array.from({ length: 30 }, (_, i) => {
-    vol = Math.max(1_500_000, Math.min(22_000_000, vol * (0.82 + rng() * 0.4)))
-    const usd = vol * HOLDER_SHARE * share
-    return { day: i, usd, xrp: usd / XRP_PRICE }
-  })
-
-  const totalXrp = days.reduce((s, d) => s + d.xrp, 0)
-  const estDailyUsd = AVG_DAILY_VOLUME * HOLDER_SHARE * share
-  const allTimeXrp = totalXrp * (2.4 + rng() * 1.8)
-
-  const hourlyBase = days[29].xrp / 24
-  const txs = Array.from({ length: 8 }, (_, i) => ({
-    id: i,
-    ago: i === 0 ? 'Just now' : `${i}h ago`,
-    xrp: hourlyBase * (0.7 + rng() * 0.6),
-  }))
-
-  return { balance, share, days, totalXrp, estDailyUsd, allTimeXrp, txs }
+function remember(address) {
+  try {
+    if (address) localStorage.setItem(LAST_ADDRESS_KEY, address)
+    else localStorage.removeItem(LAST_ADDRESS_KEY)
+  } catch {
+    /* private mode */
+  }
 }
 
-const usd = (n, d = 0) =>
-  n.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: d })
-const num = (n, d = 2) =>
-  n.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d })
+// cumulative USD per day over `range` days, missing days filled with zero
+function cumulativeSeries(daily, range) {
+  const byDate = new Map((daily || []).map((d) => [d.date, d.usd]))
+  const out = []
+  let acc = 0
+  const today = new Date()
+  for (let i = range - 1; i >= 0; i--) {
+    const d = new Date(today)
+    d.setUTCDate(today.getUTCDate() - i)
+    acc += byDate.get(d.toISOString().slice(0, 10)) || 0
+    out.push(acc)
+  }
+  return out
+}
 
 function AreaChart({ points }) {
   const W = 620
@@ -70,12 +58,13 @@ function AreaChart({ points }) {
   const R = 56
   const T = 14
   const B = 22
-  const max = Math.max(...points, 1)
-  const step = (W - L - R) / (points.length - 1)
+  const max = Math.max(...points, 0.01)
+  const step = (W - L - R) / Math.max(points.length - 1, 1)
   const x = (i) => L + i * step
   const y = (v) => H - B - (v / max) * (H - T - B)
   const line = points.map((v, i) => `${i ? 'L' : 'M'}${x(i)},${y(v)}`).join(' ')
   const area = `${line} L${x(points.length - 1)},${H - B} L${L},${H - B} Z`
+  const tick = (v) => (max < 1 ? v.toFixed(3) : max < 100 ? v.toFixed(1) : fmtNum(v, 0))
   return (
     <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full">
       <defs>
@@ -88,7 +77,7 @@ function AreaChart({ points }) {
         <g key={g}>
           <line x1={L} x2={W - R} y1={y(max * g)} y2={y(max * g)} stroke="#FFFFFF" strokeOpacity="0.07" />
           <text x={W - R + 8} y={y(max * g) + 3.5} fill="#8685A8" fontSize="10" fontFamily="Inter">
-            {num(max * g, max < 100 ? 1 : 0)}
+            ${tick(max * g)}
           </text>
         </g>
       ))}
@@ -103,8 +92,9 @@ function AreaChart({ points }) {
 }
 
 function Countdown() {
-  // the real clock: airdrops send at :26 past every hour
-  return <span className="tabular-nums">{formatCountdown(useNextAirdrop())}</span>
+  const { seconds, sending } = useNextAirdrop()
+  if (sending) return <span className="text-[#7CF5E6]">Sending</span>
+  return <span className="tabular-nums">{formatCountdown(seconds)}</span>
 }
 
 // clean fintech card: white, hairline ring, one soft shadow, no blur stack
@@ -113,27 +103,52 @@ const glass =
 
 // the one dark surface: deep night with a quiet aqua bloom in the corner
 const night = {
-  background:
-    'linear-gradient(135deg, #1D1D3E 0%, #17172B 55%, #141430 100%)',
+  background: 'linear-gradient(135deg, #1D1D3E 0%, #17172B 55%, #141430 100%)',
 }
 
-function Dashboard({ address, data, sample = false }) {
+// why this wallet was or was not paid in the last completed epoch
+function statusCopy(last, minHoldingUsd) {
+  switch (last?.result) {
+    case 'paid':
+      return { tone: 'ok', title: `Paid in the last round`, body: `Credited with ${fmtNum(last.credited_balance, 0)} XTO held through the hour.` }
+    case 'not held at open':
+      return { tone: 'wait', title: 'Earning from the next round', body: 'This wallet bought during the last hour. Tokens must be held through a full round, so the first payout comes next.' }
+    case 'below minimum holding':
+      return { tone: 'warn', title: `Below the ${fmtUsd(minHoldingUsd, 0)} minimum`, body: 'The balance held through the last round was worth less than the minimum at the closing price.' }
+    case 'not holding':
+      return { tone: 'warn', title: 'No XTO at the last snapshot', body: 'Hold XTO through a full round to earn.' }
+    case 'excluded':
+      return { tone: 'warn', title: 'Not eligible', body: 'Team, pool and treasury wallets never earn.' }
+    default:
+      return { tone: 'wait', title: 'No rounds yet', body: 'The first payout lands after the first full round.' }
+  }
+}
+
+function Dashboard({ address, wallet, liveBalance, summary }) {
   const [range, setRange] = useState(30)
-  const days = data.days.slice(30 - range)
-  const cumulative = days.reduce((acc, d) => {
-    acc.push((acc[acc.length - 1] || 0) + d.xrp)
-    return acc
-  }, [])
-  const rangeXrp = cumulative[cumulative.length - 1]
-  const positionUsd = data.balance * TOKEN_PRICE
-  const hourly = data.estDailyUsd / 24 / XRP_PRICE
+  const series = useMemo(() => cumulativeSeries(wallet?.daily, range), [wallet, range])
+  const rangeUsd = series[series.length - 1] || 0
+
+  const xtoPrice = summary?.totals?.xto_price_usd || 0
+  const balance = liveBalance ?? wallet?.balance ?? 0
+  const supply = summary?.launch?.supply || 0
+  const share = supply ? balance / supply : 0
+  const positionUsd = balance * xtoPrice
+
+  // pace: this wallet's share of the credited pot × the median hourly pot over the last day
+  const pot = summary?.totals?.avg_pot_usd_24h || 0
+  const sharePot = wallet?.last_epoch?.share_of_pot || 0
+  const hourlyUsd = sharePot * pot
+  const status = statusCopy(wallet?.last_epoch, summary?.launch?.min_holding_usd ?? 10)
+  const symbol = summary?.launch?.reward_symbol || 'USO'
+  const payouts = (wallet?.payouts || []).filter((p) => p.status === 'CONFIRMED').slice(0, 12)
 
   return (
     <div className="space-y-5">
       <div className="flex justify-end">
         <span className="inline-flex items-center gap-2 rounded-full bg-white/[0.06] px-3.5 py-1.5 text-[11px] font-medium text-mist-dim">
           <span className="h-1.5 w-1.5 rounded-full bg-[#32E7D0]" />
-          {sample ? 'Sample account — enter your wallet above' : 'Illustrative preview — live data connects at launch'}
+          Live · balance from the chain, payouts from the distribution ledger
         </span>
       </div>
 
@@ -153,17 +168,19 @@ function Dashboard({ address, data, sample = false }) {
         </div>
 
         <div className="relative mt-3 font-display text-4xl font-semibold tabular-nums tracking-[-0.025em] text-white sm:text-6xl lg:text-7xl">
-          {usd(positionUsd)}
+          {fmtUsd(positionUsd, positionUsd < 100 ? 2 : 0)}
         </div>
         <div className="relative mt-2.5 font-display text-[15px] font-medium tabular-nums tracking-[-0.01em] text-white/55 sm:text-[16px]">
-          {data.balance.toLocaleString('en-US')} XTO · {(data.share * 100).toFixed(4)}% of supply
+          {fmtNum(balance, balance < 1000 ? 2 : 0)} XTO · {(share * 100).toFixed(4)}% of supply
         </div>
 
         <div className="relative mt-7 flex flex-wrap items-center gap-x-5 gap-y-2">
           <span className="font-mono text-[12px] tracking-wide text-[#7CF5E6]/70">
             {address.slice(0, 6)}····{address.slice(-4)}
           </span>
-          <span className="text-[12px] text-white/35">Read-only · Updates hourly</span>
+          <span className="text-[12px] text-white/35">
+            Read-only · {liveBalance === null ? 'balance as of the last snapshot' : 'balance live'} · payouts update hourly
+          </span>
         </div>
       </div>
 
@@ -171,19 +188,19 @@ function Dashboard({ address, data, sample = false }) {
       <div className="grid gap-4 sm:grid-cols-3">
         {[
           {
-            label: '$USO earned, all time',
-            value: usd(data.allTimeXrp * XRP_PRICE),
-            sub: 'worth of $USO, paid to this wallet',
+            label: `$${symbol} earned, all time`,
+            value: fmtUsd(wallet?.totals?.usd_all_time || 0),
+            sub: `${fmtNum(wallet?.totals?.reward_all_time || 0, 6)} ${symbol} over ${wallet?.totals?.payouts || 0} payouts`,
           },
           {
             label: 'Last 30 days',
-            value: usd(data.totalXrp * XRP_PRICE),
-            sub: 'worth of $USO',
+            value: fmtUsd(wallet?.totals?.usd_30d || 0),
+            sub: `worth of $${symbol}`,
           },
           {
-            label: 'Estimated daily pace',
-            value: `${usd(data.estDailyUsd)} / day`,
-            sub: 'worth of $USO, at current volume',
+            label: 'Estimated hourly pace',
+            value: hourlyUsd > 0 ? `${fmtUsd(hourlyUsd, hourlyUsd < 10 ? 2 : 0)} / hour` : '—',
+            sub: hourlyUsd > 0 ? `your share × the median hourly pot (${fmtUsd(pot, 0)}) over the last day` : 'shown once this wallet has been paid a round',
           },
         ].map((k) => (
           <div key={k.label} className={`${glass} p-6`}>
@@ -202,7 +219,7 @@ function Dashboard({ address, data, sample = false }) {
           <div className="flex items-center justify-between">
             <div>
               <h3 className="font-display text-[16px] font-semibold text-mist">Earnings</h3>
-              <span className="text-[13px] text-mist-faint">Cumulative $USO received</span>
+              <span className="text-[13px] text-mist-faint">Cumulative ${symbol} received, valued at the price each payout was bought at</span>
             </div>
             <div className="flex overflow-hidden rounded-full bg-white/[0.06] p-1 ring-1 ring-white/[0.08]">
               {[7, 30].map((r) => (
@@ -220,14 +237,12 @@ function Dashboard({ address, data, sample = false }) {
           </div>
           <div className="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-1">
             <span className="font-display text-[32px] font-semibold tabular-nums tracking-[-0.02em] text-mist">
-              {usd(rangeXrp * XRP_PRICE)}
+              {fmtUsd(rangeUsd)}
             </span>
-            <span className="font-display text-[16px] font-medium tabular-nums text-mist-faint">
-              worth of $USO
-            </span>
+            <span className="font-display text-[16px] font-medium tabular-nums text-mist-faint">worth of ${symbol}</span>
           </div>
           <div className="mt-2">
-            <AreaChart points={cumulative} />
+            <AreaChart points={series} />
           </div>
         </div>
 
@@ -242,35 +257,33 @@ function Dashboard({ address, data, sample = false }) {
               <Countdown />
             </div>
             <div className="relative mt-1.5 font-display text-[15px] font-medium text-[#7CF5E6]">
-              est. +{usd(hourly * XRP_PRICE, 2)} of $USO to this wallet
+              {hourlyUsd > 0 ? `est. +${fmtUsd(hourlyUsd, 2)} of $${symbol} to this wallet` : `$${symbol}, deposited to eligible wallets`}
             </div>
-            <p className="relative mt-3 text-[12px] leading-relaxed text-white/40">
-              Deposited automatically. Nothing to claim.
-            </p>
+            <p className="relative mt-3 text-[12px] leading-relaxed text-white/40">Deposited automatically. Nothing to claim.</p>
           </div>
 
           <div className={`${glass} flex-1 p-6`}>
-            <h3 className="font-display text-[16px] font-semibold text-mist">Earning pace</h3>
-            <span className="text-[13px] text-mist-faint">At $10M average daily volume</span>
-            <div className="mt-4 space-y-3">
+            <h3 className="font-display text-[16px] font-semibold text-mist">Status</h3>
+            <div className="mt-3 flex items-start gap-3">
+              <span
+                className={`mt-1.5 h-2 w-2 flex-none rounded-full ${
+                  status.tone === 'ok' ? 'bg-[#32E7D0]' : status.tone === 'wait' ? 'bg-gold/60' : 'bg-brass'
+                }`}
+              />
+              <div>
+                <span className="block text-[15px] font-semibold text-mist">{status.title}</span>
+                <span className="mt-1 block text-[13px] leading-relaxed text-mist-faint">{status.body}</span>
+              </div>
+            </div>
+            <div className="mt-5 space-y-3 border-t border-white/[0.08] pt-4">
               {[
-                ['Hourly', hourly, 2],
-                ['Daily', data.estDailyUsd / XRP_PRICE, 1],
-                ['Monthly', (data.estDailyUsd / XRP_PRICE) * 30, 0],
-              ].map(([label, v, d]) => (
-                <div
-                  key={label}
-                  className="flex items-center justify-between border-b border-white/[0.08] pb-3 last:border-0 last:pb-0"
-                >
-                  <span className="text-[14px] text-mist-dim">{label}</span>
-                  <span className="text-right">
-                    <span className="block font-display text-[16px] font-semibold tabular-nums tracking-[-0.01em] text-mist">
-                      +{usd(v * XRP_PRICE, d === 2 ? 2 : 0)}
-                    </span>
-                    <span className="block text-[12px] tabular-nums text-mist-faint">
-                      of $USO
-                    </span>
-                  </span>
+                ['Rounds paid', wallet?.totals?.payouts || 0],
+                ['Share of the last pot', sharePot ? `${(sharePot * 100).toFixed(3)}%` : '—'],
+                ['Minimum to earn', fmtUsd(summary?.launch?.min_holding_usd ?? 10, 0) + ' of XTO'],
+              ].map(([label, v]) => (
+                <div key={label} className="flex items-center justify-between">
+                  <span className="text-[13px] text-mist-dim">{label}</span>
+                  <span className="font-display text-[14px] font-semibold tabular-nums text-mist">{v}</span>
                 </div>
               ))}
             </div>
@@ -285,47 +298,119 @@ function Dashboard({ address, data, sample = false }) {
           <span className="text-[13px] font-medium text-gold-deep">Hourly · Automatic</span>
         </div>
         <div className="divide-y divide-white/[0.06]">
-          {data.txs.map((t) => (
-            <div
-              key={t.id}
+          {payouts.length === 0 && (
+            <div className="px-6 py-8 text-center text-[13px] text-mist-faint sm:px-7">No payouts to this wallet yet.</div>
+          )}
+          {payouts.map((t) => (
+            <a
+              key={t.epoch}
+              href={t.signature ? `${SOLSCAN}${t.signature}` : undefined}
+              target="_blank"
+              rel="noreferrer"
               className="flex items-center gap-4 px-6 py-4 transition-colors hover:bg-white/[0.03] sm:px-7"
             >
               <span className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-gold/[0.1] text-[#7CF5E6] ring-1 ring-gold/[0.25]">
                 <OilMark className="h-[18px] w-[18px]" strokeWidth={5} />
               </span>
               <div className="min-w-0 flex-1">
-                <span className="block text-[15px] font-semibold text-mist">XTO Reward</span>
-                <span className="block text-[13px] text-mist-faint">Hourly payout · {t.ago}</span>
+                <span className="block text-[15px] font-semibold text-mist">XTO Reward · round {t.epoch}</span>
+                <span className="block text-[13px] text-mist-faint">
+                  {timeAgo(t.time)} · {fmtNum(t.credited_balance, 0)} XTO credited
+                  {t.signature ? ' · view on Solscan ↗' : ''}
+                </span>
               </div>
               <div className="text-right">
                 <span className="block font-display text-[16px] font-semibold tabular-nums tracking-[-0.01em] text-[#32E7D0]">
-                  +{usd(t.xrp * XRP_PRICE, 2)}
+                  +{fmtUsd(t.usd || 0, 2)}
                 </span>
                 <span className="block text-[12px] tabular-nums text-mist-faint">
-                  of $USO
+                  {fmtNum(t.reward, 6)} {symbol}
                 </span>
               </div>
-            </div>
+            </a>
           ))}
         </div>
       </div>
 
       <p className="max-w-3xl text-xs leading-relaxed text-mist-faint">
-        Pace figures apply the current formula to this wallet&rsquo;s share at
-        $10M average daily volume. They change the moment volume does, and are
-        not a promise. Future payouts may be higher, lower, or zero.
+        Pace figures apply this wallet&rsquo;s share of the last round to the median hourly pot of
+        the past day. They change the moment trading volume does, and are not a promise. Future
+        payouts may be higher, lower, or zero.
       </p>
     </div>
   )
 }
 
-export default function PortalPage() {
-  const [input, setInput] = useState('')
-  const [address, setAddress] = useState(null)
-  const [error, setError] = useState('')
+function LaunchStats({ summary }) {
+  const t = summary?.totals
+  const symbol = summary?.launch?.reward_symbol || 'USO'
+  const items = [
+    [`$${symbol} paid to holders`, t ? fmtUsd(t.usd_distributed, 0) : '—'],
+    ['Rounds paid', t ? fmtNum(t.epochs_paid, 0) : '—'],
+    ['Wallets paid', t ? fmtNum(t.wallets_paid, 0) : '—'],
+    ['Holding wallets', t?.holders != null ? fmtNum(t.holders, 0) : '—'],
+  ]
+  return (
+    <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      {items.map(([label, value]) => (
+        <div key={label} className={`${glass} p-5 text-center`}>
+          <span className="block font-display text-[24px] font-semibold tabular-nums tracking-[-0.02em] text-mist">{value}</span>
+          <span className="mt-1 block text-[12px] text-mist-faint">{label}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
 
-  const data = useMemo(() => (address ? fetchHolderData(address) : null), [address])
-  const sampleData = useMemo(() => fetchHolderData(SAMPLE_ADDRESS), [])
+export default function PortalPage() {
+  const { summary } = useSummary(60_000)
+  const [address, setAddress] = useState(() => addressFromHash() || rememberedAddress())
+  const [input, setInput] = useState(address)
+  const [error, setError] = useState('')
+  const [state, setState] = useState({ loading: false, wallet: null, liveBalance: null, found: false, failed: false })
+
+  // follow #/portal/<address> deep links
+  useEffect(() => {
+    const onHash = () => {
+      const a = addressFromHash()
+      if (a && a !== address) {
+        setAddress(a)
+        setInput(a)
+      }
+    }
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
+  }, [address])
+
+  // load the wallet's record and live balance whenever the address changes, and again each minute
+  useEffect(() => {
+    if (!address) return undefined
+    let alive = true
+    const mint = summary?.launch?.mint
+    const load = async () => {
+      setState((s) => ({ ...s, loading: true }))
+      const [walletRes, balanceRes] = await Promise.allSettled([
+        fetchWallet(address),
+        mint ? fetchLiveBalance(address, mint) : Promise.reject(new Error('no mint yet')),
+      ])
+      if (!alive) return
+      const wallet = walletRes.status === 'fulfilled' ? walletRes.value : null
+      const liveBalance = balanceRes.status === 'fulfilled' ? balanceRes.value : null
+      setState({
+        loading: false,
+        wallet,
+        liveBalance,
+        found: Boolean(wallet) || (liveBalance ?? 0) > 0,
+        failed: walletRes.status === 'rejected' && balanceRes.status === 'rejected',
+      })
+    }
+    load()
+    const iv = setInterval(load, 60_000)
+    return () => {
+      alive = false
+      clearInterval(iv)
+    }
+  }, [address, summary?.launch?.mint])
 
   const submit = (e) => {
     e.preventDefault()
@@ -336,6 +421,16 @@ export default function PortalPage() {
     }
     setError('')
     setAddress(trimmed)
+    remember(trimmed)
+    window.location.hash = `#/portal/${trimmed}`
+  }
+
+  const clear = () => {
+    setAddress('')
+    setInput('')
+    remember('')
+    setState({ loading: false, wallet: null, liveBalance: null, found: false, failed: false })
+    window.location.hash = '#/portal'
   }
 
   return (
@@ -354,9 +449,8 @@ export default function PortalPage() {
             Your money, working.
           </h1>
           <p className="mx-auto mt-5 max-w-lg text-lg leading-relaxed text-mist-dim">
-            Enter your Solana wallet and check your XTO position like a bank
-            account: balance, every payout, and your earning pace. Pin it.
-            Check it daily.
+            Enter your Solana wallet and check your XTO position like a bank account: balance,
+            every payout, and your earning pace. Pin it. Check it daily.
           </p>
         </motion.div>
 
@@ -372,15 +466,14 @@ export default function PortalPage() {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Solana wallet address — opens next week"
-              disabled
+              placeholder="Solana wallet address"
               spellCheck="false"
+              autoComplete="off"
               className="w-full rounded-full border border-navy/15 bg-ink-850 px-6 py-4 text-center font-mono text-sm text-mist placeholder:text-mist-faint focus:border-gold/50 focus:outline-none sm:rounded-none sm:border-0 sm:bg-transparent"
             />
             <button
               type="submit"
-              disabled
-              className="cursor-not-allowed whitespace-nowrap rounded-full bg-navy/60 px-7 py-4 text-sm font-semibold text-white/70 sm:rounded-none sm:py-0"
+              className="whitespace-nowrap rounded-full bg-gold px-7 py-4 text-sm font-semibold text-ink-950 transition-colors hover:bg-gold-bright sm:rounded-none sm:py-0"
             >
               Track Wallet
             </button>
@@ -388,40 +481,55 @@ export default function PortalPage() {
           {error && <p className="mt-3 text-xs text-brass">{error}</p>}
           <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.15em] text-mist-faint">
             Read-only lookup · Never asks you to connect or sign
+            {address && (
+              <>
+                {' · '}
+                <button type="button" onClick={clear} className="underline decoration-mist-faint/50 underline-offset-2 hover:text-mist">
+                  clear
+                </button>
+              </>
+            )}
           </p>
         </motion.form>
       </div>
 
-      {/* dashboard — blurred behind the launch notice until the portal opens */}
       <div className="relative mx-auto max-w-6xl px-6 pb-24">
         <AnimatePresence mode="wait">
           <motion.div
-            key={address || 'sample'}
+            key={address || 'launch'}
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div aria-hidden className="pointer-events-none select-none opacity-70 blur-[7px]">
-              <Dashboard
-                address={address || SAMPLE_ADDRESS}
-                data={data || sampleData}
-                sample={!address}
-              />
-            </div>
-            <div className="absolute inset-0 z-10 flex items-center justify-center px-6">
-              <div className="rounded-2xl bg-[#17172B]/95 px-8 py-7 text-center ring-1 ring-gold/30 shadow-[0_24px_60px_-20px_rgba(0,0,0,0.8)]">
-                <p className="eyebrow justify-center">Launching</p>
-                <p className="mt-3 font-serif text-3xl font-semibold text-white sm:text-4xl">
-                  Coming in the next week
-                </p>
-                <p className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-mist-dim">
-                  The holder portal goes live with launch: your balance, every
-                  hourly payout, and your earning pace — read-only, no wallet
-                  connection ever.
+            {!address ? (
+              <div className="space-y-5">
+                <LaunchStats summary={summary} />
+                <p className="text-center text-[13px] text-mist-faint">
+                  Figures for the whole launch, from the distribution ledger. Enter a wallet above to see its own.
                 </p>
               </div>
-            </div>
+            ) : state.loading && !state.wallet && state.liveBalance === null ? (
+              <div className="py-16 text-center text-[13px] text-mist-faint">Looking up {address.slice(0, 6)}…{address.slice(-4)}</div>
+            ) : state.failed ? (
+              <div className={`${glass} px-6 py-10 text-center`}>
+                <p className="text-[15px] font-semibold text-mist">Could not reach the ledger</p>
+                <p className="mt-2 text-[13px] text-mist-faint">Check your connection and try again in a moment.</p>
+              </div>
+            ) : !state.found ? (
+              <div className="space-y-5">
+                <div className={`${glass} px-6 py-10 text-center`}>
+                  <p className="text-[15px] font-semibold text-mist">No XTO found in this wallet</p>
+                  <p className="mx-auto mt-2 max-w-md text-[13px] leading-relaxed text-mist-faint">
+                    {address.slice(0, 6)}…{address.slice(-4)} holds no XTO and has never been paid. Hold XTO through a full
+                    round and it will appear here after the next payout.
+                  </p>
+                </div>
+                <LaunchStats summary={summary} />
+              </div>
+            ) : (
+              <Dashboard address={address} wallet={state.wallet} liveBalance={state.liveBalance} summary={summary} />
+            )}
           </motion.div>
         </AnimatePresence>
       </div>
