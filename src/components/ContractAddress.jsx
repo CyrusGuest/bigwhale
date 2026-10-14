@@ -1,6 +1,8 @@
 import { useState } from 'react'
 
 export const CONTRACT_ADDRESS = 'XtogpWjiAgvkemc5gr1auxkh77w3vKgSQN1nxJeJfHt'
+// where every "Buy XTO" button goes: a SOL -> XTO swap on Jupiter
+export const BUY_URL = `https://jup.ag/swap/SOL-${CONTRACT_ADDRESS}`
 
 // the token's mint address as a copy-to-clipboard pill; shown wherever the
 // site asks people to buy so the address they paste is always the real one

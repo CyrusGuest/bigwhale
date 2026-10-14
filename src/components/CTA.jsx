@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import Stars from './Stars.jsx'
 import { REVEAL } from '../motionPrefs.js'
-import ContractAddress from './ContractAddress.jsx'
+import ContractAddress, { BUY_URL } from './ContractAddress.jsx'
 
 export default function CTA() {
   return (
@@ -28,7 +28,9 @@ export default function CTA() {
           without paying today’s high price for a single barrel or share.
         </p>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-          <a href="#" className="btn-primary">Join the Movement · Buy XTO</a>
+          <a href={BUY_URL} target="_blank" rel="noopener noreferrer" className="btn-primary">
+            Join the Movement · Buy XTO
+          </a>
           <a href="#faq" className="btn-secondary">Read the Risks</a>
         </div>
         <div className="mt-6 flex justify-center">

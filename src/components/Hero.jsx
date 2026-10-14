@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Star } from './Stars.jsx'
 import { REVEAL } from '../motionPrefs.js'
-import ContractAddress from './ContractAddress.jsx'
+import ContractAddress, { BUY_URL } from './ContractAddress.jsx'
 
 // Oil mark: a single crude drop, outlined in the current color with a faint
 // fill and a specular highlight, so it reads at favicon size and at 560px
@@ -1129,7 +1129,9 @@ function ActEnd() {
           className="mt-9 flex flex-wrap items-center justify-center gap-4"
         >
           <motion.a
-            href="#"
+            href={BUY_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             animate={{ scale: [1, 1.045, 1] }}
             transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
             className="btn-primary inline-flex items-center gap-2.5 !px-8 !py-4"
