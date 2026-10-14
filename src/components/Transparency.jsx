@@ -26,7 +26,7 @@ const ledgerLinks = [
 
 export default function Transparency() {
   return (
-    <section id="transparency" className="border-y border-white/[0.07] bg-ink-850/40">
+    <section id="transparency" className="border-y border-navy/[0.07] bg-ink-850/40">
       <div className="mx-auto max-w-7xl px-6 py-20 sm:py-28">
         <motion.div
           initial={REVEAL ? { opacity: 0, y: 20, filter: 'blur(8px)' } : false}
@@ -70,7 +70,7 @@ export default function Transparency() {
             </h3>
             <div className="space-y-4">
               {notSources.map((s) => (
-                <div key={s.title} className="rounded-md border border-white/[0.06] p-6">
+                <div key={s.title} className="rounded-md border border-navy/[0.06] p-6">
                   <h4 className="font-medium text-mist-dim">
                     <span className="mr-3 font-mono text-mist-faint">✕</span>
                     {s.title}
@@ -91,7 +91,7 @@ export default function Transparency() {
               Verify on the ledger
             </h3>
             <div className="panel overflow-hidden rounded-md">
-              <div className="divide-y divide-white/[0.05]">
+              <div className="divide-y divide-navy/[0.05]">
                 {ledgerLinks.map((l) => (
                   <a
                     key={l.label}
@@ -109,7 +109,7 @@ export default function Transparency() {
                   </a>
                 ))}
               </div>
-              <div className="border-t border-white/[0.07] bg-ink-800/40 px-6 py-4 text-xs leading-relaxed text-mist-faint">
+              <div className="border-t border-navy/[0.07] bg-ink-800/40 px-6 py-4 text-xs leading-relaxed text-mist-faint">
                 These links open a public ledger explorer. Nothing on this page
                 requires trusting us, if a number here ever disagrees with the
                 ledger, the ledger is right.

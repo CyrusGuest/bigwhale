@@ -75,7 +75,7 @@ function AreaChart({ points }) {
       </defs>
       {[0.33, 0.66, 1].map((g) => (
         <g key={g}>
-          <line x1={L} x2={W - R} y1={y(max * g)} y2={y(max * g)} stroke="#FFFFFF" strokeOpacity="0.07" />
+          <line x1={L} x2={W - R} y1={y(max * g)} y2={y(max * g)} stroke="#17172B" strokeOpacity="0.08" />
           <text x={W - R + 8} y={y(max * g) + 3.5} fill="#8685A8" fontSize="10" fontFamily="Inter">
             ${tick(max * g)}
           </text>
@@ -97,13 +97,13 @@ function Countdown() {
   return <span className="tabular-nums">{formatCountdown(seconds)}</span>
 }
 
-// clean fintech card: white, hairline ring, one soft shadow, no blur stack
+// clean fintech card: white, ink hairline ring, one soft shadow
 const glass =
-  'rounded-2xl bg-white/[0.04] ring-1 ring-white/[0.08] shadow-[0_16px_40px_-28px_rgba(0,0,0,0.7)]'
+  'rounded-2xl bg-white ring-1 ring-navy/[0.08] shadow-[0_16px_40px_-28px_rgba(23,23,43,0.28)]'
 
-// the one dark surface: deep night with a quiet aqua bloom in the corner
+// the one deep surface: brand indigo night with a quiet aqua bloom in the corner
 const night = {
-  background: 'linear-gradient(135deg, #1D1D3E 0%, #17172B 55%, #141430 100%)',
+  background: 'linear-gradient(135deg, #3B32E6 0%, #3127CC 55%, #2A22B8 100%)',
 }
 
 // why this wallet was or was not paid in the last completed epoch
@@ -146,8 +146,8 @@ function Dashboard({ address, wallet, liveBalance, summary }) {
   return (
     <div className="space-y-5">
       <div className="flex justify-end">
-        <span className="inline-flex items-center gap-2 rounded-full bg-white/[0.06] px-3.5 py-1.5 text-[11px] font-medium text-mist-dim">
-          <span className="h-1.5 w-1.5 rounded-full bg-[#32E7D0]" />
+        <span className="inline-flex items-center gap-2 rounded-full bg-navy/[0.05] px-3.5 py-1.5 text-[11px] font-medium text-mist-dim">
+          <span className="h-1.5 w-1.5 rounded-full bg-gold" />
           Live · balance from the chain, payouts from the distribution ledger
         </span>
       </div>
@@ -221,13 +221,13 @@ function Dashboard({ address, wallet, liveBalance, summary }) {
               <h3 className="font-display text-[16px] font-semibold text-mist">Earnings</h3>
               <span className="text-[13px] text-mist-faint">Cumulative ${symbol} received, valued at the price each payout was bought at</span>
             </div>
-            <div className="flex overflow-hidden rounded-full bg-white/[0.06] p-1 ring-1 ring-white/[0.08]">
+            <div className="flex overflow-hidden rounded-full bg-navy/[0.05] p-1 ring-1 ring-navy/[0.08]">
               {[7, 30].map((r) => (
                 <button
                   key={r}
                   onClick={() => setRange(r)}
                   className={`rounded-full px-4 py-1.5 text-[12px] font-semibold transition-colors ${
-                    range === r ? 'bg-gold text-ink-950 shadow-sm' : 'text-mist-dim hover:text-mist'
+                    range === r ? 'bg-gold text-mist shadow-sm' : 'text-mist-dim hover:text-mist'
                   }`}
                 >
                   {r}D
@@ -267,7 +267,7 @@ function Dashboard({ address, wallet, liveBalance, summary }) {
             <div className="mt-3 flex items-start gap-3">
               <span
                 className={`mt-1.5 h-2 w-2 flex-none rounded-full ${
-                  status.tone === 'ok' ? 'bg-[#32E7D0]' : status.tone === 'wait' ? 'bg-gold/60' : 'bg-brass'
+                  status.tone === 'ok' ? 'bg-gold' : status.tone === 'wait' ? 'bg-gold/60' : 'bg-brass'
                 }`}
               />
               <div>
@@ -275,7 +275,7 @@ function Dashboard({ address, wallet, liveBalance, summary }) {
                 <span className="mt-1 block text-[13px] leading-relaxed text-mist-faint">{status.body}</span>
               </div>
             </div>
-            <div className="mt-5 space-y-3 border-t border-white/[0.08] pt-4">
+            <div className="mt-5 space-y-3 border-t border-navy/[0.08] pt-4">
               {[
                 ['Rounds paid', wallet?.totals?.payouts || 0],
                 ['Share of the last pot', sharePot ? `${(sharePot * 100).toFixed(3)}%` : '—'],
@@ -297,7 +297,7 @@ function Dashboard({ address, wallet, liveBalance, summary }) {
           <h3 className="font-display text-[16px] font-semibold text-mist">Recent payouts</h3>
           <span className="text-[13px] font-medium text-gold-deep">Hourly · Automatic</span>
         </div>
-        <div className="divide-y divide-white/[0.06]">
+        <div className="divide-y divide-navy/[0.06]">
           {payouts.length === 0 && (
             <div className="px-6 py-8 text-center text-[13px] text-mist-faint sm:px-7">No payouts to this wallet yet.</div>
           )}
@@ -307,9 +307,9 @@ function Dashboard({ address, wallet, liveBalance, summary }) {
               href={t.signature ? `${SOLSCAN}${t.signature}` : undefined}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-4 px-6 py-4 transition-colors hover:bg-white/[0.03] sm:px-7"
+              className="flex items-center gap-4 px-6 py-4 transition-colors hover:bg-navy/[0.03] sm:px-7"
             >
-              <span className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-gold/[0.1] text-[#7CF5E6] ring-1 ring-gold/[0.25]">
+              <span className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-gold/[0.1] text-gold ring-1 ring-gold/[0.25]">
                 <OilMark className="h-[18px] w-[18px]" strokeWidth={5} />
               </span>
               <div className="min-w-0 flex-1">
@@ -320,7 +320,7 @@ function Dashboard({ address, wallet, liveBalance, summary }) {
                 </span>
               </div>
               <div className="text-right">
-                <span className="block font-display text-[16px] font-semibold tabular-nums tracking-[-0.01em] text-[#32E7D0]">
+                <span className="block font-display text-[16px] font-semibold tabular-nums tracking-[-0.01em] text-gold">
                   +{fmtUsd(t.usd || 0, 2)}
                 </span>
                 <span className="block text-[12px] tabular-nums text-mist-faint">
@@ -473,7 +473,7 @@ export default function PortalPage() {
             />
             <button
               type="submit"
-              className="whitespace-nowrap rounded-full bg-gold px-7 py-4 text-sm font-semibold text-ink-950 transition-colors hover:bg-gold-bright sm:rounded-none sm:py-0"
+              className="whitespace-nowrap rounded-full bg-gold px-7 py-4 text-sm font-semibold text-mist transition-colors hover:bg-gold-bright sm:rounded-none sm:py-0"
             >
               Track Wallet
             </button>

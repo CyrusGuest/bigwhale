@@ -43,8 +43,8 @@ function GrowthChart() {
     <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full text-mist" role="img" aria-label="Illustration: as holders grow, XTO price and your $USO position both rise">
       <defs>
         <linearGradient id="oilFill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#2BD4BE" stopOpacity="0.28" />
-          <stop offset="100%" stopColor="#2BD4BE" stopOpacity="0" />
+          <stop offset="0%" stopColor="#32E7D0" stopOpacity="0.28" />
+          <stop offset="100%" stopColor="#32E7D0" stopOpacity="0" />
         </linearGradient>
       </defs>
       {/* gridlines */}
@@ -76,7 +76,7 @@ function GrowthChart() {
       <motion.path
         d={oilD}
         fill="none"
-        stroke="#2BD4BE"
+        stroke="#32E7D0"
         strokeWidth="2.5"
         strokeLinecap="round"
         initial={REVEAL ? { pathLength: 0 } : false}
@@ -98,7 +98,7 @@ function GrowthChart() {
       />
       {/* end markers */}
       <motion.circle cx={W - PAD.r} cy={baseY - 0.96 * (H - PAD.t - PAD.b)} r="4.5" fill="currentColor" initial={REVEAL ? { scale: 0, opacity: 0 } : false} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true }} transition={{ delay: 1.9, duration: 0.3 }} style={{ transformOrigin: `${W - PAD.r}px ${baseY - 0.96 * (H - PAD.t - PAD.b)}px` }} />
-      <motion.circle cx={W - PAD.r} cy={baseY - 0.9 * (H - PAD.t - PAD.b)} r="4.5" fill="#2BD4BE" initial={REVEAL ? { scale: 0, opacity: 0 } : false} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true }} transition={{ delay: 2.5, duration: 0.3 }} style={{ transformOrigin: `${W - PAD.r}px ${baseY - 0.9 * (H - PAD.t - PAD.b)}px` }} />
+      <motion.circle cx={W - PAD.r} cy={baseY - 0.9 * (H - PAD.t - PAD.b)} r="4.5" fill="#32E7D0" initial={REVEAL ? { scale: 0, opacity: 0 } : false} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true }} transition={{ delay: 2.5, duration: 0.3 }} style={{ transformOrigin: `${W - PAD.r}px ${baseY - 0.9 * (H - PAD.t - PAD.b)}px` }} />
     </svg>
   )
 }

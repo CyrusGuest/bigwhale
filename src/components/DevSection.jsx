@@ -43,7 +43,7 @@ const perks = [
 
 export default function DevSection() {
   return (
-    <section id="developers" className="border-y border-white/[0.07] bg-ink-850/40">
+    <section id="developers" className="border-y border-navy/[0.07] bg-ink-850/40">
       <div className="mx-auto max-w-7xl px-6 py-20 sm:py-28">
         <div className="grid gap-14 lg:grid-cols-2 lg:items-start">
           <motion.div
@@ -86,7 +86,7 @@ export default function DevSection() {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="panel overflow-hidden rounded-md">
-              <div className="flex items-center justify-between border-b border-white/[0.07] px-5 py-3">
+              <div className="flex items-center justify-between border-b border-navy/[0.07] px-5 py-3">
                 <span className="font-mono text-[11px] text-mist-faint">settle.ts</span>
                 <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-mist-faint">
                   TypeScript
@@ -111,10 +111,10 @@ export default function DevSection() {
               transition={{ duration: 0.6, delay: 0.15 }}
               className="panel mt-5 overflow-hidden rounded-md"
             >
-              <div className="border-b border-white/[0.07] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.18em] text-mist-faint">
+              <div className="border-b border-navy/[0.07] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.18em] text-mist-faint">
                 Core endpoints
               </div>
-              <div className="divide-y divide-white/[0.04] font-mono text-xs">
+              <div className="divide-y divide-navy/[0.04] font-mono text-xs">
                 {endpoints.map((e) => (
                   <div key={e.path} className="flex items-center gap-4 px-5 py-2.5">
                     <span

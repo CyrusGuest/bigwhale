@@ -10,7 +10,7 @@ const previewStats = [
 
 export default function HolderPortal() {
   return (
-    <section id="portal" className="border-y border-white/[0.07] bg-ink-850/40">
+    <section id="portal" className="border-y border-navy/[0.07] bg-ink-850/40">
       <div className="mx-auto max-w-7xl px-6 py-20 sm:py-28">
         <div className="grid items-center gap-14 lg:grid-cols-2">
           <motion.div
@@ -44,7 +44,7 @@ export default function HolderPortal() {
             className="group block"
           >
             <div className="panel panel-hover relative overflow-hidden rounded-md">
-              <div className="flex items-center justify-between border-b border-white/[0.07] px-5 py-3">
+              <div className="flex items-center justify-between border-b border-navy/[0.07] px-5 py-3">
                 <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-mist-faint">
                   7xKXtg…gAsU
                 </span>
@@ -53,7 +53,7 @@ export default function HolderPortal() {
                 </span>
               </div>
               <div aria-hidden className="pointer-events-none select-none opacity-70 blur-[6px]">
-                <div className="grid grid-cols-2 gap-px bg-white/[0.06]">
+                <div className="grid grid-cols-2 gap-px bg-navy/[0.06]">
                   {previewStats.map(([label, value, sub]) => (
                     <div key={label} className="bg-ink-850 p-5">
                       <span className="block font-mono text-[9px] uppercase tracking-[0.16em] text-mist-faint">
@@ -68,11 +68,11 @@ export default function HolderPortal() {
                 </div>
               </div>
               <div className="absolute inset-x-0 top-1/2 z-10 flex -translate-y-1/2 justify-center px-6">
-                <span className="rounded-full bg-[#17172B]/95 px-6 py-3 font-serif text-lg font-semibold text-white ring-1 ring-gold/30">
+                <span className="rounded-full bg-gold px-6 py-3 font-serif text-lg font-semibold text-mist shadow-lg shadow-gold/30">
                   Coming in the next week
                 </span>
               </div>
-              <div className="border-t border-white/[0.07] px-5 py-3 text-center font-mono text-[10px] uppercase tracking-[0.18em] text-mist-dim transition-colors group-hover:text-mist">
+              <div className="border-t border-navy/[0.07] px-5 py-3 text-center font-mono text-[10px] uppercase tracking-[0.18em] text-mist-dim transition-colors group-hover:text-mist">
                 Track your wallet →
               </div>
             </div>

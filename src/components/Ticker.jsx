@@ -9,8 +9,8 @@ const metrics = [
 
 export default function Ticker() {
   return (
-    <div className="border-y border-white/[0.07] bg-ink-850/70">
-      <div className="mx-auto grid max-w-7xl grid-cols-2 divide-x divide-white/[0.06] px-6 sm:grid-cols-3 lg:grid-cols-6">
+    <div className="border-y border-navy/[0.07] bg-ink-850/70">
+      <div className="mx-auto grid max-w-7xl grid-cols-2 divide-x divide-navy/[0.06] px-6 sm:grid-cols-3 lg:grid-cols-6">
         {metrics.map(([label, value]) => (
           <div key={label} className="px-5 py-5 first:pl-0">
             <span className="block font-mono text-[10px] uppercase tracking-[0.18em] text-mist-faint">

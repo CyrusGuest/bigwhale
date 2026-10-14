@@ -69,12 +69,12 @@ export default function Features() {
             whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.55, delay: (i % 3) * 0.08, ease: [0.22, 1, 0.36, 1] }}
-            className="group flex flex-col rounded-lg border border-white/[0.06] bg-white/[0.03] p-8 transition-colors duration-300 hover:border-gold/25 hover:bg-white/[0.05]"
+            className="group flex flex-col rounded-lg border border-navy/[0.06] bg-navy/[0.03] p-8 transition-colors duration-300 hover:border-gold/25 hover:bg-navy/[0.05]"
           >
             <span className="font-mono text-[11px] text-brass">{f.num}</span>
             <h3 className="mb-3 mt-5 text-lg font-medium tracking-tight">{f.title}</h3>
             <p className="flex-1 text-sm leading-relaxed text-mist-dim">{f.body}</p>
-            <p className="mt-6 border-t border-white/[0.07] pt-4 font-mono text-[10px] uppercase tracking-[0.12em] text-mist-faint">
+            <p className="mt-6 border-t border-navy/[0.07] pt-4 font-mono text-[10px] uppercase tracking-[0.12em] text-mist-faint">
               {f.spec}
             </p>
           </motion.div>

@@ -30,7 +30,7 @@ const items = [
 
 export default function Security() {
   return (
-    <section id="security" className="border-t border-white/[0.07] bg-ink-850/40">
+    <section id="security" className="border-t border-navy/[0.07] bg-ink-850/40">
       <div className="mx-auto max-w-7xl px-6 py-20 sm:py-28">
         <motion.div
           initial={REVEAL ? { opacity: 0, y: 20, filter: 'blur(8px)' } : false}

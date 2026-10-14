@@ -80,7 +80,7 @@ function Spark({ data, delay }) {
 
 export default function Stats() {
   return (
-    <section id="stats" className="relative overflow-hidden border-y border-white/[0.06] bg-ink-850/50">
+    <section id="stats" className="relative overflow-hidden border-y border-navy/[0.06] bg-ink-850/50">
       <div className="breathe pointer-events-none absolute left-1/2 top-1/2 h-[300px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold-deep/[0.14] blur-[120px]" />
       <div className="relative mx-auto max-w-7xl px-6 py-16 sm:py-24">
         <div className="mb-12 text-center">

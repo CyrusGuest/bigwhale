@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { OilMark } from './Hero.jsx'
 import AirdropCountdown from './AirdropCountdown.jsx'
 
 const links = [
@@ -21,15 +20,10 @@ export default function Navbar() {
       className="fixed inset-x-0 top-0 z-40 border-b border-gold/20 bg-paper/88 backdrop-blur-xl"
     >
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-        <a href="#" className="flex items-center gap-3">
-          <span className="flex h-8 w-8 items-center justify-center rounded-sm border border-gold/40 bg-gold/10 text-gold">
-            <OilMark className="h-4 w-4" strokeWidth={5} />
-          </span>
-          <span className="flex flex-col leading-none">
-            <span className="font-serif text-base font-semibold tracking-[0.12em]">XTO</span>
-            <span className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.22em] text-mist-faint">
-              American Oil Reserve
-            </span>
+        <a href="#" className="flex flex-col items-start gap-1 leading-none">
+          <img src="/logo-xto.png" alt="XTO" width={1000} height={380} className="h-6 w-auto" />
+          <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-mist-faint">
+            American Oil Reserve
           </span>
         </a>
 

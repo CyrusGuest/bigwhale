@@ -99,7 +99,7 @@ export default function Pricing() {
               <span className="text-xs text-mist-faint">{t.cadence}</span>
             </div>
             <p className="mt-4 text-sm leading-relaxed text-mist-dim">{t.blurb}</p>
-            <ul className="mt-8 flex-1 space-y-3.5 border-t border-white/[0.07] pt-6">
+            <ul className="mt-8 flex-1 space-y-3.5 border-t border-navy/[0.07] pt-6">
               {t.features.map((f) => (
                 <li key={f} className="flex gap-3 text-sm text-mist-dim">
                   <span className="text-brass">·</span>

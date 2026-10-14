@@ -55,7 +55,7 @@ export default function HowItWorks() {
             whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.6, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
-            className="flex flex-col rounded-lg border border-white/[0.06] bg-white/[0.03] p-8 transition-colors duration-300 hover:border-gold/25"
+            className="flex flex-col rounded-lg border border-navy/[0.06] bg-navy/[0.03] p-8 transition-colors duration-300 hover:border-gold/25"
           >
             <div className="flex items-baseline justify-between">
               <span className="font-serif text-3xl text-brass">{s.num}</span>
@@ -63,7 +63,7 @@ export default function HowItWorks() {
             </div>
             <h3 className="mb-3 mt-6 text-lg font-medium">{s.title}</h3>
             <p className="flex-1 text-sm leading-relaxed text-mist-dim">{s.body}</p>
-            <p className="mt-6 border-t border-white/[0.07] pt-4 font-mono text-[10px] uppercase tracking-[0.14em] text-mist-faint">
+            <p className="mt-6 border-t border-navy/[0.07] pt-4 font-mono text-[10px] uppercase tracking-[0.14em] text-mist-faint">
               {s.spec}
             </p>
           </motion.div>
@@ -76,11 +76,11 @@ export default function HowItWorks() {
         whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
         viewport={{ once: true, margin: '-60px' }}
         transition={{ duration: 0.7, delay: 0.1 }}
-        className="mt-16 overflow-x-auto rounded-md border border-white/[0.08]"
+        className="mt-16 overflow-x-auto rounded-md border border-navy/[0.08]"
       >
         <table className="w-full min-w-[640px] border-collapse text-left text-sm">
           <thead>
-            <tr className="border-b border-white/[0.08] bg-ink-800/80">
+            <tr className="border-b border-navy/[0.08] bg-ink-800/80">
               <th className="px-6 py-5"> </th>
               <th className="px-6 py-5 text-[13px] font-medium text-mist-faint">Bitcoin mining</th>
               <th className="px-6 py-5 text-[13px] font-semibold text-mist">XTO virtual drilling</th>
@@ -95,12 +95,12 @@ export default function HowItWorks() {
               ['Reward driver', 'Your share of network hashpower', 'Your share of supply × trading volume'],
               ['When activity stops', 'Difficulty adjusts; issuance continues', 'No volume, no fees, distributions pause'],
             ].map(([label, btc, xrpay]) => (
-              <tr key={label} className="border-b border-white/[0.05] last:border-0">
+              <tr key={label} className="border-b border-navy/[0.05] last:border-0">
                 <td className="px-6 py-4 font-mono text-[10px] uppercase tracking-[0.12em] text-mist-faint">
                   {label}
                 </td>
                 <td className="px-6 py-4 text-mist-dim">{btc}</td>
-                <td className="border-l border-white/[0.06] bg-gold-deep/[0.10] px-6 py-4 font-medium text-mist">
+                <td className="border-l border-navy/[0.06] bg-gold-deep/[0.10] px-6 py-4 font-medium text-mist">
                   {xrpay}
                 </td>
               </tr>

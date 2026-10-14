@@ -1,4 +1,3 @@
-import { OilMark } from './Hero.jsx'
 import ContractAddress from './ContractAddress.jsx'
 import AirdropCountdown from './AirdropCountdown.jsx'
 
@@ -27,12 +26,7 @@ export default function Footer() {
     <footer className="border-t border-navy/[0.07] bg-ink-850">
       <div className="mx-auto grid max-w-7xl gap-12 px-6 py-16 sm:grid-cols-2 lg:grid-cols-4">
         <div className="lg:col-span-2">
-          <div className="flex items-center gap-3">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gold/10 text-gold">
-              <OilMark className="h-4 w-4" strokeWidth={5} />
-            </span>
-            <span className="text-base font-semibold tracking-[0.08em]">XTO</span>
-          </div>
+          <img src="/logo-xto.png" alt="XTO" width={1000} height={380} className="h-7 w-auto" />
           <p className="mt-5 max-w-xs text-sm leading-relaxed text-mist-dim">
             Virtual drilling on a public ledger: trading fees redistributed to
             holders in $USO, split by holdings, hourly, and publicly verifiable.

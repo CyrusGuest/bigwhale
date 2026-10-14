@@ -117,7 +117,7 @@ export default function Future() {
           <motion.span
             animate={{ left: ['1%', '99%'] }}
             transition={{ duration: 4.2, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-gold shadow-[0_0_14px_3px_rgba(212,167,44,0.7)]"
+            className="absolute top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-gold shadow-[0_0_14px_3px_rgba(50,231,208,0.7)]"
           />
         </div>
 
@@ -132,7 +132,7 @@ export default function Future() {
                 className={`relative flex h-full flex-col rounded-lg p-7 ${
                   p.live
                     ? 'border border-gold/40 bg-gold-deep/[0.12]'
-                    : 'border border-white/[0.06] bg-white/[0.03] transition-colors hover:border-gold/25'
+                    : 'border border-navy/[0.06] bg-navy/[0.03] transition-colors hover:border-gold/25'
                 }`}
               >
                 {p.live && (
@@ -141,7 +141,7 @@ export default function Future() {
                     <motion.span
                       animate={{ opacity: [0.4, 0.9, 0.4] }}
                       transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-                      className="pointer-events-none absolute -inset-px rounded-lg shadow-[0_0_50px_-14px_rgba(212,167,44,0.55)]"
+                      className="pointer-events-none absolute -inset-px rounded-lg shadow-[0_0_50px_-14px_rgba(50,231,208,0.55)]"
                     />
                     <motion.span
                       initial={{ opacity: 0 }}
@@ -172,7 +172,7 @@ export default function Future() {
                     className={`flex h-11 w-11 items-center justify-center rounded-full text-lg font-medium ${
                       p.live
                         ? 'border border-gold/50 bg-ink-900 text-gold'
-                        : 'border border-white/10 bg-ink-900 text-mist-dim'
+                        : 'border border-navy/10 bg-ink-900 text-mist-dim'
                     }`}
                   >
                     {p.glyph ? p.glyph : <OilMark className="h-5 w-5" strokeWidth={4} />}
@@ -183,7 +183,7 @@ export default function Future() {
                     className={`rounded-full px-3 py-1 font-mono text-[9px] uppercase tracking-[0.16em] ${
                       p.live
                         ? 'border border-gold/40 bg-gold/10 text-gold-bright'
-                        : 'border border-white/10 bg-white/[0.04] text-mist-faint'
+                        : 'border border-navy/10 bg-navy/[0.04] text-mist-faint'
                     }`}
                   >
                     {p.live && (

@@ -132,7 +132,7 @@ function PhoneMock({ notifs }) {
         className="relative w-[310px]"
       >
         {/* titanium frame */}
-        <div className="relative rounded-[3.2rem] bg-gradient-to-b from-[#55607a] via-[#2a3147] to-[#171c2e] p-[3px] shadow-[0_44px_110px_-24px_rgba(0,0,0,0.9),0_0_90px_-28px_rgba(212,167,44,0.45)]">
+        <div className="relative rounded-[3.2rem] bg-gradient-to-b from-[#55607a] via-[#2a3147] to-[#171c2e] p-[3px] shadow-[0_44px_110px_-24px_rgba(0,0,0,0.9),0_0_90px_-28px_rgba(50,231,208,0.45)]">
           {/* side buttons */}
           <div className="absolute -left-[2.5px] top-[104px] h-7 w-[3px] rounded-l-full bg-gradient-to-b from-[#5b6680] to-[#2a3147]" />
           <div className="absolute -left-[2.5px] top-[144px] h-12 w-[3px] rounded-l-full bg-gradient-to-b from-[#5b6680] to-[#2a3147]" />
@@ -227,15 +227,8 @@ function PhoneMock({ notifs }) {
                         >
                           <div className="flex items-start gap-3">
                             {n.type === 'pay' ? (
-                              <span
-                                className="relative flex h-[40px] w-[40px] flex-none items-center justify-center overflow-hidden rounded-[10px] shadow-md shadow-gold/30 ring-1 ring-white/10"
-                                style={{
-                                  background:
-                                    'radial-gradient(130% 105% at 50% 0%, rgba(212,167,44,0.55) 0%, rgba(58,46,16,0.95) 48%, #060504 100%)',
-                                }}
-                              >
-                                <span className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/[0.18] to-transparent" />
-                                <OilMark className="relative h-[21px] w-[21px] text-white" strokeWidth={5.2} />
+                              <span className="h-[40px] w-[40px] flex-none overflow-hidden rounded-[10px] shadow-md shadow-black/30 ring-1 ring-white/10">
+                                <img src="/logo.png" alt="" width={512} height={512} className="h-full w-full" />
                               </span>
                             ) : (
                               <span className="h-[40px] w-[40px] flex-none overflow-hidden rounded-[10px] shadow-md shadow-black/30">
@@ -462,7 +455,7 @@ function ActPhone({ notifs }) {
                 key={i}
                 animate={{
                   scale: [1, w === '·' ? 1 : w === 'Real' || w === 'Oil' ? 1.38 : 1.22, 1],
-                  color: ['#7CF5E6', '#FFFFFF', '#7CF5E6'],
+                  color: ['#3127CC', '#8A82FF', '#3127CC'],
                 }}
                 transition={{
                   delay: 1.5 + i * 0.14,
@@ -558,15 +551,8 @@ function ActSleep() {
               transition={{ delay: 0.7 + i * 0.32, type: 'spring', stiffness: 200, damping: 22 }}
               className="mx-auto flex w-full max-w-md items-start gap-3 rounded-[24px] bg-[#1d1f27]/85 p-4 text-left shadow-[0_14px_34px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.09)] backdrop-blur-2xl"
             >
-              <span
-                className="relative flex h-[40px] w-[40px] flex-none items-center justify-center overflow-hidden rounded-[10px] shadow-md shadow-gold/30 ring-1 ring-white/10"
-                style={{
-                  background:
-                    'radial-gradient(130% 105% at 50% 0%, rgba(212,167,44,0.55) 0%, rgba(58,46,16,0.95) 48%, #060504 100%)',
-                }}
-              >
-                <span className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/[0.18] to-transparent" />
-                <OilMark className="relative h-[21px] w-[21px] text-white" strokeWidth={5.2} />
+              <span className="h-[40px] w-[40px] flex-none overflow-hidden rounded-[10px] shadow-md shadow-black/30 ring-1 ring-white/10">
+                <img src="/logo.png" alt="" width={512} height={512} className="h-full w-full" />
               </span>
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline justify-between gap-2">
@@ -594,7 +580,7 @@ function ActSleep() {
                 key={i}
                 animate={{
                   scale: [1, i < 2 ? 1.35 : 1.18, 1],
-                  color: ['#7CF5E6', '#FFFFFF', '#7CF5E6'],
+                  color: ['#3127CC', '#8A82FF', '#3127CC'],
                 }}
                 transition={{
                   delay: 2.3 + i * 0.14,
@@ -672,7 +658,7 @@ function ActReserve() {
             initial={{ opacity: 0, scale: 1.3, filter: 'blur(10px)' }}
             animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
             transition={{ delay: 0.35, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-6 text-6xl font-bold tabular-nums tracking-[-0.03em] text-mist [text-shadow:0_0_60px_rgba(212,167,44,0.45)] sm:text-8xl"
+            className="mt-6 text-6xl font-bold tabular-nums tracking-[-0.03em] text-mist [text-shadow:0_0_60px_rgba(50,231,208,0.45)] sm:text-8xl"
           >
             {/* heartbeat once the roll-up settles */}
             <motion.span
@@ -821,7 +807,7 @@ function ActPortal() {
                   cx={px(i)}
                   cy={py(PORTAL_PTS[i])}
                   r="5"
-                  fill="#7CF5E6"
+                  fill="#3127CC"
                   initial={{ opacity: 0, scale: 0 }}
                   animate={{ opacity: 1, scale: [0, 1.6, 1] }}
                   transition={{ delay: popDelay(i), duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
@@ -1075,7 +1061,7 @@ function ActOutro() {
         <motion.div
           animate={{ y: [0, 14, 0] }}
           transition={{ duration: 1.1, repeat: Infinity, ease: 'easeInOut' }}
-          className="relative flex h-12 w-12 items-center justify-center rounded-full border border-gold/40 bg-gold/10 text-gold shadow-[0_0_30px_-8px_rgba(212,167,44,0.6)]"
+          className="relative flex h-12 w-12 items-center justify-center rounded-full border border-gold/40 bg-gold/10 text-gold shadow-[0_0_30px_-8px_rgba(50,231,208,0.6)]"
         >
           <motion.span
             animate={{ scale: [1, 1.9], opacity: [0.6, 0] }}

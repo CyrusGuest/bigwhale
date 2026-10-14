@@ -3,78 +3,40 @@
 @tailwind utilities;
 
 @layer base {
-  /* brand: electric indigo paper, white ink, aqua accents */
+  /* brand, from the XTO logo and banner, inverted for the web: white paper,
+     the logo's neon aqua (#32E7D0) as the primary accent, its electric indigo
+     (#493FFA) as the secondary, near-black indigo ink.
+     One theme, no dark mode. */
   :root {
-    --paper: 73 63 250; /* #493FFA */
-    --ink-950: 49 39 204; /* #3127CC deep indigo */
-    --ink-900: 55 45 218;
-    --ink-850: 64 54 235;
-    --ink-800: 89 80 251;
-    --ink-700: 110 102 252;
-    --mist: 255 255 255;
-    --mist-dim: 219 218 255;
-    --mist-faint: 178 176 243;
-    --gold: 50 231 208; /* aqua #32E7D0 */
-    --gold-bright: 124 245 230;
-    --gold-deep: 165 247 236; /* light aqua: small-caps text on indigo */
-    --navy: 255 255 255; /* borders/dividers read as white lines on indigo */
-    --navy-deep: 49 39 204;
-    --blue: 50 231 208;
-    --blue-bright: 124 245 230;
-    --blue-soft: 139 131 253;
-  }
-  /* dark: near-black indigo paper, white ink, same aqua */
-  .dark {
-    --paper: 23 23 43; /* #17172B */
-    --ink-950: 13 13 26;
-    --ink-900: 18 18 34;
-    --ink-850: 27 27 50;
-    --ink-800: 35 34 64;
-    --ink-700: 47 45 84;
-    --mist: 245 245 255;
-    --mist-dim: 189 188 220;
-    --mist-faint: 134 133 168;
-    --gold: 50 231 208;
-    --gold-bright: 124 245 230;
-    --gold-deep: 124 245 230;
-    --navy: 142 134 255;
-    --navy-deep: 49 39 204;
-    --blue: 50 231 208;
-    --blue-bright: 124 245 230;
-    --blue-soft: 40 38 86;
-    color-scheme: dark;
-  }
-  /* white surfaces: cards and panels carry dark ink and deeper accents */
-  .card,
-  .panel,
-  .surface-light {
     --paper: 255 255 255;
+    /* the "ink" scale is the raised-surface scale: on white paper these are
+       faint indigo tints; 950 is pure white so `text-ink-950` on an accent
+       fill reads as white type */
+    --ink-950: 255 255 255;
+    --ink-900: 249 249 255;
+    --ink-850: 240 240 251;
+    --ink-800: 232 231 250;
+    --ink-700: 220 219 247;
     --mist: 23 23 43; /* #17172B */
     --mist-dim: 74 74 104;
     --mist-faint: 122 122 150;
-    --navy: 23 23 43;
+    --gold: 50 231 208; /* neon aqua #32E7D0, the primary accent (fills, strokes, hairlines) */
+    --gold-text: 11 142 125; /* deep teal: what `text-gold` resolves to, aqua is unreadable as type on white */
+    --gold-bright: 31 217 193; /* hover: a notch deeper so the lift reads on white */
+    --gold-deep: 49 39 204; /* indigo #3127CC, the secondary accent: small-caps and eyebrow text */
+    --navy: 23 23 43; /* ink alpha: borders, dividers, hairlines */
     --navy-deep: 49 39 204;
-    --gold-deep: 11 142 125; /* dark teal: aqua-family text on white */
     --blue: 73 63 250;
     --blue-bright: 49 39 204;
     --blue-soft: 245 245 255; /* #F5F5FF */
+  }
+  /* cards and panels sit on the same white paper and inherit the ink */
+  .card,
+  .panel {
     color: rgb(var(--mist));
   }
   .surface-light {
     --paper: 245 245 255;
-  }
-  /* in dark mode, cards become raised indigo-night panels instead of white */
-  .dark .card,
-  .dark .panel {
-    --paper: 30 29 58;
-    --mist: 245 245 255;
-    --mist-dim: 189 188 220;
-    --mist-faint: 134 133 168;
-    --navy: 142 134 255;
-    --gold-deep: 124 245 230;
-    --blue: 50 231 208;
-    --blue-bright: 124 245 230;
-    --blue-soft: 40 38 86;
   }
   html {
     @apply bg-paper text-mist antialiased;
@@ -90,7 +52,7 @@
     @apply overflow-x-clip font-sans text-[15px] font-[450];
   }
   ::selection {
-    @apply bg-gold text-ink-950;
+    @apply bg-gold text-mist;
   }
   /* section headings carry the engraved serif of a prospectus */
   h1,
@@ -124,19 +86,19 @@
     @apply transition-colors duration-300 hover:border-blue/40 hover:bg-blue-soft/40;
   }
   .card {
-    @apply rounded-lg border border-navy/10 bg-paper shadow-[0_10px_30px_-18px_rgba(23,23,43,0.45)];
+    @apply rounded-lg border border-navy/10 bg-paper shadow-[0_10px_30px_-18px_rgba(23,23,43,0.22)];
   }
   .btn-primary {
-    @apply inline-block rounded-sm bg-gold px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.08em] text-[#17172B] transition-all hover:bg-gold-bright hover:shadow-[0_12px_28px_-10px_rgba(50,231,208,0.6)];
+    @apply inline-block rounded-sm bg-gold px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.08em] text-mist transition-all hover:bg-gold-bright hover:shadow-[0_12px_28px_-10px_rgba(50,231,208,0.6)];
   }
   .btn-secondary {
-    @apply inline-block rounded-sm border border-navy/30 bg-paper px-7 py-3.5 text-sm font-medium uppercase tracking-[0.08em] text-navy transition-colors hover:border-navy hover:bg-white/10;
+    @apply inline-block rounded-sm border border-navy/30 bg-paper px-7 py-3.5 text-sm font-medium uppercase tracking-[0.08em] text-navy transition-colors hover:border-navy hover:bg-navy/[0.04];
   }
 }
 
-/* gold-leaf gradient text for headline emphasis */
+/* aqua-to-teal gradient text for headline emphasis */
 .text-shimmer {
-  background: linear-gradient(90deg, #2bd4be 0%, #8cf7ea 25%, #2bd4be 50%, #8cf7ea 75%, #2bd4be 100%);
+  background: linear-gradient(90deg, #0fb8a2 0%, #32e7d0 25%, #0fb8a2 50%, #32e7d0 75%, #0fb8a2 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
@@ -153,11 +115,11 @@
 /* soft lift that makes display text read as solid print on paper */
 .text-3d {
   text-shadow:
-    0 1px 0 #3a30e0,
-    0 2px 0 #332ac4,
-    0 3px 0 #2c24a8,
-    0 8px 18px rgba(23, 23, 43, 0.35),
-    0 18px 40px rgba(50, 231, 208, 0.14);
+    0 1px 0 #dcdaff,
+    0 2px 0 #c9c6ff,
+    0 3px 0 #b5b1ff,
+    0 8px 18px rgba(23, 23, 43, 0.18),
+    0 18px 40px rgba(73, 63, 250, 0.16);
 }
 
 /* bright specular glint that sweeps through the glyphs, then rests */
@@ -224,9 +186,9 @@
     0 0 44px rgba(50, 231, 208, 0.35);
 }
 
-/* white text with a slow traveling aqua luster */
+/* ink text with a slow traveling aqua luster */
 .text-luster {
-  background: linear-gradient(100deg, #ffffff 35%, #32e7d0 50%, #ffffff 65%);
+  background: linear-gradient(100deg, #17172b 35%, #32e7d0 50%, #17172b 65%);
   background-size: 220% auto;
   -webkit-background-clip: text;
   background-clip: text;
@@ -256,7 +218,7 @@
   animation: glitchLayer 0.45s steps(3) both;
 }
 .glitch::after {
-  color: #17172b;
+  color: #493ffa;
   clip-path: inset(46% 0 0 0);
   animation: glitchLayer 0.45s steps(3) reverse both;
 }
@@ -382,37 +344,12 @@
   width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #3b31e8;
+  background: #f0f0fa;
 }
 ::-webkit-scrollbar-thumb {
-  background: #6d65fc;
+  background: #c9c6f5;
   border-radius: 8px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #32e7d0;
-}
-
-/* dark-mode retunes for the effects above */
-.dark .text-3d {
-  text-shadow:
-    0 1px 0 #2c24a8,
-    0 2px 0 #241d8c,
-    0 3px 0 #1c1670,
-    0 8px 18px rgba(0, 0, 0, 0.55),
-    0 18px 40px rgba(50, 231, 208, 0.22);
-}
-.dark .text-luster {
-  background-image: linear-gradient(100deg, #f5f5ff 35%, #32e7d0 50%, #f5f5ff 65%);
-}
-.dark .text-shimmer {
-  background-image: linear-gradient(90deg, #2bd4be 0%, #8cf7ea 25%, #2bd4be 50%, #8cf7ea 75%, #2bd4be 100%);
-}
-.dark ::-webkit-scrollbar-track {
-  background: #12121f;
-}
-.dark ::-webkit-scrollbar-thumb {
-  background: #2e2c54;
-}
-.dark ::-webkit-scrollbar-thumb:hover {
   background: #32e7d0;
 }

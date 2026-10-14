@@ -133,8 +133,8 @@ export default function LegalPage({ doc = 'risk' }) {
                 href={`#/legal/${key}`}
                 className={`rounded-full px-4 py-1.5 text-[12px] font-medium transition-colors ${
                   key === doc
-                    ? 'bg-gold text-ink-950'
-                    : 'bg-white/[0.06] text-mist-dim hover:text-mist'
+                    ? 'bg-gold text-mist'
+                    : 'bg-navy/[0.06] text-mist-dim hover:text-mist'
                 }`}
               >
                 {label}

@@ -35,11 +35,11 @@ export default function Compare() {
         whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
         viewport={{ once: true, margin: '-60px' }}
         transition={{ duration: 0.7, delay: 0.1 }}
-        className="overflow-x-auto rounded-md border border-white/[0.08]"
+        className="overflow-x-auto rounded-md border border-navy/[0.08]"
       >
         <table className="w-full min-w-[720px] border-collapse text-left text-sm">
           <thead>
-            <tr className="border-b border-white/[0.08] bg-ink-800/80">
+            <tr className="border-b border-navy/[0.08] bg-ink-800/80">
               <th className="px-6 py-5"> </th>
               <th className="px-6 py-5 text-[13px] font-semibold text-mist">XTO</th>
               <th className="px-6 py-5 text-[13px] font-medium text-mist-faint">SWIFT wire</th>
@@ -48,11 +48,11 @@ export default function Compare() {
           </thead>
           <tbody>
             {rows.map((r) => (
-              <tr key={r.label} className="border-b border-white/[0.05] last:border-0">
+              <tr key={r.label} className="border-b border-navy/[0.05] last:border-0">
                 <td className="px-6 py-4 font-mono text-[10px] uppercase tracking-[0.12em] text-mist-faint">
                   {r.label}
                 </td>
-                <td className="border-x border-white/[0.06] bg-gold-deep/[0.10] px-6 py-4 font-medium text-mist">
+                <td className="border-x border-navy/[0.06] bg-gold-deep/[0.10] px-6 py-4 font-medium text-mist">
                   {r.xrpay}
                 </td>
                 <td className="px-6 py-4 text-mist-dim">{r.swift}</td>

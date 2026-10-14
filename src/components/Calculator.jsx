@@ -61,7 +61,7 @@ function GrowthChart({ position, dailyRate, days, total }) {
         <text
           x={x(N) + 10}
           y={y(total) + 4}
-          fill="#7CF5E6"
+          fill="#3127CC"
           fontSize="12"
           fontFamily="IBM Plex Mono, monospace"
         >
@@ -189,7 +189,7 @@ export default function Calculator() {
             <label className="mb-3 block font-mono text-[11px] uppercase tracking-[0.2em] text-mist-faint">
               Horizon
             </label>
-            <div className="grid grid-cols-4 gap-px overflow-hidden rounded-sm border border-white/10 bg-white/10">
+            <div className="grid grid-cols-4 gap-px overflow-hidden rounded-sm border border-navy/10 bg-navy/10">
               {HORIZONS.map((h) => (
                 <button
                   key={h}
@@ -207,7 +207,7 @@ export default function Calculator() {
         </div>
 
         {/* results */}
-        <div className="flex flex-col border-t border-white/[0.07] bg-ink-800/50 p-8 sm:p-10 lg:border-l lg:border-t-0">
+        <div className="flex flex-col border-t border-navy/[0.07] bg-ink-800/50 p-8 sm:p-10 lg:border-l lg:border-t-0">
           <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-mist-faint">
             Estimated at these inputs
           </span>
@@ -220,7 +220,7 @@ export default function Calculator() {
             </span>
           </div>
 
-          <div className="mt-6 grid grid-cols-3 gap-px overflow-hidden rounded-sm border border-white/[0.08] bg-white/[0.08] font-mono text-xs">
+          <div className="mt-6 grid grid-cols-3 gap-px overflow-hidden rounded-sm border border-navy/[0.08] bg-navy/[0.08] font-mono text-xs">
             <div className="bg-ink-850 px-4 py-3">
               <span className="block text-[9px] uppercase tracking-[0.18em] text-mist-faint">
                 Per day
@@ -245,7 +245,7 @@ export default function Calculator() {
             <GrowthChart position={position} dailyRate={dailyRate} days={days} total={total} />
           </div>
 
-          <div className="mt-6 flex flex-col gap-1.5 border-t border-white/[0.08] pt-4 font-mono text-[11px] leading-relaxed text-mist-faint">
+          <div className="mt-6 flex flex-col gap-1.5 border-t border-navy/[0.08] pt-4 font-mono text-[11px] leading-relaxed text-mist-faint">
             <span>
               {fmtShort(volume)} × 4% ÷ {fmtShort(mcap)} ={' '}
               <span className="text-mist-dim">{(dailyRate * 100).toFixed(3)}%/day</span>

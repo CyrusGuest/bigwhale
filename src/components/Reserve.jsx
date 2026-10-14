@@ -62,7 +62,7 @@ const principles = [
 
 export default function Reserve() {
   return (
-    <section id="reserve" className="relative overflow-x-clip border-y border-white/[0.06]">
+    <section id="reserve" className="relative overflow-x-clip border-y border-navy/[0.06]">
       <div className="breathe pointer-events-none absolute -left-64 top-0 h-[480px] w-[720px] rounded-full bg-gold-deep/[0.18] blur-[140px]" />
       <div className="breathe pointer-events-none absolute -right-40 bottom-0 h-[380px] w-[520px] rounded-full bg-gold/[0.06] blur-[120px]" />
 
@@ -125,7 +125,7 @@ export default function Reserve() {
                 whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
                 viewport={{ once: true, margin: '-80px' }}
                 transition={{ delay: 0.35, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-                className="text-5xl font-bold tabular-nums tracking-[-0.03em] text-mist [text-shadow:0_0_60px_rgba(212,167,44,0.4)] sm:text-8xl"
+                className="text-5xl font-bold tabular-nums tracking-[-0.03em] text-mist [text-shadow:0_0_60px_rgba(50,231,208,0.4)] sm:text-8xl"
               >
                 <motion.span
                   animate={{ scale: [1, 1.03, 1] }}
@@ -159,7 +159,7 @@ export default function Reserve() {
               <OilMark className="h-3.5 w-3.5" strokeWidth={5} />
               100% held in oil stock
             </span>
-            <span className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-mist-dim">
+            <span className="rounded-full border border-navy/10 bg-navy/[0.04] px-4 py-2 text-sm text-mist-dim">
               Public on-ledger address
             </span>
             <span className="rounded-full border border-brass/40 bg-brass/[0.06] px-4 py-2 font-mono text-[10px] uppercase tracking-[0.16em] text-brass">
@@ -201,7 +201,7 @@ export default function Reserve() {
                 whileInView={{ opacity: 1, x: 0, rotate: 0 }}
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ delay: i * 0.12, type: 'spring', stiffness: 190, damping: 21 }}
-                className="h-full rounded-lg border border-white/[0.06] bg-white/[0.03] p-7 transition-colors hover:border-gold/25"
+                className="h-full rounded-lg border border-navy/[0.06] bg-navy/[0.03] p-7 transition-colors hover:border-gold/25"
               >
                 <span className="font-mono text-[11px] text-gold">0{i + 1}</span>
                 <h3 className="mb-2.5 mt-4 font-medium tracking-tight">{p.title}</h3>

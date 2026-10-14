@@ -99,19 +99,13 @@ export default function Backdrop() {
 
   return (
     <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden="true">
-      {/* white paper with a soft blue sky at the top; a deep navy night in dark mode */}
+      {/* white paper with a faint indigo sky at the top, so the logo indigo can
+          carry the accents without flooding the page */}
       <div
-        className="absolute inset-0 dark:hidden"
+        className="absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse 130% 60% at 50% -12%, #E8F0FD 0%, #F5F8FC 45%, #FFFFFF 100%)',
-        }}
-      />
-      <div
-        className="absolute inset-0 hidden dark:block"
-        style={{
-          background:
-            'radial-gradient(ellipse 130% 60% at 50% -12%, #14213D 0%, #0D1220 45%, #0B0E15 100%)',
+            'radial-gradient(ellipse 130% 60% at 50% -12%, #ECEBFF 0%, #F7F7FF 45%, #FFFFFF 100%)',
         }}
       />
 
@@ -127,9 +121,9 @@ export default function Backdrop() {
         }}
       />
 
-      {/* blue and gold washes, kept faint so text stays crisp. Desktop only:
+      {/* indigo washes, kept faint so text stays crisp. Desktop only:
           giant blurred layers inside a fixed backdrop crush phone GPUs */}
-      <div className="absolute -top-72 left-1/2 hidden h-[720px] w-[1200px] -translate-x-1/2 rounded-full bg-blue/[0.10] blur-[170px] md:block" />
+      <div className="absolute -top-72 left-1/2 hidden h-[720px] w-[1200px] -translate-x-1/2 rounded-full bg-gold/[0.10] blur-[170px] md:block" />
       <div className="absolute right-[-280px] top-[28%] hidden h-[560px] w-[560px] rounded-full bg-gold/[0.10] blur-[150px] md:block" />
       <div className="absolute bottom-[-220px] left-[-220px] hidden h-[600px] w-[600px] rounded-full bg-blue/[0.08] blur-[160px] md:block" />
 

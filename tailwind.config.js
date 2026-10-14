@@ -5,8 +5,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        // every brand color is an RGB triplet CSS variable (see index.css),
-        // so the .dark class on <html> flips the whole palette at once
+        // every brand color is an RGB triplet CSS variable (see index.css);
+        // white .card/.panel surfaces re-map the same names to dark ink
         paper: 'rgb(var(--paper) / <alpha-value>)',
         ink: {
           950: 'rgb(var(--ink-950) / <alpha-value>)',
@@ -39,8 +39,16 @@ export default {
           DEFAULT: '#B31942',
         },
         brass: {
-          DEFAULT: '#C8A96A',
-          dim: '#8C7A4E',
+          DEFAULT: '#9C7A2E',
+          dim: '#6F5620',
+        },
+      },
+      // `text-gold` is deep teal, not the aqua fill: neon aqua has no contrast as type on white
+      textColor: {
+        gold: {
+          DEFAULT: 'rgb(var(--gold-text) / <alpha-value>)',
+          bright: 'rgb(var(--gold-text) / <alpha-value>)',
+          deep: 'rgb(var(--gold-deep) / <alpha-value>)',
         },
       },
       fontFamily: {
