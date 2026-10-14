@@ -17,7 +17,7 @@ export default function Navbar() {
       initial={{ y: -24, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed inset-x-0 top-0 z-40 border-b border-gold/20 bg-paper/88 backdrop-blur-xl"
+      className={`fixed inset-x-0 top-0 z-40 border-b border-gold/20 ${open ? 'bg-paper shadow-[0_18px_40px_-24px_rgba(23,23,43,0.35)]' : 'bg-paper/88 backdrop-blur-xl'}`}
     >
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         <a href="#" className="flex flex-col items-start gap-1 leading-none">
@@ -62,7 +62,7 @@ export default function Navbar() {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden border-t border-navy/[0.07] md:hidden"
+            className="overflow-hidden border-t border-navy/[0.07] bg-paper md:hidden"
           >
             <div className="flex flex-col gap-4 px-6 py-6">
               {links.map((l) => (
