@@ -11,6 +11,7 @@ const columns = [
       ['Why Oil', '#oil'],
       ['Next Airdrop', '#/airdrop'],
       ['Holder Portal', '#/portal'],
+      ['Marketplace (preview)', '#/marketplace'],
       ['FAQ', '#faq'],
     ],
   },

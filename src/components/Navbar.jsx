@@ -6,6 +6,7 @@ const links = [
   { label: 'How It Works', href: '#how' },
   { label: 'Why Oil', href: '#oil' },
   { label: 'Verify On-Ledger', href: '#cta' },
+  { label: 'Marketplace', href: '#/marketplace', tag: 'Preview' },
   { label: 'FAQ', href: '#faq' },
 ]
 
@@ -33,9 +34,10 @@ export default function Navbar() {
             <a
               key={l.label}
               href={l.href}
-              className="text-[13px] font-medium text-mist-dim transition-colors hover:text-mist"
+              className="inline-flex items-center gap-1.5 text-[13px] font-medium text-mist-dim transition-colors hover:text-mist"
             >
               {l.label}
+              {l.tag && <span className="rounded-full bg-brass/10 px-1.5 py-0.5 font-mono text-[8.5px] uppercase tracking-[0.14em] text-brass">{l.tag}</span>}
             </a>
           ))}
           <a href="#/portal" className="btn-primary !px-5 !py-2.5 text-[13px]">
@@ -70,9 +72,10 @@ export default function Navbar() {
                   key={l.label}
                   href={l.href}
                   onClick={() => setOpen(false)}
-                  className="text-sm font-medium text-mist-dim hover:text-mist"
+                  className="inline-flex items-center gap-2 text-sm font-medium text-mist-dim hover:text-mist"
                 >
                   {l.label}
+                  {l.tag && <span className="rounded-full bg-brass/10 px-1.5 py-0.5 font-mono text-[8.5px] uppercase tracking-[0.14em] text-brass">{l.tag}</span>}
                 </a>
               ))}
               <a href="#/portal" onClick={() => setOpen(false)} className="btn-primary w-fit !px-5 !py-2.5 text-[13px]">

@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "map": "node scripts/build-map.mjs"
   },
   "dependencies": {
     "framer-motion": "^11.11.17",
@@ -16,8 +17,12 @@
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
+    "d3-geo": "^3.1.1",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
+    "topojson-client": "^3.1.0",
+    "topojson-simplify": "^3.0.3",
+    "us-atlas": "^3.0.1",
     "vite": "^6.0.5"
   }
 }
