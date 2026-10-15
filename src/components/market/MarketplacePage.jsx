@@ -1,262 +1,41 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { REVEAL } from '../motionPrefs.js'
-import { OilMark } from './Hero.jsx'
-import MAP from '../data/marketplace.json'
+import { OilMark } from '../Hero.jsx'
+import {
+  BY_ID,
+  LockIcon,
+  EASE,
+  OrderTicket,
+  PreviewButton,
+  PreviewStrip,
+  PreviewTag,
+  REFINERIES,
+  REGIONS,
+  REGION_BY_KEY,
+  Stat,
+  TOP_TEN,
+  TOP_TEN_GULF,
+  US_CAPACITY_BPD,
+  UsMap,
+  fade,
+  fmtBpd,
+  fmtInt,
+  fmtPct,
+  fmtUsd,
+  glass,
+  inFilter,
+  regionName,
+  sitePath,
+} from './shared.jsx'
 
 // A design preview of a marketplace for tokenized refining capacity. Nothing here works on
 // purpose: every action is disabled, every price is illustrative, and the listings are real
 // US refineries used as placeholders (see scripts/refineries.mjs). XTO has no relationship
 // with any of them. The map and its coordinates are pre-projected at build time (npm run map).
+// The data, the map and the preview widgets live in ./shared.jsx, shared with RefineryPage.
 
-const EASE = [0.22, 1, 0.36, 1]
-const US_CAPACITY_BPD = 18_400_000 // approximate total US operable refining capacity
 const INITIAL_LISTINGS = 12
-const glass = 'rounded-2xl bg-white ring-1 ring-navy/[0.08] shadow-[0_16px_40px_-28px_rgba(23,23,43,0.28)]'
 
-const fade = (delay = 0) => ({
-  initial: REVEAL ? { opacity: 0, y: 24, filter: 'blur(8px)' } : false,
-  whileInView: { opacity: 1, y: 0, filter: 'blur(0px)' },
-  viewport: { once: true, margin: '-60px' },
-  transition: { delay, duration: 0.8, ease: EASE },
-})
-
-const REGIONS = MAP.regions
-const REGION_BY_KEY = Object.fromEntries(REGIONS.map((r) => [r.key, r]))
-const REFINERIES = [...MAP.refineries].sort((a, b) => b.capacity - a.capacity)
-const BY_ID = Object.fromEntries(REFINERIES.map((r) => [r.id, r]))
-const TOP_TEN = new Set(REFINERIES.slice(0, 10).map((r) => r.id))
-const WORDS = ['none', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
-const TOP_TEN_GULF = WORDS[REFINERIES.slice(0, 10).filter((r) => r.region === 'gulf').length]
-
-const fmtInt = (n) => Math.round(n).toLocaleString('en-US')
-const fmtUsd = (n, d = 2) => n.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: d, maximumFractionDigits: d })
-const fmtBpd = (n) => (n >= 1_000_000 ? `${(n / 1_000_000).toFixed(2)}M` : `${Math.round(n / 1000)}K`)
-const fmtPct = (n, d = 1) => `${n.toFixed(d)}%`
-const regionName = (key) => REGION_BY_KEY[key]?.name ?? key
-
-// the filter is either a region key, 'top' (ten largest) or 'all'
-function inFilter(r, filter) {
-  if (filter === 'all') return true
-  if (filter === 'top') return TOP_TEN.has(r.id)
-  return r.region === filter
-}
-
-function LockIcon({ className = 'h-3 w-3' }) {
-  return (
-    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" className={className} aria-hidden="true">
-      <rect x="3" y="7" width="10" height="7" rx="1.5" />
-      <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" />
-    </svg>
-  )
-}
-
-// every call to action on this page: greyed, locked and announced as a preview
-function PreviewButton({ children, primary = false, className = '' }) {
-  return (
-    <button
-      type="button"
-      disabled
-      aria-disabled="true"
-      title="Preview only. Trading is not live."
-      className={`inline-flex cursor-not-allowed select-none items-center justify-center gap-2 rounded-sm px-5 py-2.5 text-[12px] font-semibold uppercase tracking-[0.08em] ${
-        primary ? 'bg-navy/[0.08] text-mist-faint' : 'border border-navy/15 text-mist-faint'
-      } ${className}`}
-    >
-      <LockIcon />
-      {children}
-    </button>
-  )
-}
-
-function PreviewTag({ className = '' }) {
-  return (
-    <span className={`inline-flex items-center gap-1.5 rounded-full bg-brass/10 px-2.5 py-1 font-mono text-[9.5px] font-medium uppercase tracking-[0.18em] text-brass ${className}`}>
-      <LockIcon className="h-2.5 w-2.5" />
-      Preview
-    </span>
-  )
-}
-
-// the dot radius in map units; the screen scale keeps dots tappable on phones
-function dotRadius(capacity, k) {
-  const r = 2.6 + Math.sqrt(capacity / 1000) * 0.3
-  return Math.max(r, 4.5 * k)
-}
-
-function UsMap({ filter, selected, hovered, onHover, onSelect, onRegion }) {
-  const box = useRef(null)
-  const [k, setK] = useState(1) // map units per CSS pixel
-  useEffect(() => {
-    const el = box.current
-    if (!el) return undefined
-    const update = () => setK(MAP.width / Math.max(el.clientWidth, 1))
-    update()
-    const ro = new ResizeObserver(update)
-    ro.observe(el)
-    return () => ro.disconnect()
-  }, [])
-
-  const hover = hovered ? BY_ID[hovered] : null
-  const regionOn = filter !== 'all' && filter !== 'top'
-
-  return (
-    <div ref={box} className="relative w-full select-none" style={{ aspectRatio: `${MAP.width} / ${MAP.height}` }}>
-      <svg viewBox={`0 0 ${MAP.width} ${MAP.height}`} className="h-full w-full overflow-visible" role="img" aria-label="Map of the United States with refinery locations">
-        <defs>
-          <radialGradient id="mk-glow">
-            <stop offset="0%" stopColor="#32E7D0" stopOpacity="0.55" />
-            <stop offset="100%" stopColor="#32E7D0" stopOpacity="0" />
-          </radialGradient>
-        </defs>
-
-        {/* states: the active region lifts in aqua, the rest sink to a faint indigo tint */}
-        <g onMouseLeave={() => onHover(null)}>
-          {MAP.states.map((s) => {
-            const active = regionOn && s.region === filter
-            return (
-              <path
-                key={s.id}
-                d={s.d}
-                className={`cursor-pointer transition-[fill] duration-300 ${
-                  active ? 'fill-gold/[0.22] hover:fill-gold/[0.3]' : regionOn ? 'fill-navy/[0.025] hover:fill-navy/[0.06]' : 'fill-navy/[0.045] hover:fill-gold/[0.16]'
-                }`}
-                onClick={() => s.region && onRegion(s.region)}
-              >
-                <title>{s.name}</title>
-              </path>
-            )
-          })}
-        </g>
-        <path d={MAP.borders} fill="none" className="stroke-paper" strokeWidth={1.4 * Math.min(k, 2)} strokeLinejoin="round" pointerEvents="none" />
-        <path d={MAP.outline} fill="none" className="stroke-navy/20" strokeWidth={1.1 * Math.min(k, 2)} strokeLinejoin="round" pointerEvents="none" />
-
-        {/* refineries, largest drawn first so the small ones stay on top */}
-        <g>
-          {REFINERIES.map((r) => {
-            const on = inFilter(r, filter)
-            const isSel = r.id === selected
-            const isHov = r.id === hovered
-            const rad = dotRadius(r.capacity, k)
-            return (
-              <g
-                key={r.id}
-                transform={`translate(${r.x} ${r.y})`}
-                className="cursor-pointer"
-                style={{ opacity: on ? 1 : 0.18, transition: 'opacity 300ms' }}
-                onMouseEnter={() => onHover(r.id)}
-                onMouseLeave={() => onHover(null)}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  onSelect(r.id)
-                }}
-              >
-                {r.capacity >= 180_000 && on && <circle r={rad * 2.6} fill="url(#mk-glow)" />}
-                {isSel && (
-                  <circle
-                    r={rad * 1.9}
-                    fill="none"
-                    className="animate-ping stroke-gold"
-                    strokeWidth={1.2 * k}
-                    style={{ transformBox: 'fill-box', transformOrigin: 'center', animationDuration: '1.8s' }}
-                  />
-                )}
-                <circle
-                  r={isSel || isHov ? rad * 1.25 : rad}
-                  className={`${isSel ? 'fill-gold-deep' : 'fill-gold'} stroke-paper transition-[r] duration-200`}
-                  strokeWidth={1.2 * k}
-                />
-                {/* generous invisible hit area for thumbs */}
-                <circle r={Math.max(rad * 1.6, 12 * k)} fill="transparent" />
-              </g>
-            )
-          })}
-        </g>
-      </svg>
-
-      {/* hover label, positioned in map percentages so it tracks the responsive SVG */}
-      <AnimatePresence>
-        {hover && (
-          <motion.div
-            key={hover.id}
-            initial={{ opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
-            className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-full whitespace-nowrap rounded-md bg-mist px-3 py-2 text-paper shadow-lg"
-            style={{ left: `${(hover.x / MAP.width) * 100}%`, top: `calc(${(hover.y / MAP.height) * 100}% - ${dotRadius(hover.capacity, k) / k + 8}px)` }}
-          >
-            <div className="text-[12px] font-semibold">{hover.name}</div>
-            <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-paper/70">
-              {hover.operator} · {fmtInt(hover.capacity)} bbl/d
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* legend */}
-      <div className="pointer-events-none absolute bottom-0 left-0 hidden items-end gap-4 font-mono text-[9.5px] uppercase tracking-[0.16em] text-mist-faint sm:flex">
-        <div className="flex items-center gap-2">
-          <span className="h-1.5 w-1.5 rounded-full bg-gold ring-1 ring-paper" />
-          <span className="h-3 w-3 rounded-full bg-gold ring-1 ring-paper" />
-          <span className="ml-1">Dot size = capacity</span>
-        </div>
-        <span>Tap a state to pick its region</span>
-      </div>
-    </div>
-  )
-}
-
-function Stat({ label, value, sub }) {
-  return (
-    <div>
-      <div className="font-mono text-[9.5px] uppercase tracking-[0.2em] text-mist-faint">{label}</div>
-      <div className="mt-1 font-display text-[22px] font-semibold tabular-nums tracking-[-0.02em] text-mist">{value}</div>
-      {sub && <div className="text-[12px] text-mist-faint">{sub}</div>}
-    </div>
-  )
-}
-
-// the mock order ticket: a frosted sheet over it says why it does nothing
-function OrderTicket({ refinery }) {
-  const tokens = 500
-  return (
-    <div className="relative mt-6 overflow-hidden rounded-xl border border-navy/10 bg-ink-900">
-      {/* blurred in place rather than through a backdrop filter, which phones turn off */}
-      <div className="pointer-events-none select-none space-y-3 p-4 opacity-70 blur-[2.5px]" aria-hidden="true">
-        <div className="flex items-center justify-between font-mono text-[9.5px] uppercase tracking-[0.2em] text-mist-faint">
-          <span>Order</span>
-          <span>{refinery.ticker}</span>
-        </div>
-        <div className="flex items-end justify-between gap-4 rounded-md bg-paper px-3 py-2.5 ring-1 ring-navy/10">
-          <div>
-            <div className="text-[10px] uppercase tracking-[0.14em] text-mist-faint">You pay</div>
-            <div className="font-display text-xl font-semibold tabular-nums text-mist">{fmtUsd(tokens * refinery.price, 0)}</div>
-          </div>
-          <div className="text-[12px] font-medium text-mist-faint">USDC</div>
-        </div>
-        <div className="flex items-end justify-between gap-4 rounded-md bg-paper px-3 py-2.5 ring-1 ring-navy/10">
-          <div>
-            <div className="text-[10px] uppercase tracking-[0.14em] text-mist-faint">You receive</div>
-            <div className="font-display text-xl font-semibold tabular-nums text-mist">{fmtInt(tokens)}</div>
-          </div>
-          <div className="text-[12px] font-medium text-mist-faint">{refinery.ticker}</div>
-        </div>
-        <div className="flex gap-2 pt-1">
-          <PreviewButton primary className="flex-1">
-            Buy
-          </PreviewButton>
-          <PreviewButton className="flex-1">Watch</PreviewButton>
-        </div>
-      </div>
-      <div className="absolute inset-0 flex items-center justify-center bg-paper/35">
-        <div className="rounded-full bg-mist px-4 py-2 text-center text-[11px] font-semibold uppercase tracking-[0.14em] text-paper shadow-lg">
-          Preview · trading is not live
-        </div>
-      </div>
-    </div>
-  )
-}
 
 function RefineryDetail({ refinery, onBack }) {
   const share = (refinery.capacity / US_CAPACITY_BPD) * 100
@@ -296,6 +75,12 @@ function RefineryDetail({ refinery, onBack }) {
         </div>
       </div>
 
+      <a
+        href={sitePath(refinery.id)}
+        className="mt-6 inline-flex w-full items-center justify-center rounded-sm bg-mist px-4 py-2.5 text-[12px] font-semibold uppercase tracking-[0.08em] text-paper transition-colors hover:bg-gold-deep"
+      >
+        View more
+      </a>
       <OrderTicket refinery={refinery} />
     </div>
   )
@@ -425,9 +210,12 @@ function ListingCard({ r, selected, onOpen, index }) {
       </div>
 
       <div className="mt-5 flex items-center gap-2 pt-1">
-        <PreviewButton primary className="flex-1">
-          Buy
-        </PreviewButton>
+        <a
+          href={sitePath(r.id)}
+          className="inline-flex flex-1 items-center justify-center rounded-sm bg-mist px-4 py-2.5 text-[12px] font-semibold uppercase tracking-[0.08em] text-paper transition-colors hover:bg-gold-deep"
+        >
+          View more
+        </a>
         <button
           type="button"
           onClick={onOpen}
@@ -510,15 +298,7 @@ export default function MarketplacePage() {
 
   return (
     <div className="relative overflow-hidden bg-paper pt-16">
-      {/* the preview strip: the first thing on the page says what it is */}
-      <div className="relative border-b border-brass/20 bg-brass/[0.07]">
-        <div className="mx-auto flex max-w-7xl items-center justify-center gap-3 px-6 py-2.5 text-center">
-          <LockIcon className="h-3 w-3 flex-none text-brass" />
-          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-brass">
-            Design preview · nothing here is live or for sale · listings are placeholders
-          </p>
-        </div>
-      </div>
+      <PreviewStrip />
 
       <div className="breathe pointer-events-none absolute -top-40 left-1/2 h-[560px] w-[900px] -translate-x-1/2 rounded-full bg-gold-deep/[0.12] blur-[140px]" />
 

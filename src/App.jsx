@@ -13,13 +13,15 @@ import Footer from './components/Footer.jsx'
 // subpages ship as their own chunks: the home route never needs their code
 const PortalPage = lazy(() => import('./components/PortalPage.jsx'))
 const AirdropPage = lazy(() => import('./components/AirdropPage.jsx'))
-const MarketplacePage = lazy(() => import('./components/MarketplacePage.jsx'))
+const MarketplacePage = lazy(() => import('./components/market/MarketplacePage.jsx'))
+const RefineryPage = lazy(() => import('./components/market/RefineryPage.jsx'))
 const LegalPage = lazy(() => import('./components/LegalPage.jsx'))
 
 function currentRoute() {
   if (window.location.hash.startsWith('#/portal')) return 'portal'
   if (window.location.hash.startsWith('#/airdrop')) return 'airdrop'
   if (window.location.hash.startsWith('#/marketplace')) return 'marketplace'
+  if (window.location.hash.startsWith('#/refinery/')) return 'refinery:' + window.location.hash.split('/')[2]
   if (window.location.hash.startsWith('#/legal')) {
     return 'legal:' + (window.location.hash.split('/')[2] || 'risk')
   }
@@ -100,6 +102,12 @@ export default function App() {
           <main>
             <Suspense fallback={null}>
               <MarketplacePage />
+            </Suspense>
+          </main>
+        ) : route.startsWith('refinery:') ? (
+          <main>
+            <Suspense fallback={null}>
+              <RefineryPage id={route.slice('refinery:'.length)} />
             </Suspense>
           </main>
         ) : route.startsWith('legal:') ? (
