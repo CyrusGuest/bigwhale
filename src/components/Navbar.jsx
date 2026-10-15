@@ -22,7 +22,7 @@ export default function Navbar() {
     >
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         <a href="#" className="flex flex-col items-start gap-1 leading-none">
-          <img src="/logo-xto.png" alt="XTO" width={1000} height={380} className="h-6 w-auto" />
+          <img src="logo-xto.png" alt="XTO" width={1000} height={380} className="h-6 w-auto" />
           <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-mist-faint">
             American Oil Reserve
           </span>

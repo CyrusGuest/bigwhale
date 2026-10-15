@@ -30,7 +30,7 @@ export default function Footer() {
     <footer className="border-t border-navy/[0.07] bg-ink-850">
       <div className="mx-auto grid max-w-7xl gap-12 px-6 py-16 sm:grid-cols-2 lg:grid-cols-4">
         <div className="lg:col-span-2">
-          <img src="/logo-xto.png" alt="XTO" width={1000} height={380} className="h-7 w-auto" />
+          <img src="logo-xto.png" alt="XTO" width={1000} height={380} className="h-7 w-auto" />
           <p className="mt-5 max-w-xs text-sm leading-relaxed text-mist-dim">
             Virtual drilling on a public ledger: trading fees redistributed to
             holders in <UsoLink />, split by holdings, hourly, and publicly verifiable.

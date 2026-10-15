@@ -230,7 +230,7 @@ function PhoneMock({ notifs }) {
                           <div className="flex items-start gap-3">
                             {n.type === 'pay' ? (
                               <span className="h-[40px] w-[40px] flex-none overflow-hidden rounded-[10px] shadow-md shadow-black/30 ring-1 ring-white/10">
-                                <img src="/logo.png" alt="" width={512} height={512} className="h-full w-full" />
+                                <img src="logo.png" alt="" width={512} height={512} className="h-full w-full" />
                               </span>
                             ) : (
                               <span className="h-[40px] w-[40px] flex-none overflow-hidden rounded-[10px] shadow-md shadow-black/30">
@@ -554,7 +554,7 @@ function ActSleep() {
               className="mx-auto flex w-full max-w-md items-start gap-3 rounded-[24px] bg-[#1d1f27]/85 p-4 text-left shadow-[0_14px_34px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.09)] backdrop-blur-2xl"
             >
               <span className="h-[40px] w-[40px] flex-none overflow-hidden rounded-[10px] shadow-md shadow-black/30 ring-1 ring-white/10">
-                <img src="/logo.png" alt="" width={512} height={512} className="h-full w-full" />
+                <img src="logo.png" alt="" width={512} height={512} className="h-full w-full" />
               </span>
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline justify-between gap-2">
